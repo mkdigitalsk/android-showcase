@@ -129,7 +129,7 @@ class LoginViewModel @Inject constructor(
 
     companion object {
         const val TEST_EMAIL = "test01@mkdigital.sk"
-        const val TEST_PASSWORD = "Kmpshowcase1@"
+        const val TEST_PASSWORD = "MKDigitalTest1@"
     }
 }
 
