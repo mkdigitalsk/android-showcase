@@ -5,16 +5,12 @@ import com.mk.androidshowcase.domain.repository.AuthRepository
 import com.mk.androidshowcase.domain.useCase.base.UseCase
 import javax.inject.Inject
 
-class RegisterUserUseCase @Inject constructor(
+class LoginUseCase @Inject constructor(
     private val authRepository: AuthRepository
-) : UseCase<RegisterUserUseCase.Params, AuthSession>() {
+) : UseCase<LoginUseCase.Params, AuthSession>() {
 
-    data class Params(
-        val name: String,
-        val email: String,
-        val password: String
-    )
+    data class Params(val email: String, val password: String)
 
     override suspend fun run(params: Params): AuthSession =
-        authRepository.register(params.name, params.email, params.password)
+        authRepository.login(params.email, params.password)
 }

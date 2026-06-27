@@ -9,6 +9,10 @@ interface PersistentPreferences {
 
     suspend fun getFcmToken(): String?
     suspend fun setFcmToken(value: String)
+
+    suspend fun getToken(): String?
+    suspend fun setToken(value: String)
+    suspend fun clearToken()
 }
 
 class PersistentPreferencesImpl(private val preferences: Preferences) : PersistentPreferences {
@@ -22,10 +26,15 @@ class PersistentPreferencesImpl(private val preferences: Preferences) : Persiste
     override suspend fun getFcmToken(): String? = preferences.getString(FB_TOKEN_KEY)
     override suspend fun setFcmToken(value: String) = preferences.putString(FB_TOKEN_KEY, value)
 
+    override suspend fun getToken(): String? = preferences.getString(TOKEN_KEY)
+    override suspend fun setToken(value: String) = preferences.putString(TOKEN_KEY, value)
+    override suspend fun clearToken() = preferences.remove(TOKEN_KEY)
+
     private companion object {
         private const val PERSISTENT_COUNTER_KEY = "persistent_counter"
         private const val THEME_MODE_KEY = "theme_mode"
         private const val DEFAULT_THEME_MODE = "SYSTEM"
         private const val FB_TOKEN_KEY = "fcm_token"
+        private const val TOKEN_KEY = "auth_token"
     }
 }
