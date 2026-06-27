@@ -2,6 +2,8 @@ package com.mk.androidshowcase.presentation.screen.login
 
 import dagger.hilt.android.lifecycle.HiltViewModel
 import com.mk.androidshowcase.data.biometric.BiometricResult
+import com.mk.androidshowcase.domain.useCase.auth.LoginUseCase
+import com.mk.androidshowcase.domain.useCase.auth.LoginWithTokenUseCase
 import com.mk.androidshowcase.domain.useCase.base.invoke
 import com.mk.androidshowcase.domain.useCase.biometric.AuthenticateWithBiometricUseCase
 import com.mk.androidshowcase.domain.useCase.biometric.IsBiometricEnabledUseCase
@@ -12,6 +14,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
+    private val loginUseCase: LoginUseCase,
+    private val loginWithTokenUseCase: LoginWithTokenUseCase,
     private val isBiometricEnabledUseCase: IsBiometricEnabledUseCase,
     private val authenticateWithBiometricUseCase: AuthenticateWithBiometricUseCase,
 ) : BaseViewModel<LoginUiState>(LoginUiState()) {
@@ -21,6 +25,15 @@ class LoginViewModel @Inject constructor(
     fun toRegister() = navigate(LoginNavEvent.ToRegister)
 
     override fun loadInitialData() {
+        execute(
+            action = { loginWithTokenUseCase() },
+            onLoading = { newState { it.copy(isLoading = true) } },
+            onSuccess = { session ->
+                newState { it.copy(isLoading = false) }
+                if (session != null) navigate(LoginNavEvent.ToHome)
+            },
+            onError = { newState { it.copy(isLoading = false) } }
+        )
         execute(
             action = { isBiometricEnabledUseCase() },
             onSuccess = { enabled -> newState { it.copy(biometricsAvailable = enabled) } }
@@ -57,8 +70,17 @@ class LoginViewModel @Inject constructor(
                 return@requireState
             }
 
-            // Login successful - navigate to home
-            navigate(LoginNavEvent.ToHome)
+            execute(
+                action = { loginUseCase(LoginUseCase.Params(state.email, state.password)) },
+                onLoading = { newState { it.copy(isLoading = true, serverError = null) } },
+                onSuccess = {
+                    newState { it.copy(isLoading = false) }
+                    navigate(LoginNavEvent.ToHome)
+                },
+                onError = { error ->
+                    newState { it.copy(isLoading = false, serverError = error.message) }
+                }
+            )
         }
     }
 
@@ -127,6 +149,8 @@ data class LoginUiState(
     val password: String = "",
     val emailError: EmailError? = null,
     val passwordError: PasswordError? = null,
+    val isLoading: Boolean = false,
+    val serverError: String? = null,
     val biometricsAvailable: Boolean = false,
     val biometricsLoading: Boolean = false,
     val biometricsResult: BiometricResult? = null,

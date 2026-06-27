@@ -13,7 +13,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -29,7 +28,6 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mk.androidshowcase.R
-import com.mk.androidshowcase.domain.model.Address
 import com.mk.androidshowcase.domain.model.User
 import com.mk.androidshowcase.presentation.component.CircularProgress
 import com.mk.androidshowcase.presentation.component.ErrorView
@@ -150,18 +148,6 @@ private fun UserCard(user: User) {
                 modifier = Modifier.padding(start = space4)
             )
         }
-        Spacer2()
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Icon(
-                imageVector = Icons.Filled.LocationOn,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary
-            )
-            TextBodyMediumNeutral80(
-                text = "${user.address.city}, ${user.address.street}",
-                modifier = Modifier.padding(start = space4)
-            )
-        }
     }
 }
 
@@ -182,14 +168,8 @@ internal class NetworkingScreenPreviewParams : PreviewParameterProvider<Networki
         NetworkingUiState(error = "401"),
         NetworkingUiState(users = listOf(
             User(
-                address = Address(
-                    city = "city",
-                    street = "street",
-                    suite = "suite",
-                    zipcode = "zipcode"
-                ),
-                email = "mir.kusnir@gmail.com",
                 id = 1,
+                email = "mir.kusnir@gmail.com",
                 name = "Miroslav Coder"
             )
         ))
