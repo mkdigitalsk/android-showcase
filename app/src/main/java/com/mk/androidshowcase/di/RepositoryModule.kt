@@ -8,7 +8,7 @@ import com.mk.androidshowcase.data.repository.BiometricRepositoryImpl
 import com.mk.androidshowcase.data.repository.DateRepositoryImpl
 import com.mk.androidshowcase.data.repository.LocationRepositoryImpl
 import com.mk.androidshowcase.data.repository.SettingsRepositoryImpl
-import com.mk.androidshowcase.data.repository.database.AuthRepositoryImpl
+import com.mk.androidshowcase.data.repository.AuthRepositoryImpl
 import com.mk.androidshowcase.data.repository.database.NoteRepositoryImpl
 import com.mk.androidshowcase.data.repository.storage.StorageRepositoryImpl
 import com.mk.androidshowcase.data.repository.user.UserRepositoryImpl

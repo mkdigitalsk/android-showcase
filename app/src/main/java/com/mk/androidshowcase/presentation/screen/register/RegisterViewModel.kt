@@ -1,8 +1,8 @@
 package com.mk.androidshowcase.presentation.screen.register
 
 import dagger.hilt.android.lifecycle.HiltViewModel
+import com.mk.androidshowcase.domain.exceptions.base.ApiException
 import com.mk.androidshowcase.domain.exceptions.base.BaseException
-import com.mk.androidshowcase.domain.useCase.auth.CheckEmailExistsUseCase
 import com.mk.androidshowcase.domain.useCase.auth.RegisterUserUseCase
 import com.mk.androidshowcase.presentation.base.BaseViewModel
 import com.mk.androidshowcase.presentation.base.NavEvent
@@ -11,7 +11,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RegisterViewModel @Inject constructor(
-    private val checkEmailExistsUseCase: CheckEmailExistsUseCase,
     private val registerUserUseCase: RegisterUserUseCase,
 ) : BaseViewModel<RegisterUiState>(RegisterUiState()) {
 
@@ -56,12 +55,7 @@ class RegisterViewModel @Inject constructor(
 
     private fun performRegistration(name: String, email: String, password: String) {
         execute(
-            action = {
-                val emailExists = checkEmailExistsUseCase(email)
-                if (emailExists) throw EmailAlreadyExistsException()
-
-                registerUserUseCase(RegisterUserUseCase.Params(name, email, password))
-            },
+            action = { registerUserUseCase(RegisterUserUseCase.Params(name, email, password)) },
             onLoading = { newState { it.copy(isLoading = true) } },
             onSuccess = {
                 newState { it.copy(isLoading = false) }
@@ -71,7 +65,7 @@ class RegisterViewModel @Inject constructor(
                 newState {
                     it.copy(
                         isLoading = false,
-                        emailError = if (error is EmailAlreadyExistsException) {
+                        emailError = if (error.isEmailAlreadyExists()) {
                             RegisterEmailError.ALREADY_EXISTS
                         } else null
                     )
@@ -161,11 +155,7 @@ sealed interface RegisterNavEvent : NavEvent {
     data object ToLogin : RegisterNavEvent
 }
 
-private class EmailAlreadyExistsException : BaseException(
-    message = "Email already exists",
-    cause = null
-) {
-    override val errorCode: String = "5001"
-    override val userMessage: String = "This email is already registered"
-    override val shouldReport: Boolean = false
-}
+private const val HTTP_CONFLICT = 409
+
+private fun BaseException.isEmailAlreadyExists(): Boolean =
+    this is ApiException && httpCode == HTTP_CONFLICT
