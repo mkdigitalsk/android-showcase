@@ -1,48 +1,24 @@
 package com.mk.androidshowcase.presentation.base
 
-import io.mockk.impl.annotations.MockK
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.setMain
 import com.mk.androidshowcase.base.BaseTest
-import com.mk.androidshowcase.util.Logger
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
 
 @ExperimentalCoroutinesApi
-//@ExtendWith(InstantExecutorExtension::class)
 abstract class BaseViewModelTest<ClassUnderTest> : BaseTest<ClassUnderTest>() {
 
-    @MockK
-    lateinit var logger: Logger
-
-    override fun beforeEach() {
-
+    @BeforeEach
+    fun setUpMainDispatcher() {
+        Dispatchers.setMain(UnconfinedTestDispatcher())
     }
 
-    protected fun <VS, NE : NavEvent?> testViewModel(
-        given: () -> Unit = {},
-        whenAction: () -> Pair<VS, NE>,
-        then: (viewState: VS, navEvent: NE) -> Unit,
-    ) {
-        given()
-        val actionResult = whenAction()
-        then(actionResult.first, actionResult.second)
-    }
-
-    protected fun <VS> testViewState(
-        given: () -> Unit = {},
-        whenAction: () -> VS,
-        then: (VS) -> Unit,
-    ) {
-        given()
-        val actionResult = whenAction()
-        then(actionResult)
-    }
-
-    protected fun <NE : NavEvent?> testNavEvent(
-        given: () -> Unit = {},
-        whenAction: () -> NE,
-        then: (NE) -> Unit,
-    ) {
-        given()
-        val actionResult = whenAction()
-        then(actionResult)
+    @AfterEach
+    fun tearDownMainDispatcher() {
+        Dispatchers.resetMain()
     }
 }

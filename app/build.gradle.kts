@@ -213,6 +213,7 @@ dependencies {
     testRuntimeOnly(libs.junit.vintage.engine)
     testImplementation(libs.mockk)
     testImplementation(libs.coroutines.test)
+    testImplementation(libs.turbine)
     testImplementation(libs.paparazzi)
 
     debugImplementation(libs.compose.ui.tooling)
