@@ -1,11 +1,10 @@
 package com.mk.androidshowcase.presentation.screen.apis
 
 import androidx.annotation.StringRes
+import androidx.compose.runtime.Immutable
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import com.mk.androidshowcase.R
-import com.mk.androidshowcase.data.biometric.BiometricResult
-import com.mk.androidshowcase.domain.model.Location
 import com.mk.androidshowcase.domain.useCase.base.invoke
 import com.mk.androidshowcase.domain.useCase.biometric.AuthenticateWithBiometricUseCase
 import com.mk.androidshowcase.domain.useCase.biometric.IsBiometricEnabledUseCase
@@ -68,7 +67,7 @@ class ApisViewModel @Inject constructor(
             action = { getLastKnownLocationUseCase() },
             onLoading = { newState { it.copy(locationLoading = true, locationError = false) } },
             onSuccess = { location ->
-                newState { it.copy(location = location, locationLoading = false) }
+                newState { it.copy(location = location.toUiModel(), locationLoading = false) }
             },
             onError = {
                 newState { it.copy(locationLoading = false, locationError = true) }
@@ -90,7 +89,7 @@ class ApisViewModel @Inject constructor(
         newState { it.copy(isTrackingLocation = true, locationUpdatesError = false) }
         locationUpdatesJob = observe(
             flow = observeLocationUpdatesUseCase(ObserveLocationUpdatesUseCase.Params(highAccuracy = true)),
-            onEach = { location -> newState { it.copy(trackedLocation = location) } },
+            onEach = { location -> newState { it.copy(trackedLocation = location.toUiModel()) } },
             onError = { newState { it.copy(isTrackingLocation = false, locationUpdatesError = true) } }
         )
     }
@@ -105,14 +104,12 @@ class ApisViewModel @Inject constructor(
         execute(
             action = { authenticateWithBiometricUseCase() },
             onLoading = { newState { it.copy(biometricsLoading = true, biometricsResult = null) } },
-            onSuccess = { result -> newState { it.copy(biometricsLoading = false, biometricsResult = result) } },
+            onSuccess = { result ->
+                newState { it.copy(biometricsLoading = false, biometricsResult = result.toUiModel()) }
+            },
             onError = { error ->
-                newState {
-                    it.copy(
-                        biometricsLoading = false,
-                        biometricsResult = BiometricResult.SystemError(error.message)
-                    )
-                }
+                val result = BiometricUiModel(BiometricUiStatus.FAILED, error.message?.takeIf { it.isNotBlank() })
+                newState { it.copy(biometricsLoading = false, biometricsResult = result) }
             }
         )
     }
@@ -123,18 +120,19 @@ class ApisViewModel @Inject constructor(
     }
 }
 
+@Immutable
 data class ApisUiState(
     val copiedToClipboard: Boolean = false,
-    val location: Location? = null,
+    val location: LocationUiModel? = null,
     val locationLoading: Boolean = false,
     val locationError: Boolean = false,
     val isTrackingLocation: Boolean = false,
     val shouldTrackLocation: Boolean = false,
-    val trackedLocation: Location? = null,
+    val trackedLocation: LocationUiModel? = null,
     val locationUpdatesError: Boolean = false,
     val biometricsAvailable: Boolean = false,
     val biometricsLoading: Boolean = false,
-    val biometricsResult: BiometricResult? = null,
+    val biometricsResult: BiometricUiModel? = null,
 )
 
 sealed interface ApisNavEvent : NavEvent {

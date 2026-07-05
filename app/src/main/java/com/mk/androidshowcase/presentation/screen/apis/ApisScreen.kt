@@ -36,7 +36,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.SharedFlow
 import com.mk.androidshowcase.R
-import com.mk.androidshowcase.data.biometric.BiometricResult
 import com.mk.androidshowcase.presentation.base.CollectNavEvents
 import com.mk.androidshowcase.presentation.base.NavEvent
 import com.mk.androidshowcase.presentation.base.NavRouter
@@ -52,7 +51,6 @@ import com.mk.androidshowcase.presentation.component.text.headlineMedium.TextHea
 import com.mk.androidshowcase.presentation.foundation.floatingNavBarSpace
 import com.mk.androidshowcase.presentation.foundation.space4
 import com.mk.androidshowcase.presentation.screen.LocalSnackbarHostState
-import com.mk.androidshowcase.util.StringFormatter
 
 private enum class PendingLocationAction { NONE, GET_LOCATION, START_UPDATES }
 
@@ -197,13 +195,14 @@ fun ApisScreen(
                 icon = Icons.Outlined.LocationOn,
                 title = stringResource(R.string.platform_apis_location_title)
             ) {
-                when {
-                    state.locationLoading -> TextBodyMediumNeutral80(loadingText)
-                    state.locationError -> TextBodyMediumNeutral80(errorText)
-                    location != null -> TextBodyMediumNeutral80(
-                        formatLocationText(location.lat, location.lon)
-                    )
+                val locationText = when {
+                    state.locationLoading -> loadingText
+                    state.locationError -> errorText
+                    location != null ->
+                        stringResource(R.string.platform_apis_location_result, location.latitude, location.longitude)
+                    else -> null
                 }
+                locationText?.let { TextBodyMediumNeutral80(it) }
                 Spacer2()
                 ApiCardButton(
                     text = stringResource(R.string.platform_apis_location_action),
@@ -219,12 +218,16 @@ fun ApisScreen(
                 icon = Icons.Outlined.MyLocation,
                 title = stringResource(R.string.platform_apis_location_updates_title)
             ) {
-                when {
-                    state.locationUpdatesError -> TextBodyMediumNeutral80(errorText)
-                    trackedLocation != null -> TextBodyMediumNeutral80(
-                        formatLocationText(trackedLocation.lat, trackedLocation.lon)
+                val trackedText = when {
+                    state.locationUpdatesError -> errorText
+                    trackedLocation != null -> stringResource(
+                        R.string.platform_apis_location_result,
+                        trackedLocation.latitude,
+                        trackedLocation.longitude
                     )
+                    else -> null
                 }
+                trackedText?.let { TextBodyMediumNeutral80(it) }
                 Spacer2()
                 ApiCardButton(
                     text = stringResource(
@@ -246,25 +249,24 @@ fun ApisScreen(
             val notAvailableText = stringResource(R.string.platform_apis_biometrics_not_available)
             val activityNotAvailableText = stringResource(R.string.platform_apis_biometrics_activity_not_available)
             val unknownErrorText = stringResource(R.string.platform_apis_biometrics_unknown_error)
+            val biometric = state.biometricsResult
             ApiCard(
                 icon = Icons.Outlined.Fingerprint,
                 title = stringResource(R.string.platform_apis_biometrics_title)
             ) {
-                when {
-                    !state.biometricsAvailable -> TextBodyMediumNeutral80(notAvailableText)
-                    state.biometricsLoading -> TextBodyMediumNeutral80("...")
-                    state.biometricsResult is BiometricResult.Success -> TextBodyMediumNeutral80(successText)
-                    state.biometricsResult is BiometricResult.SystemError -> {
-                        val errorMsg = (state.biometricsResult as BiometricResult.SystemError)
-                            .message.ifEmpty { unknownErrorText }
-                        TextBodyMediumNeutral80("$failedText: $errorMsg")
+                val biometricText = when {
+                    !state.biometricsAvailable -> notAvailableText
+                    state.biometricsLoading -> "..."
+                    biometric != null -> when (biometric.status) {
+                        BiometricUiStatus.SUCCESS -> successText
+                        BiometricUiStatus.FAILED -> "$failedText: ${biometric.errorDetail ?: unknownErrorText}"
+                        BiometricUiStatus.CANCELLED -> cancelledText
+                        BiometricUiStatus.NOT_AVAILABLE -> notAvailableText
+                        BiometricUiStatus.ACTIVITY_NOT_AVAILABLE -> activityNotAvailableText
                     }
-
-                    state.biometricsResult is BiometricResult.Cancelled -> TextBodyMediumNeutral80(cancelledText)
-                    state.biometricsResult is BiometricResult.NotAvailable -> TextBodyMediumNeutral80(notAvailableText)
-                    state.biometricsResult is BiometricResult.ActivityNotAvailable ->
-                        TextBodyMediumNeutral80(activityNotAvailableText)
+                    else -> null
                 }
+                biometricText?.let { TextBodyMediumNeutral80(it) }
                 Spacer2()
                 ApiCardButton(
                     text = stringResource(R.string.platform_apis_biometrics_action),
@@ -316,17 +318,6 @@ private fun ApiCardButton(
         onClick = onClick,
         modifier = Modifier.fillMaxWidth(),
         enabled = enabled
-    )
-}
-
-private const val COORDINATE_DECIMAL_PLACES = 6
-
-@Composable
-private fun formatLocationText(lat: Double, lon: Double): String {
-    return stringResource(
-        R.string.platform_apis_location_result,
-        StringFormatter.formatDouble(lat, COORDINATE_DECIMAL_PLACES),
-        StringFormatter.formatDouble(lon, COORDINATE_DECIMAL_PLACES)
     )
 }
 
