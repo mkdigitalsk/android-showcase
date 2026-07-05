@@ -1,5 +1,6 @@
 package com.mk.androidshowcase.presentation.screen.database
 
+import androidx.compose.runtime.Immutable
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.FlowPreview
@@ -54,7 +55,9 @@ class DatabaseViewModel @Inject constructor(
         searchJob?.cancel()
         searchJob = observe(
             flow = searchNotesUseCase(SearchNotesUseCase.Params(query, sortOption)),
-            onEach = { notes -> newState { it.copy(notes = notes, isLoading = false) } },
+            onEach = { notes ->
+                newState { it.copy(notes = notes.map { note -> note.toUiModel() }, isLoading = false) }
+            },
             onError = { newState { it.copy(isLoading = false, error = true) } }
         )
     }
@@ -120,8 +123,9 @@ class DatabaseViewModel @Inject constructor(
     )
 }
 
+@Immutable
 data class DatabaseUiState(
-    val notes: List<Note> = emptyList(),
+    val notes: List<NoteUiModel> = emptyList(),
     val isLoading: Boolean = true,
     val error: Boolean = false,
     val newNoteTitle: String = "",
