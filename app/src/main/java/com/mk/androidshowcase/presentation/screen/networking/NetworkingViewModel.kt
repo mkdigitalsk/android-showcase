@@ -1,7 +1,7 @@
 package com.mk.androidshowcase.presentation.screen.networking
 
+import androidx.compose.runtime.Immutable
 import dagger.hilt.android.lifecycle.HiltViewModel
-import com.mk.androidshowcase.domain.model.User
 import com.mk.androidshowcase.domain.useCase.GetUsersUseCase
 import com.mk.androidshowcase.domain.useCase.base.invoke
 import com.mk.androidshowcase.presentation.base.BaseViewModel
@@ -20,7 +20,9 @@ class NetworkingViewModel @Inject constructor(
         execute(
             action = { getUsersUseCase() },
             onLoading = { newState { it.copy(isLoading = true, error = null) } },
-            onSuccess = { users -> newState { it.copy(isLoading = false, users = users) } },
+            onSuccess = { users ->
+                newState { it.copy(isLoading = false, users = users.map { user -> user.toUiModel() }) }
+            },
             onError = { error -> newState { it.copy(isLoading = false, error = error.message) } }
         )
     }
@@ -30,8 +32,9 @@ class NetworkingViewModel @Inject constructor(
     }
 }
 
+@Immutable
 data class NetworkingUiState(
     val isLoading: Boolean = false,
-    val users: List<User> = emptyList(),
+    val users: List<UserUiModel> = emptyList(),
     val error: String? = null
 )
