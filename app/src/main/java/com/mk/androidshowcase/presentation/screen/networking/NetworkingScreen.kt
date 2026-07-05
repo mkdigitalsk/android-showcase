@@ -82,7 +82,7 @@ private fun EmptyContent() {
 
 @Composable
 private fun UserListContent(
-    users: List<User>,
+    users: List<UserUiModel>,
     isRefreshing: Boolean,
     onRefresh: () -> Unit
 ) {
@@ -129,7 +129,7 @@ private fun UserListContent(
 }
 
 @Composable
-private fun UserCard(user: User) {
+private fun UserCard(user: UserUiModel) {
     AppElevatedCard(
         modifier = Modifier
             .fillMaxWidth()
@@ -171,7 +171,7 @@ internal class NetworkingScreenPreviewParams : PreviewParameterProvider<Networki
                 id = 1,
                 email = "mir.kusnir@gmail.com",
                 name = "Miroslav Coder"
-            )
+            ).toUiModel()
         ))
     )
 }
