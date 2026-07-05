@@ -26,8 +26,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
 import com.mk.androidshowcase.R
 import com.mk.androidshowcase.domain.model.Note
 import com.mk.androidshowcase.domain.model.NoteSortOption
@@ -48,7 +46,6 @@ import com.mk.androidshowcase.presentation.component.text.titleLarge.TextTitleLa
 import com.mk.androidshowcase.presentation.foundation.AppTheme
 import com.mk.androidshowcase.presentation.foundation.floatingNavBarSpace
 import com.mk.androidshowcase.presentation.foundation.space4
-import kotlin.time.Instant
 
 @Composable
 fun DatabaseScreen(viewModel: DatabaseViewModel = lifecycleAwareViewModel()) {
@@ -254,7 +251,7 @@ private fun AddNoteCard(
 
 @Composable
 private fun NoteCard(
-    note: Note,
+    note: NoteUiModel,
     onDeleteClick: () -> Unit,
 ) {
     AppElevatedCard(
@@ -274,7 +271,7 @@ private fun NoteCard(
                     TextBodyMediumNeutral80(note.content)
                 }
                 Spacer2()
-                TextBodySmallNeutral80(formatTimestamp(note.createdAt))
+                TextBodySmallNeutral80(note.createdAt)
             }
             IconButton(onClick = onDeleteClick) {
                 AppIconNeutral80(
@@ -284,14 +281,6 @@ private fun NoteCard(
             }
         }
     }
-}
-
-private fun formatTimestamp(timestamp: Long): String {
-    val instant = Instant.fromEpochMilliseconds(timestamp)
-    val localDateTime = instant.toLocalDateTime(TimeZone.currentSystemDefault())
-    return "${localDateTime.date} ${localDateTime.hour.toString().padStart(2, '0')}:${
-        localDateTime.minute.toString().padStart(2, '0')
-    }"
 }
 
 @Preview
@@ -311,10 +300,10 @@ internal class DatabaseScreenPreviewParams : PreviewParameterProvider<DatabaseUi
         DatabaseUiState(error = true),
         DatabaseUiState(
             notes = listOf(
-                Note(id = 1, title = "title", content = "content", createdAt = 0),
+                Note(id = 1, title = "title", content = "content", createdAt = 0).toUiModel(),
                 Note(
                     id = 2, title = "title2", content = "content2", createdAt = 1769344378
-                ),
+                ).toUiModel(),
             ),
             newNoteTitle = "New Note",
             newNoteContent = "Content",
