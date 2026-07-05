@@ -27,6 +27,8 @@ import com.mk.androidshowcase.data.repository.user.UserClient
 import com.mk.androidshowcase.data.repository.user.UserClientImpl
 import com.mk.androidshowcase.data.service.LocalNotificationServiceImpl
 import com.mk.androidshowcase.domain.repository.LocalNotificationService
+import com.mk.androidshowcase.util.Logger
+import com.mk.androidshowcase.util.LoggerImpl
 import javax.inject.Named
 import javax.inject.Singleton
 
@@ -101,6 +103,10 @@ abstract class DataBindsModule {
     @Binds
     @Singleton
     abstract fun bindAnalyticsClient(impl: FirebaseAnalyticsClient): AnalyticsClient
+
+    @Binds
+    @Singleton
+    abstract fun bindLogger(impl: LoggerImpl): Logger
 
     @Binds
     @Singleton
