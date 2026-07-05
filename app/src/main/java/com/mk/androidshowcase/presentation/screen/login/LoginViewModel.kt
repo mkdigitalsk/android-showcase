@@ -87,26 +87,14 @@ class LoginViewModel @Inject constructor(
     fun authenticateWithBiometrics() {
         execute(
             action = { authenticateWithBiometricUseCase() },
-            onLoading = { newState { it.copy(biometricsLoading = true, biometricsResult = null) } },
+            onLoading = { newState { it.copy(biometricsLoading = true) } },
             onSuccess = { result ->
-                newState {
-                    it.copy(
-                        biometricsLoading = false,
-                        biometricsResult = result
-                    )
-                }
+                newState { it.copy(biometricsLoading = false) }
                 if (result is BiometricResult.Success) {
                     navigate(LoginNavEvent.ToHome)
                 }
             },
-            onError = { error ->
-                newState {
-                    it.copy(
-                        biometricsLoading = false,
-                        biometricsResult = BiometricResult.SystemError(error.message.orEmpty())
-                    )
-                }
-            }
+            onError = { newState { it.copy(biometricsLoading = false) } }
         )
     }
 
@@ -153,7 +141,6 @@ data class LoginUiState(
     val serverError: String? = null,
     val biometricsAvailable: Boolean = false,
     val biometricsLoading: Boolean = false,
-    val biometricsResult: BiometricResult? = null,
 )
 
 sealed interface LoginNavEvent : NavEvent {
