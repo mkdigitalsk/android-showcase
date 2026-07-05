@@ -1,70 +1,68 @@
 package com.mk.androidshowcase.presentation.screen.networking
 
-import io.mockk.impl.annotations.MockK
+import app.cash.turbine.test
+import io.mockk.coEvery
+import io.mockk.mockk
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
+import com.mk.androidshowcase.domain.model.User
 import com.mk.androidshowcase.domain.useCase.GetUsersUseCase
+import com.mk.androidshowcase.domain.useCase.base.None
+import com.mk.androidshowcase.fake.NoOpLogger
 import com.mk.androidshowcase.presentation.base.BaseViewModelTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
-import org.junit.jupiter.api.Assertions.assertNull
+import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class NetworkingViewModelTest : BaseViewModelTest<NetworkingViewModel>() {
 
     override lateinit var classUnderTest: NetworkingViewModel
 
-    @MockK
-    private lateinit var getUsersUseCase: GetUsersUseCase
+    private val getUsersUseCase = mockk<GetUsersUseCase>()
+
+    private val alice = User(id = 1, email = "alice@mk.sk", name = "Alice")
 
     override fun beforeEach() {
-        classUnderTest = NetworkingViewModel(getUsersUseCase)
+        classUnderTest = NetworkingViewModel(getUsersUseCase).apply { logger = NoOpLogger }
     }
 
     @Test
-    fun `default state has empty users list`() {
-        assertTrue(classUnderTest.state.value.users.isEmpty())
-    }
+    fun `fetchUsers maps domain users into UI models`() = runTest {
+        coEvery { getUsersUseCase(None) } returns listOf(alice)
 
-    @Test
-    fun `default state is not loading`() {
-        assertFalse(classUnderTest.state.value.isLoading)
-    }
+        classUnderTest.fetchUsers()
 
-    @Test
-    fun `default state has no error`() {
-        assertNull(classUnderTest.state.value.error)
-    }
-
-    @Test
-    fun `NetworkingUiState default values are correct`() {
-        val state = NetworkingUiState()
+        val state = classUnderTest.state.value
         assertFalse(state.isLoading)
-        assertTrue(state.users.isEmpty())
-        assertNull(state.error)
+        assertEquals(listOf(UserUiModel(id = 1, name = "Alice", email = "alice@mk.sk")), state.users)
     }
 
     @Test
-    fun `NetworkingUiState can hold users`() {
-        val users = listOf(createTestUserUiModel(1), createTestUserUiModel(2))
-        val state = NetworkingUiState(users = users)
-        assertEquals(2, state.users.size)
+    fun `fetchUsers failure sets error and stops loading`() = runTest {
+        coEvery { getUsersUseCase(None) } throws RuntimeException("boom")
+
+        classUnderTest.fetchUsers()
+
+        val state = classUnderTest.state.value
+        assertFalse(state.isLoading)
+        assertNotNull(state.error)
     }
 
     @Test
-    fun `NetworkingUiState can hold error`() {
-        val state = NetworkingUiState(error = "Network error")
-        assertEquals("Network error", state.error)
-    }
+    fun `fetchUsers emits loading then success`() = runTest {
+        val gate = CompletableDeferred<Unit>()
+        coEvery { getUsersUseCase(None) } coAnswers { gate.await(); listOf(alice) }
 
-    @Test
-    fun `NetworkingUiState can have loading state`() {
-        val state = NetworkingUiState(isLoading = true)
-        assertTrue(state.isLoading)
+        classUnderTest.state.test {
+            assertEquals(NetworkingUiState(), awaitItem())
+            classUnderTest.fetchUsers()
+            assertTrue(awaitItem().isLoading)
+            gate.complete(Unit)
+            assertFalse(awaitItem().isLoading)
+        }
     }
-
-    private fun createTestUserUiModel(id: Long = 1, name: String = "John Doe") = UserUiModel(
-        id = id,
-        name = name,
-        email = "john@example.com",
-    )
 }

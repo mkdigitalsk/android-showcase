@@ -12,6 +12,7 @@ agp = "9.0.0"
 kotlin = "2.3.0"
 ksp = "2.3.3"
 kotlinx-coroutines = "1.10.2"
+turbine = "1.2.1"
 kotlinx-datetime = "0.7.1"
 kotlinx-serialization = "1.10.0"
 
@@ -155,6 +156,7 @@ junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "jun
 junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher" }
 junit-vintage-engine = { module = "org.junit.vintage:junit-vintage-engine" }
 coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
+turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 paparazzi = {group = "app.cash.paparazzi", name = "paparazzi", version.ref = "paparazzi" }
 
