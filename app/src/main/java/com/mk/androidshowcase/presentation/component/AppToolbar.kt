@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import com.mk.androidshowcase.R
 import com.mk.androidshowcase.presentation.component.ext.noRippleClickable
+import com.mk.androidshowcase.presentation.foundation.appColorScheme
 import com.mk.androidshowcase.presentation.foundation.space6
 
 
@@ -37,10 +38,10 @@ fun TopAppBar(
             .statusBarsPadding(),
         title = { title?.let { Text(text = title, style = MaterialTheme.typography.titleLarge) } },
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.primary,
-            titleContentColor = MaterialTheme.colorScheme.onPrimary,
-            navigationIconContentColor = MaterialTheme.colorScheme.onPrimary,
-            actionIconContentColor = MaterialTheme.colorScheme.onPrimary
+            containerColor = MaterialTheme.appColorScheme.brandBar,
+            titleContentColor = MaterialTheme.appColorScheme.onBrandBar,
+            navigationIconContentColor = MaterialTheme.appColorScheme.onBrandBar,
+            actionIconContentColor = MaterialTheme.appColorScheme.onBrandBar
         ),
         navigationIcon = {
             navIcon?.let {
