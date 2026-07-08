@@ -1,10 +1,11 @@
 package com.mk.androidshowcase.data.network
 
+import com.mk.androidshowcase.BuildConfig
 import kotlinx.serialization.json.Json
 
 object NetworkModule {
 
-    const val BASE_URL = "https://kmp-showcase-production.up.railway.app/api/v1/"
+    val BASE_URL: String = BuildConfig.BASE_URL
     const val TIMEOUT_SECONDS = 30L
 
     val json: Json = Json {
