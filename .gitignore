@@ -28,3 +28,5 @@ output-metadata.json
 render.experimental.xml
 
 .claude/
+.claude/standards/
+.claude/.pre-commit-review-done
