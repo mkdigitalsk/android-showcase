@@ -13,6 +13,8 @@
 *.iml
 *.jks
 *.keystore
+# The signing passwords — the keystore binary alone is not the secret.
+keystore.properties
 *.log
 .cxx/
 .externalNativeBuild/
