@@ -1,6 +1,6 @@
 # Android Showcase
 
-[![CI](https://github.com/mkdigitalsk/android-showcase/actions/workflows/pull_request.yml/badge.svg)](https://github.com/mkdigitalsk/android-showcase/actions/workflows/pull_request.yml)
+[![CI](https://github.com/mkdigitalsk/android-showcase/actions/workflows/ci.yml/badge.svg)](https://github.com/mkdigitalsk/android-showcase/actions/workflows/ci.yml)
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.3.0-7F52FF.svg?logo=kotlin&logoColor=white)](https://kotlinlang.org)
 [![Compose](https://img.shields.io/badge/Jetpack_Compose-4285F4.svg?logo=jetpackcompose&logoColor=white)](https://developer.android.com/jetpack/compose)
 [![Android](https://img.shields.io/badge/Android-36-3DDC84.svg?logo=android&logoColor=white)](https://developer.android.com)
