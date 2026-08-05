@@ -13,7 +13,6 @@ import androidx.compose.ui.res.stringResource
 import com.mk.androidshowcase.presentation.foundation.cardCornerRadius6
 import com.mk.androidshowcase.presentation.foundation.space4
 
-
 @Composable
 fun ContainedButton(
     text: String,

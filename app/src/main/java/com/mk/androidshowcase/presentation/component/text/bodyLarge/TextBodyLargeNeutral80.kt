@@ -6,7 +6,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import com.mk.androidshowcase.presentation.foundation.appColorScheme
 
-
 @Composable
 fun TextBodyLargeNeutral80(
     text: String,

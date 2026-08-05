@@ -42,7 +42,10 @@ jobs:
         run: ./gradlew :app:testDebugUnitTest
 
       - name: Verify Screenshot Tests
-        run: ./gradlew verifyPaparazziDebug -PscreenshotOnly
+        # UTC or the rendered timestamps carry the runner's offset and nothing matches.
+        env:
+          TZ: UTC
+        run: ./gradlew :app:verifyPaparazziDebug -PscreenshotOnly
 
       - name: Upload test results
         if: always()
@@ -56,7 +59,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: detekt-report
-          path: build/reports/detekt/
+          # Per subproject since detekt moved off the root project, which owns no Kotlin compilation.
+          path: '**/build/reports/detekt/'
 
       - name: Upload Screenshot Test report
         if: failure()

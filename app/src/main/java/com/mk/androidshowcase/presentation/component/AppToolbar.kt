@@ -23,7 +23,6 @@ import com.mk.androidshowcase.presentation.component.ext.noRippleClickable
 import com.mk.androidshowcase.presentation.foundation.appColorScheme
 import com.mk.androidshowcase.presentation.foundation.space6
 
-
 @Composable
 fun TopAppBar(
     modifier: Modifier = Modifier,

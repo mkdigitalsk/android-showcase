@@ -18,7 +18,6 @@ import com.mk.androidshowcase.presentation.foundation.space10
 import com.mk.androidshowcase.presentation.foundation.space4
 import com.mk.androidshowcase.presentation.foundation.space8
 
-
 private val featureCardIconSize = space10
 
 @Composable

@@ -5,8 +5,6 @@ import org.junit.runners.model.Statement
 import org.junit.runner.Description
 import java.util.Locale
 
-
-
 class LocaleRule : TestRule {
     override fun apply(statement: Statement?, description: Description?): Statement = object : Statement() {
         override fun evaluate() {
