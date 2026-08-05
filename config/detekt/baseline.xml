@@ -2,28 +2,53 @@
 <SmellBaseline>
   <ManuallySuppressedIssues/>
   <CurrentIssues>
-    <ID>CognitiveComplexMethod:DatabaseScreen.kt$@Composable private fun SearchBar( query: String, onQueryChanged: (String) -&gt; Unit, sortOption: NoteSortOption, onSortOptionChanged: (NoteSortOption) -&gt; Unit, showFilterMenu: Boolean, onToggleFilterMenu: () -&gt; Unit, onDismissFilterMenu: () -&gt; Unit, )</ID>
-    <ID>CognitiveComplexMethod:RegisterScreen.kt$@Composable fun RegisterScreen( state: RegisterUiState = RegisterUiState(), onNameChange: (String) -&gt; Unit = {}, onEmailChange: (String) -&gt; Unit = {}, onPasswordChange: (String) -&gt; Unit = {}, onConfirmPasswordChange: (String) -&gt; Unit = {}, onRegister: () -&gt; Unit = {}, onLogin: () -&gt; Unit = {} )</ID>
-    <ID>ComplexCondition:RegisterViewModel.kt$RegisterViewModel$nameError != null || emailError != null || passwordError != null || confirmPasswordError != null</ID>
-    <ID>CyclomaticComplexMethod:CalendarDayCell.kt$@Composable fun CalendarDayCell( day: CalendarDay, selectionType: DaySelectionType, onClick: () -&gt; Unit, modifier: Modifier = Modifier, colors: CalendarColors = CalendarColors.default(), )</ID>
-    <ID>CyclomaticComplexMethod:DeepLinkHandler.kt$DeepLinkHandler$fun parseDeepLink(deepLink: String): Route?</ID>
-    <ID>CyclomaticComplexMethod:RegisterScreen.kt$@Composable fun RegisterScreen( state: RegisterUiState = RegisterUiState(), onNameChange: (String) -&gt; Unit = {}, onEmailChange: (String) -&gt; Unit = {}, onPasswordChange: (String) -&gt; Unit = {}, onConfirmPasswordChange: (String) -&gt; Unit = {}, onRegister: () -&gt; Unit = {}, onLogin: () -&gt; Unit = {} )</ID>
-    <ID>LongParameterList:DatabaseScreen.kt$( query: String, onQueryChanged: (String) -&gt; Unit, sortOption: NoteSortOption, onSortOptionChanged: (NoteSortOption) -&gt; Unit, showFilterMenu: Boolean, onToggleFilterMenu: () -&gt; Unit, onDismissFilterMenu: () -&gt; Unit, )</ID>
-    <ID>LongParameterList:NotificationsViewModel.kt$NotificationsViewModel$( private val getPushPermissionStatusUseCase: GetPushPermissionStatusUseCase, private val observePushTokenUseCase: ObservePushTokenUseCase, private val observePushNotificationsUseCase: ObservePushNotificationsUseCase, private val refreshPushTokenUseCase: RefreshPushTokenUseCase, private val logPushTokenUseCase: LogPushTokenUseCase, private val showLocalNotificationUseCase: ShowLocalNotificationUseCase, private val cancelAllNotificationsUseCase: CancelAllNotificationsUseCase, )</ID>
-    <ID>MagicNumber:CalendarViewModel.kt$CalendarViewModel$12</ID>
-    <ID>MagicNumber:CalendarViewModel.kt$CalendarViewModel$15</ID>
-    <ID>MagicNumber:CalendarViewModel.kt$CalendarViewModel$3</ID>
-    <ID>MagicNumber:CalendarViewModel.kt$CalendarViewModel$7</ID>
-    <ID>MagicNumber:CalendarViewModel.kt$CalendarViewModel$8</ID>
-    <ID>MaxLineLength:NoteDao.kt$NoteDao$@Query("SELECT * FROM notes WHERE title LIKE '%' || :query || '%' OR content LIKE '%' || :query || '%' ORDER BY createdAt ASC")</ID>
-    <ID>MaxLineLength:NoteDao.kt$NoteDao$@Query("SELECT * FROM notes WHERE title LIKE '%' || :query || '%' OR content LIKE '%' || :query || '%' ORDER BY createdAt DESC")</ID>
-    <ID>MaxLineLength:NoteDao.kt$NoteDao$@Query("SELECT * FROM notes WHERE title LIKE '%' || :query || '%' OR content LIKE '%' || :query || '%' ORDER BY title ASC")</ID>
-    <ID>MaxLineLength:NoteDao.kt$NoteDao$@Query("SELECT * FROM notes WHERE title LIKE '%' || :query || '%' OR content LIKE '%' || :query || '%' ORDER BY title DESC")</ID>
-    <ID>SpacingBetweenPackageAndImports:NetworkModule.kt$ </ID>
-    <ID>TooGenericExceptionCaught:LocalNotificationServiceImpl.kt$LocalNotificationServiceImpl$e: Exception</ID>
-    <ID>TooGenericExceptionCaught:PushNotificationServiceImpl.kt$PushNotificationServiceImpl$e: Exception</ID>
-    <ID>TooManyFunctions:NavRouter.kt$NavRouter&lt;T : NavKey&gt;</ID>
-    <ID>TooManyFunctions:NoteDao.kt$NoteDao</ID>
-    <ID>TooManyFunctions:Preferences.kt$Preferences</ID>
+    <ID>CognitiveComplexMethod:DatabaseScreen.kt:@Composable private fun SearchBar</ID>
+    <ID>ComplexCondition:RegisterViewModel.kt:RegisterViewModel$nameError != null || emailError != null || passwordError != null || confirmPasswordError != null</ID>
+    <ID>ComposableParamOrder:AppAlertDialog.kt:@Composable fun AppAlertDialog</ID>
+    <ID>ComposableParamOrder:AppSnackbar.kt:@Composable fun AppSnackbar</ID>
+    <ID>ComposableParamOrder:ImageSourceOptionDialog.kt:@Composable fun ImageSourceOptionDialog</ID>
+    <ID>ComposableParamOrder:MainView.kt:@Suppress("CognitiveComplexMethod") @Composable fun MainView</ID>
+    <ID>CompositionLocalAllowlist:AppTheme.kt:private val LocalColors = staticCompositionLocalOf { LightColorPalette }</ID>
+    <ID>CompositionLocalAllowlist:MainView.kt:val LocalSnackbarHostState = compositionLocalOf&lt;SnackbarHostState&gt; { error("No SnackbarHostState provided") }</ID>
+    <ID>ContentSlotReused:PermissionView.kt:content: @Composable () -&gt; Unit</ID>
+    <ID>LambdaParameterEventTrailing:BiometricView.kt:onClick: () -&gt; Unit</ID>
+    <ID>LambdaParameterInRestartableEffect:ApisScreen.kt:onGetLocation: () -&gt; Unit</ID>
+    <ID>LambdaParameterInRestartableEffect:ApisScreen.kt:onStartUpdates: () -&gt; Unit</ID>
+    <ID>MagicNumber:CalendarViewModel.kt:CalendarViewModel$12</ID>
+    <ID>MagicNumber:CalendarViewModel.kt:CalendarViewModel$15</ID>
+    <ID>MagicNumber:CalendarViewModel.kt:CalendarViewModel$3</ID>
+    <ID>MagicNumber:CalendarViewModel.kt:CalendarViewModel$7</ID>
+    <ID>MagicNumber:CalendarViewModel.kt:CalendarViewModel$8</ID>
+    <ID>MaxLineLength:NoteDao.kt:NoteDao$@Query("SELECT * FROM notes WHERE title LIKE '%' || :query || '%' OR content LIKE '%' || :query || '%' ORDER BY createdAt ASC")</ID>
+    <ID>MaxLineLength:NoteDao.kt:NoteDao$@Query("SELECT * FROM notes WHERE title LIKE '%' || :query || '%' OR content LIKE '%' || :query || '%' ORDER BY createdAt DESC")</ID>
+    <ID>MaxLineLength:NoteDao.kt:NoteDao$@Query("SELECT * FROM notes WHERE title LIKE '%' || :query || '%' OR content LIKE '%' || :query || '%' ORDER BY title ASC")</ID>
+    <ID>MaxLineLength:NoteDao.kt:NoteDao$@Query("SELECT * FROM notes WHERE title LIKE '%' || :query || '%' OR content LIKE '%' || :query || '%' ORDER BY title DESC")</ID>
+    <ID>ModifierNotUsedAtRoot:AppCard.kt:modifier = Modifier.clip(shape).then(modifier)</ID>
+    <ID>ModifierWithoutDefault:BiometricView.kt:modifier: Modifier</ID>
+    <ID>ModifierWithoutDefault:CodeScanner.kt:modifier: Modifier</ID>
+    <ID>MutableStateAutoboxing:UiComponentsScreen.kt:mutableStateOf(0)</ID>
+    <ID>MutableStateAutoboxing:UiComponentsScreen.kt:mutableStateOf(0.5f)</ID>
+    <ID>ParameterNaming:AppSegmentedButton.kt:onSelectionChanged: (Int) -&gt; Unit</ID>
+    <ID>ParameterNaming:CodeScanner.kt:onScanned: (String) -&gt; Unit</ID>
+    <ID>ParameterNaming:DatabaseScreen.kt:onContentChanged: (String) -&gt; Unit</ID>
+    <ID>ParameterNaming:DatabaseScreen.kt:onContentChanged: (String) -&gt; Unit = {}</ID>
+    <ID>ParameterNaming:DatabaseScreen.kt:onQueryChanged: (String) -&gt; Unit</ID>
+    <ID>ParameterNaming:DatabaseScreen.kt:onSearchQueryChanged: (String) -&gt; Unit = {}</ID>
+    <ID>ParameterNaming:DatabaseScreen.kt:onSortOptionChanged: (NoteSortOption) -&gt; Unit</ID>
+    <ID>ParameterNaming:DatabaseScreen.kt:onSortOptionChanged: (NoteSortOption) -&gt; Unit = {}</ID>
+    <ID>ParameterNaming:DatabaseScreen.kt:onTitleChanged: (String) -&gt; Unit</ID>
+    <ID>ParameterNaming:DatabaseScreen.kt:onTitleChanged: (String) -&gt; Unit = {}</ID>
+    <ID>ParameterNaming:LanguageSelector.kt:onLanguageSelected: (LanguageState) -&gt; Unit</ID>
+    <ID>ParameterNaming:SettingsScreen.kt:onLanguageSelected: (LanguageState) -&gt; Unit = {}</ID>
+    <ID>ParameterNaming:SettingsScreen.kt:onThemeSelected: (ThemeModeState) -&gt; Unit</ID>
+    <ID>ParameterNaming:SettingsScreen.kt:onThemeSelected: (ThemeModeState) -&gt; Unit = {}</ID>
+    <ID>PreviewPublic:HomeScreen.kt:@Preview @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES) @Composable fun HomeScreenPreview</ID>
+    <ID>TooGenericExceptionCaught:LocalNotificationServiceImpl.kt:LocalNotificationServiceImpl$e: Exception</ID>
+    <ID>TooGenericExceptionCaught:PushNotificationServiceImpl.kt:PushNotificationServiceImpl$e: Exception</ID>
+    <ID>TooManyFunctions:NavRouter.kt:NavRouter&lt;T : NavKey&gt;</ID>
+    <ID>TooManyFunctions:NoteDao.kt:NoteDao</ID>
+    <ID>TooManyFunctions:Preferences.kt:Preferences</ID>
+    <ID>ViewModelForwarding:SettingsScreen.kt:ImagePickerView(viewModel = imagePickerViewModel)</ID>
+    <ID>ViewModelInjection:ScreenLifecycleEffect.kt:val viewModel = hiltViewModel&lt;VM&gt;(viewModelStoreOwner = viewModelStoreOwner, key = key)</ID>
   </CurrentIssues>
 </SmellBaseline>
