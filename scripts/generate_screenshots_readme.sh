@@ -16,7 +16,7 @@ OUTPUT_FILE="docs/screens.md"
 mkdir -p "$(dirname "$OUTPUT_FILE")"
 
 # Paparazzi names files like:
-#   com.mk.androidshowcase.presentation.screen.calendar_CalendarScreenScreenshotTest_calendarScreen[0]_light.png
+#   sk.mkdigital.androidshowcase.presentation.screen.calendar_CalendarScreenScreenshotTest_calendarScreen[0]_light.png
 # The '[' and ']' must be percent-encoded in Markdown/HTML image src.
 url_encode() { echo "$1" | sed 's/\[/%5B/g; s/\]/%5D/g'; }
 
