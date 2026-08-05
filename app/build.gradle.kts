@@ -55,6 +55,18 @@ android {
 
     buildTypes {
         debug {
+            // A debuggable build never occupies the production identity: it installs beside the release
+            // instead of replacing it, its crashes and analytics stay out of the testers' stream, and no
+            // one ends up with a debugger-attachable app under the real application id.
+            applicationIdSuffix = ".debug"
+
+            // Its own Firebase app, so a build sent to testers for a look never lands in the production
+            // app's crash and analytics stream.
+            firebaseAppDistribution {
+                appId = "1:513132666055:android:976493229a289ee55d32e2"
+                artifactType = "APK"
+                groups = localProperties["fb.test.group"]?.toString() ?: "testers"
+            }
             isDefault = true
             isDebuggable = true
             buildConfigField("String", "BASE_URL", "\"https://api.showcase.mkdigital.sk/v1/\"")

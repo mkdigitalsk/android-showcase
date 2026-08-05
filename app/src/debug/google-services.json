@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "513132666055",
+    "project_id": "android-showcase-34ca1",
+    "storage_bucket": "android-showcase-34ca1.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:513132666055:android:976493229a289ee55d32e2",
+        "android_client_info": {
+          "package_name": "sk.mkdigital.androidshowcase.debug"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDrN6JVs-UHxXnO3cOqag5yjWEStfPDuyw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
