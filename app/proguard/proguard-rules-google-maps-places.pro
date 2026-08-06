@@ -1,4 +1,0 @@
--keep class com.google.android.gms.maps.** { *; }
--keep class com.google.android.libraries.places.** { *; }
--dontwarn com.google.android.gms.**
--dontwarn com.google.android.libraries.places.**
