@@ -9,7 +9,7 @@ data class AppCallbacks(
     // External actions
     val openLink: (String) -> Unit = {},
     val dial: (String) -> Unit = {},
-    val share: (String) -> Unit = {},
+    val share: (String, String) -> Unit = { _, _ -> },
     val copyToClipboard: (String) -> Unit = {},
     val sendEmail: (to: String, subject: String, body: String) -> Unit = { _, _, _ -> },
     val openSettings: () -> Unit = {},
