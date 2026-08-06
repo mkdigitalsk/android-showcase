@@ -137,6 +137,7 @@ dependencies {
     // Core Android
     implementation(libs.androidx.core.ktx)
     implementation(libs.activity.compose)
+    implementation(libs.core.splashscreen)
     implementation(libs.android.material)
 
     // Compose

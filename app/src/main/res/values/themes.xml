@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="Theme.AndroidShowcase" parent="Theme.Material3.DayNight.NoActionBar" />
+    <style name="Theme.AndroidShowcase.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/brand_navy</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_splash_logo</item>
+        <item name="postSplashScreenTheme">@style/Theme.AndroidShowcase</item>
+    </style>
 </resources>
