@@ -30,7 +30,7 @@ interface NavRouter<T : NavKey> {
     // External actions
     fun openLink(url: String)
     fun dial(number: String)
-    fun share(text: String)
+    fun share(text: String, title: String)
     fun copyToClipboard(text: String)
     fun sendEmail(to: String, subject: String, body: String)
     fun openNotificationSettings()
@@ -67,7 +67,7 @@ class NavRouterImpl<T : NavKey>(
 
     override fun openLink(url: String) = callbacks.openLink(url)
     override fun dial(number: String) = callbacks.dial(number)
-    override fun share(text: String) = callbacks.share(text)
+    override fun share(text: String, title: String) = callbacks.share(text, title)
     override fun copyToClipboard(text: String) = callbacks.copyToClipboard(text)
     override fun sendEmail(to: String, subject: String, body: String) = callbacks.sendEmail(to, subject, body)
     override fun openNotificationSettings() = callbacks.openNotificationSettings()

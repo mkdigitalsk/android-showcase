@@ -329,7 +329,10 @@ private fun ApisNavEvents(
     val context = LocalContext.current
     CollectNavEvents(navEventFlow = navEvent) { event ->
         when (event) {
-            is ApisNavEvent.Share -> router.share(context.getString(event.textRes))
+            is ApisNavEvent.Share -> router.share(
+                text = context.getString(event.textRes),
+                title = context.getString(event.titleRes)
+            )
             is ApisNavEvent.Dial -> router.dial(context.getString(event.numberRes))
             is ApisNavEvent.OpenLink -> router.openLink(context.getString(event.urlRes))
             is ApisNavEvent.SendEmail -> router.sendEmail(

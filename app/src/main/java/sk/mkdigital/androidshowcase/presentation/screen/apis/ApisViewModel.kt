@@ -32,7 +32,12 @@ class ApisViewModel @Inject constructor(
     }
 
     fun share() {
-        navigate(ApisNavEvent.Share(R.string.platform_apis_demo_share_text))
+        navigate(
+            ApisNavEvent.Share(
+                textRes = R.string.platform_apis_demo_share_text,
+                titleRes = R.string.platform_apis_demo_share_title
+            )
+        )
     }
 
     fun dial() {
@@ -136,7 +141,10 @@ data class ApisUiState(
 )
 
 sealed interface ApisNavEvent : NavEvent {
-    data class Share(@param:StringRes val textRes: Int) : ApisNavEvent
+    data class Share(
+        @param:StringRes val textRes: Int,
+        @param:StringRes val titleRes: Int
+    ) : ApisNavEvent
     data class Dial(@param:StringRes val numberRes: Int) : ApisNavEvent
     data class OpenLink(@param:StringRes val urlRes: Int) : ApisNavEvent
     data class SendEmail(
