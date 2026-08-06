@@ -23,6 +23,7 @@ lifecycleViewmodelNav3 = "2.11.0"
 
 # Android / AndroidX
 activityCompose = "1.13.0"
+coreSplashscreen = "1.2.0"
 androidMaterial = "1.14.0"
 biometric = "1.1.0"
 cameraX = "1.6.1"
@@ -77,6 +78,7 @@ detektCompose = "0.6.3"
 # Android / AndroidX Core
 androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }
 activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
+core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
 android-material = { module = "com.google.android.material:material", version.ref = "androidMaterial" }
 androidx-biometric = { module = "androidx.biometric:biometric", version.ref = "biometric" }
 datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
