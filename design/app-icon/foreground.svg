@@ -1,0 +1,18 @@
+<svg viewBox="0 0 108 108" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Android Showcase">
+  <!-- Adaptive-icon FOREGROUND, 108 canvas. The safe zone is a CIRCLE of diameter 66, so the limit is the
+       glyph's diagonal, not its width: the 0.81 scale pulls the torso corners inside r=33 of (54,54). -->
+  <g transform="translate(54,54) scale(0.81) translate(-54,-54)">
+    <g fill="#3DDC84">
+      <path d="M27,57 A27,27 0 0 1 81,57 Z"/>
+      <path d="M27,59 L81,59 L81,77 Q81,84 74,84 L34,84 Q27,84 27,77 Z"/>
+    </g>
+    <g stroke="#3DDC84" stroke-width="5" stroke-linecap="round">
+      <line x1="37" y1="24" x2="43" y2="38"/>
+      <line x1="71" y1="24" x2="65" y2="38"/>
+    </g>
+    <g fill="#0E2A47">
+      <circle cx="44" cy="45" r="3.5"/>
+      <circle cx="64" cy="45" r="3.5"/>
+    </g>
+  </g>
+</svg>
