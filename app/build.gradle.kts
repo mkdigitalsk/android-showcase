@@ -216,7 +216,6 @@ dependencies {
     // Firebase
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
-    implementation(libs.firebase.app.check)
     implementation(libs.firebase.crashlytics)
     implementation(libs.firebase.messaging)
 
@@ -232,4 +231,5 @@ dependencies {
 
     debugImplementation(libs.compose.ui.tooling)
     debugImplementation(libs.compose.ui.test.manifest)
+    debugImplementation(libs.firebase.app.check.debug)
 }
