@@ -97,7 +97,6 @@ private fun UserListContent(
         ) {
             Column {
                 TextHeadlineMediumPrimary(stringResource(R.string.networking_title))
-                TextBodyMediumNeutral80(stringResource(R.string.networking_subtitle))
             }
             IconButton(onClick = onRefresh, enabled = !isRefreshing) {
                 if (isRefreshing) {
