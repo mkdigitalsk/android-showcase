@@ -75,7 +75,6 @@ fun LoginScreen(
         onEmailChange = viewModel::onEmailChange,
         onPasswordChange = viewModel::onPasswordChange,
         onLogin = viewModel::login,
-        onSkip = viewModel::skip,
         onRegister = viewModel::toRegister,
         onBiometricAuth = viewModel::authenticateWithBiometrics,
         onFillTestAccount = viewModel::fillTestAccount
@@ -88,7 +87,6 @@ fun LoginScreen(
     onEmailChange: (String) -> Unit = {},
     onPasswordChange: (String) -> Unit = {},
     onLogin: () -> Unit = {},
-    onSkip: () -> Unit = {},
     onRegister: () -> Unit = {},
     onBiometricAuth: () -> Unit = {},
     onFillTestAccount: () -> Unit = {}
@@ -103,18 +101,6 @@ fun LoginScreen(
             .padding(space4),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Skip button at top right
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.End
-        ) {
-            TextButton(onClick = onSkip) {
-                TextButtonPrimary(stringResource(R.string.login_skip))
-            }
-        }
-
-        Spacer4()
-
         TextTitleLargePrimary(stringResource(R.string.login_title))
 
         Spacer8()
