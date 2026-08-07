@@ -33,7 +33,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.SharedFlow
 import sk.mkdigital.androidshowcase.R
 import sk.mkdigital.androidshowcase.presentation.base.CollectNavEvents
@@ -50,7 +49,6 @@ import sk.mkdigital.androidshowcase.presentation.component.text.bodyMedium.TextB
 import sk.mkdigital.androidshowcase.presentation.component.text.headlineMedium.TextHeadlineMediumPrimary
 import sk.mkdigital.androidshowcase.presentation.foundation.floatingNavBarSpace
 import sk.mkdigital.androidshowcase.presentation.foundation.space4
-import sk.mkdigital.androidshowcase.presentation.screen.LocalSnackbarHostState
 
 private enum class PendingLocationAction { NONE, GET_LOCATION, START_UPDATES }
 
@@ -94,21 +92,10 @@ fun ApisScreen(
     viewModel: ApisViewModel = lifecycleAwareViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    val snackbarHostState = LocalSnackbarHostState.current
-    val copiedMessage = stringResource(R.string.platform_apis_copied_message)
-
     val handleLocationAction = rememberLocationActionHandler(
         onGetLocation = viewModel::getLocation,
         onStartUpdates = viewModel::startLocationUpdates
     )
-
-    LaunchedEffect(state.copiedToClipboard) {
-        if (state.copiedToClipboard) {
-            snackbarHostState.showSnackbar(copiedMessage)
-            delay(100)
-            viewModel.resetCopyState()
-        }
-    }
 
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
@@ -180,6 +167,10 @@ fun ApisScreen(
                 icon = Icons.Outlined.ContentCopy,
                 title = stringResource(R.string.platform_apis_copy_title)
             ) {
+                if (state.copiedToClipboard) {
+                    TextBodyMediumNeutral80(stringResource(R.string.platform_apis_copied_message))
+                    Spacer2()
+                }
                 ApiCardButton(
                     text = stringResource(R.string.platform_apis_copy_action),
                     onClick = viewModel::copyToClipboard
@@ -202,8 +193,10 @@ fun ApisScreen(
                         stringResource(R.string.platform_apis_location_result, location.latitude, location.longitude)
                     else -> null
                 }
-                locationText?.let { TextBodyMediumNeutral80(it) }
-                Spacer2()
+                locationText?.let {
+                    TextBodyMediumNeutral80(it)
+                    Spacer2()
+                }
                 ApiCardButton(
                     text = stringResource(R.string.platform_apis_location_action),
                     onClick = { handleLocationAction(PendingLocationAction.GET_LOCATION) }
@@ -227,8 +220,10 @@ fun ApisScreen(
                     )
                     else -> null
                 }
-                trackedText?.let { TextBodyMediumNeutral80(it) }
-                Spacer2()
+                trackedText?.let {
+                    TextBodyMediumNeutral80(it)
+                    Spacer2()
+                }
                 ApiCardButton(
                     text = stringResource(
                         if (state.isTrackingLocation) R.string.platform_apis_location_updates_stop
@@ -266,8 +261,10 @@ fun ApisScreen(
                     }
                     else -> null
                 }
-                biometricText?.let { TextBodyMediumNeutral80(it) }
-                Spacer2()
+                biometricText?.let {
+                    TextBodyMediumNeutral80(it)
+                    Spacer2()
+                }
                 ApiCardButton(
                     text = stringResource(R.string.platform_apis_biometrics_action),
                     onClick = viewModel::authenticateWithBiometrics,

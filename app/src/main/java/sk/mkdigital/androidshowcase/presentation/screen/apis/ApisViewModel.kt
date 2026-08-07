@@ -63,10 +63,6 @@ class ApisViewModel @Inject constructor(
         newState { it.copy(copiedToClipboard = true) }
     }
 
-    fun resetCopyState() {
-        newState { it.copy(copiedToClipboard = false) }
-    }
-
     fun getLocation() {
         execute(
             action = { getLastKnownLocationUseCase() },
