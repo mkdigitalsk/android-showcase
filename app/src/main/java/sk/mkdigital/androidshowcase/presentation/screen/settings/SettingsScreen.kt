@@ -2,6 +2,7 @@ package sk.mkdigital.androidshowcase.presentation.screen.settings
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -46,6 +47,13 @@ import sk.mkdigital.androidshowcase.presentation.component.text.bodySmall.TextBo
 import sk.mkdigital.androidshowcase.presentation.component.text.titleLarge.TextTitleLargePrimary
 import sk.mkdigital.androidshowcase.presentation.foundation.AppTheme
 import sk.mkdigital.androidshowcase.presentation.foundation.floatingNavBarSpace
+import sk.mkdigital.androidshowcase.presentation.foundation.space2
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.material3.MaterialTheme
+import sk.mkdigital.androidshowcase.presentation.component.image.AppImage
+import sk.mkdigital.androidshowcase.presentation.component.text.bodySmall.TextBodySmall
 import sk.mkdigital.androidshowcase.presentation.foundation.space4
 
 @Composable
@@ -73,7 +81,8 @@ fun SettingsScreen(
         onThemeDismiss = viewModel::hideThemeDialog,
         onLanguageSelected = viewModel::onLanguageSelected,
         onCrashClick = viewModel::triggerTestCrash,
-        onLogout = viewModel::logout
+        onLogout = viewModel::logout,
+        onWebClick = viewModel::openWeb
     )
 
     ImagePickerView(viewModel = imagePickerViewModel)
@@ -89,7 +98,8 @@ fun SettingsScreen(
     onThemeDismiss: () -> Unit = {},
     onLanguageSelected: (LanguageState) -> Unit = {},
     onCrashClick: () -> Unit = {},
-    onLogout: () -> Unit = {}
+    onLogout: () -> Unit = {},
+    onWebClick: () -> Unit = {}
 ) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
@@ -119,7 +129,10 @@ fun SettingsScreen(
         }
 
         item {
-            TextTitleLargePrimary(stringResource(R.string.settings_appearance))
+            TextTitleLargePrimary(
+                text = stringResource(R.string.settings_appearance),
+                modifier = Modifier.padding(top = space4)
+            )
         }
 
         item {
@@ -164,6 +177,22 @@ fun SettingsScreen(
                         value = stringResource(R.string.settings_test_crash_subtitle)
                     )
                 }
+            }
+        }
+
+        item {
+            TextTitleLargePrimary(
+                text = stringResource(R.string.settings_about),
+                modifier = Modifier.padding(top = space4)
+            )
+        }
+
+        item {
+            AppElevatedCard(
+                modifier = Modifier.fillMaxWidth(),
+                onClick = onWebClick
+            ) {
+                AboutItem()
             }
         }
 
@@ -280,6 +309,31 @@ private fun ThemeOption(
 }
 
 @Composable
+private fun AboutItem() {
+    Column(modifier = Modifier.fillMaxWidth()) {
+        AppImage(
+            resource = R.drawable.mk_digital_lockup,
+            modifier = Modifier.fillMaxWidth(),
+            contentScale = ContentScale.FillWidth
+        )
+        Column(
+            modifier = Modifier.fillMaxWidth().padding(space4),
+            verticalArrangement = Arrangement.spacedBy(space2)
+        ) {
+            TextBodyLargeNeutral100(
+                text = stringResource(R.string.settings_about_tagline),
+                fontWeight = FontWeight.Bold
+            )
+            TextBodySmall(
+                text = stringResource(R.string.settings_about_web),
+                color = MaterialTheme.colorScheme.primary,
+                textDecoration = TextDecoration.Underline
+            )
+        }
+    }
+}
+
+@Composable
 private fun VersionFooter(
     versionName: String,
     versionCode: String,
@@ -306,6 +360,7 @@ private fun SettingsNavEvents(
             )
 
             is SettingNavEvents.ThemeChanged -> router.setThemeMode(event.mode)
+            is SettingNavEvents.OpenWeb -> router.openLink(event.url)
         }
     }
 }
