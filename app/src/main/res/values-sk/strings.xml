@@ -180,10 +180,8 @@
     <string name="platform_apis_copied_message">Skopírované do schránky</string>
     <string name="platform_apis_demo_email_subject">Ahoj z Android Showcase</string>
     <string name="platform_apis_demo_email_body">Toto je demo email odoslaný z aplikácie Android Showcase.</string>
-    <string name="platform_apis_demo_share_title">MK Digital — váš produkt, dodaný od začiatku do konca</string>
-    <string name="platform_apis_demo_share_text">iOS, Android, web aj backend — postavené raz a poriadne, jedným zodpovedným partnerom.
-
-https://mkdigital.sk</string>
+    <string name="platform_apis_demo_share_title">MK Digital — Software Studio</string>
+    <string name="platform_apis_demo_share_text">iOS, Android, web aj backend — postavené raz a poriadne, jedným zodpovedným partnerom.</string>
     <string name="platform_apis_demo_copy_text">Text skopírovaný z Android Showcase</string>
     <string name="platform_apis_location_title">Poloha</string>
     <string name="platform_apis_location_action">Získať polohu</string>

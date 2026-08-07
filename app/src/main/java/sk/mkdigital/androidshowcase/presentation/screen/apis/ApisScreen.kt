@@ -328,7 +328,8 @@ private fun ApisNavEvents(
         when (event) {
             is ApisNavEvent.Share -> router.share(
                 text = context.getString(event.textRes),
-                title = context.getString(event.titleRes)
+                title = context.getString(event.titleRes),
+                url = context.getString(event.urlRes)
             )
             is ApisNavEvent.Dial -> router.dial(context.getString(event.numberRes))
             is ApisNavEvent.OpenLink -> router.openLink(context.getString(event.urlRes))

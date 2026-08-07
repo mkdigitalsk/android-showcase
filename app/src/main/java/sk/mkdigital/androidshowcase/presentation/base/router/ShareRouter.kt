@@ -9,15 +9,16 @@ import sk.mkdigital.androidshowcase.R
 import java.io.File
 
 interface ShareRouter {
-    fun share(text: String, title: String)
+    fun share(text: String, title: String, url: String)
     class Impl(private val context: Context) : ShareRouter {
         override fun share(
             text: String,
-            title: String
+            title: String,
+            url: String
         ) {
             val sendIntent = Intent(Intent.ACTION_SEND).apply {
                 type = "text/plain"
-                putExtra(Intent.EXTRA_TEXT, text)
+                putExtra(Intent.EXTRA_TEXT, "$text\n\n$url")
                 putExtra(Intent.EXTRA_TITLE, title)
                 // The thumbnail rides the ClipData and appears only when a title is set.
                 previewUri()?.let { uri ->
