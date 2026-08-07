@@ -92,6 +92,10 @@ class SettingsViewModel @Inject constructor(
         navigate(SettingNavEvents.SetLocaleTag(language.code))
     }
 
+    fun openWeb() {
+        navigate(SettingNavEvents.OpenWeb(STUDIO_URL))
+    }
+
     fun logout() {
         navigate(SettingNavEvents.Logout)
     }
@@ -102,6 +106,10 @@ class SettingsViewModel @Inject constructor(
             action = { recordExceptionUseCase(exception) },
             onSuccess = { throw exception }
         )
+    }
+
+    private companion object {
+        const val STUDIO_URL = "https://mkdigital.sk"
     }
 }
 
@@ -127,4 +135,6 @@ sealed interface SettingNavEvents : NavEvent {
     data object Logout : SettingNavEvents
 
     data class ThemeChanged(val mode: ThemeMode) : SettingNavEvents
+
+    data class OpenWeb(val url: String) : SettingNavEvents
 }
