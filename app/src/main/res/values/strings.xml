@@ -296,14 +296,14 @@
     <string name="sign_in_password_weak">Password must contain uppercase, lowercase, number and special character</string>
     <string name="sign_in_button">Sign In</string>
     <string name="sign_in_no_account">Don\'t have an account?</string>
-    <string name="sign_in_sign_up">SignUp</string>
+    <string name="sign_in_sign_up">Sign Up</string>
     <string name="sign_in_or_divider">or</string>
     <string name="sign_in_biometric_hint_fingerprint">Use fingerprint</string>
     <string name="sign_in_test_account_hint">Test Account</string>
     <string name="sign_in_test_account_fill">Fill</string>
 
     <!-- SignUp Screen -->
-    <string name="screen_sign_up">SignUp</string>
+    <string name="screen_sign_up">Sign Up</string>
     <string name="sign_up_title">Create Account</string>
     <string name="sign_up_name_label">Name</string>
     <string name="sign_up_name_placeholder">Enter your name</string>
@@ -323,7 +323,7 @@
     <string name="sign_up_confirm_password_placeholder">Confirm your password</string>
     <string name="sign_up_confirm_password_empty">Please confirm your password</string>
     <string name="sign_up_confirm_password_mismatch">Passwords do not match</string>
-    <string name="sign_up_button">SignUp</string>
+    <string name="sign_up_button">Sign Up</string>
     <string name="sign_up_has_account">Already have an account?</string>
     <string name="sign_up_sign_in">Sign In</string>
 
