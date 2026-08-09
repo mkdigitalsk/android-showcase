@@ -8,7 +8,6 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import sk.mkdigital.androidshowcase.data.database.AppDatabase
 import sk.mkdigital.androidshowcase.data.database.dao.NoteDao
-import sk.mkdigital.androidshowcase.data.database.dao.RegisteredUserDao
 import javax.inject.Singleton
 
 @Module
@@ -25,11 +24,5 @@ object DatabaseModule {
     @Singleton
     fun provideNoteDao(database: AppDatabase): NoteDao {
         return database.noteDao()
-    }
-
-    @Provides
-    @Singleton
-    fun provideRegisteredUserDao(database: AppDatabase): RegisteredUserDao {
-        return database.registeredUserDao()
     }
 }

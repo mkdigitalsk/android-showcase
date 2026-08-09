@@ -5,19 +5,16 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import sk.mkdigital.androidshowcase.data.database.dao.NoteDao
-import sk.mkdigital.androidshowcase.data.database.dao.RegisteredUserDao
 import sk.mkdigital.androidshowcase.data.database.entity.NoteEntity
-import sk.mkdigital.androidshowcase.data.database.entity.RegisteredUserEntity
 
 @Database(
-    entities = [NoteEntity::class, RegisteredUserEntity::class],
+    entities = [NoteEntity::class],
     version = 1,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun noteDao(): NoteDao
-    abstract fun registeredUserDao(): RegisteredUserDao
 
     companion object {
         private const val DATABASE_NAME = "app.db"
