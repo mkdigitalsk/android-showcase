@@ -7,7 +7,9 @@ import sk.mkdigital.androidshowcase.domain.useCase.auth.SignInWithTokenUseCase
 import sk.mkdigital.androidshowcase.domain.useCase.base.invoke
 import sk.mkdigital.androidshowcase.domain.useCase.biometric.AuthenticateWithBiometricUseCase
 import sk.mkdigital.androidshowcase.domain.useCase.biometric.IsBiometricEnabledUseCase
+import sk.mkdigital.androidshowcase.presentation.base.AppError
 import sk.mkdigital.androidshowcase.presentation.base.BaseViewModel
+import sk.mkdigital.androidshowcase.presentation.base.toAppError
 import sk.mkdigital.androidshowcase.presentation.base.NavEvent
 import sk.mkdigital.androidshowcase.presentation.util.ValidationPatterns
 import javax.inject.Inject
@@ -78,7 +80,7 @@ class SignInViewModel @Inject constructor(
                     navigate(SignInNavEvent.ToHome)
                 },
                 onError = { error ->
-                    newState { it.copy(isLoading = false, serverError = error.message) }
+                    newState { it.copy(isLoading = false, serverError = error.toAppError()) }
                 }
             )
         }
@@ -138,7 +140,7 @@ data class SignInUiState(
     val emailError: EmailError? = null,
     val passwordError: PasswordError? = null,
     val isLoading: Boolean = false,
-    val serverError: String? = null,
+    val serverError: AppError? = null,
     val biometricsAvailable: Boolean = false,
     val biometricsLoading: Boolean = false,
 )

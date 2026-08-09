@@ -15,7 +15,7 @@ class LocationRepositoryImpl @Inject constructor(
     override suspend fun lastKnownLocation(): Location {
         return locationClient.lastKnown() ?: throw LocationException(
             message = "Last known location not available",
-            userMessage = "Location not available. Please enable location services.",
+            logMessage = "Location not available. Please enable location services.",
             errorCode = LocationErrorCode.NOT_AVAILABLE
         )
     }

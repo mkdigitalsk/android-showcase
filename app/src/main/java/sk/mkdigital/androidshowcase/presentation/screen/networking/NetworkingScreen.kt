@@ -30,7 +30,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import sk.mkdigital.androidshowcase.R
 import sk.mkdigital.androidshowcase.domain.model.User
 import sk.mkdigital.androidshowcase.presentation.component.CircularProgress
+import sk.mkdigital.androidshowcase.presentation.base.AppError
 import sk.mkdigital.androidshowcase.presentation.component.ErrorView
+import sk.mkdigital.androidshowcase.presentation.component.text
 import sk.mkdigital.androidshowcase.presentation.component.LoadingView
 import sk.mkdigital.androidshowcase.presentation.component.cards.AppElevatedCard
 import sk.mkdigital.androidshowcase.presentation.component.spacers.ColumnSpacer.Spacer2
@@ -56,7 +58,7 @@ internal fun NetworkingScreen(
         when {
             state.isLoading && state.users.isEmpty() -> LoadingView()
             state.error != null && state.users.isEmpty() -> ErrorView(
-                message = state.error,
+                message = state.error.text(),
                 onRetry = onRefresh
             )
 
@@ -162,7 +164,7 @@ private fun NetworkingScreenPreview(
 internal class NetworkingScreenPreviewParams : PreviewParameterProvider<NetworkingUiState> {
     override val values = sequenceOf(
         NetworkingUiState(isLoading = true),
-        NetworkingUiState(error = "401"),
+        NetworkingUiState(error = AppError.UNAUTHORIZED),
         NetworkingUiState(users = listOf(
             User(
                 id = 1,

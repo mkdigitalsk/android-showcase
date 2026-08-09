@@ -48,6 +48,8 @@ import sk.mkdigital.androidshowcase.presentation.component.AppPasswordTextField
 import sk.mkdigital.androidshowcase.presentation.component.AppTextField
 import sk.mkdigital.androidshowcase.presentation.component.biometric.BiometricView
 import sk.mkdigital.androidshowcase.presentation.component.buttons.ContainedButton
+import sk.mkdigital.androidshowcase.presentation.component.text
+import sk.mkdigital.androidshowcase.presentation.component.text.labelLarge.TextButtonError
 import sk.mkdigital.androidshowcase.presentation.component.image.AppIconNeutral80
 import sk.mkdigital.androidshowcase.presentation.component.spacers.ColumnSpacer.Spacer2
 import sk.mkdigital.androidshowcase.presentation.component.spacers.ColumnSpacer.Spacer4
@@ -159,7 +161,11 @@ fun SignInScreen(
 
         Spacer6()
 
-        // SignIn button
+        state.serverError?.let { error ->
+            TextButtonError(text = error.text(), modifier = Modifier.fillMaxWidth())
+            Spacer4()
+        }
+
         ContainedButton(
             text = stringResource(R.string.sign_in_button),
             onClick = {
