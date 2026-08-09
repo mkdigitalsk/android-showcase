@@ -40,7 +40,7 @@ suspend inline fun <T> handleApiCall(
         message = "HTTP error: ${e.message()}",
         cause = e,
         userMessage = when (code) {
-            401 -> "Please log in again."
+            401 -> "Please sign in again."
             403 -> "You don't have permission to access this."
             404 -> "The requested resource was not found."
             in 500..599 -> "Server error. Please try again later."
