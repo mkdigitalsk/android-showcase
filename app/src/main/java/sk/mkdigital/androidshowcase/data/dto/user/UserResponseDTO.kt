@@ -8,10 +8,9 @@ import kotlinx.serialization.Serializable
 data class UserResponseDTO(
     val id: Long,
     val email: String,
-    val name: String,
     val createdAt: Long,
     val themeMode: ThemeModeDTO,
     val locale: String,
 ) : TransformToDomainModel<User> {
-    override fun transform(): User = User(id = id, email = email, name = name)
+    override fun transform(): User = User(id = id, email = email)
 }

@@ -14,10 +14,6 @@ class SignUpViewModel @Inject constructor(
     private val signUpUseCase: SignUpUseCase,
 ) : BaseViewModel<SignUpUiState>(SignUpUiState()) {
 
-    fun onNameChange(name: String) {
-        newState { it.copy(name = name, nameError = null) }
-    }
-
     fun onEmailChange(email: String) {
         newState { it.copy(email = email, emailError = null) }
     }
@@ -32,15 +28,13 @@ class SignUpViewModel @Inject constructor(
 
     fun signUp() {
         requireState { state ->
-            val nameError = validateName(state.name)
             val emailError = validateEmail(state.email)
             val passwordError = validatePassword(state.password)
             val confirmPasswordError = validateConfirmPassword(state.password, state.confirmPassword)
 
-            if (nameError != null || emailError != null || passwordError != null || confirmPasswordError != null) {
+            if (emailError != null || passwordError != null || confirmPasswordError != null) {
                 newState {
                     it.copy(
-                        nameError = nameError,
                         emailError = emailError,
                         passwordError = passwordError,
                         confirmPasswordError = confirmPasswordError
@@ -49,13 +43,13 @@ class SignUpViewModel @Inject constructor(
                 return@requireState
             }
 
-            performSignUp(state.name, state.email, state.password)
+            performSignUp(state.email, state.password)
         }
     }
 
-    private fun performSignUp(name: String, email: String, password: String) {
+    private fun performSignUp(email: String, password: String) {
         execute(
-            action = { signUpUseCase(SignUpUseCase.Params(name, email, password)) },
+            action = { signUpUseCase(SignUpUseCase.Params(email, password)) },
             onLoading = { newState { it.copy(isLoading = true) } },
             onSuccess = {
                 newState { it.copy(isLoading = false) }
@@ -76,14 +70,6 @@ class SignUpViewModel @Inject constructor(
 
     fun toSignIn() {
         navigate(SignUpNavEvent.ToSignIn)
-    }
-
-    private fun validateName(name: String): SignUpNameError? {
-        return when {
-            name.isBlank() -> SignUpNameError.EMPTY
-            name.length < MIN_NAME_LENGTH -> SignUpNameError.TOO_SHORT
-            else -> null
-        }
     }
 
     private fun validateEmail(email: String): SignUpEmailError? {
@@ -110,15 +96,6 @@ class SignUpViewModel @Inject constructor(
             else -> null
         }
     }
-
-    companion object {
-        private const val MIN_NAME_LENGTH = 2
-    }
-}
-
-enum class SignUpNameError {
-    EMPTY,
-    TOO_SHORT
 }
 
 enum class SignUpEmailError {
@@ -139,11 +116,9 @@ enum class SignUpConfirmPasswordError {
 }
 
 data class SignUpUiState(
-    val name: String = "",
     val email: String = "",
     val password: String = "",
     val confirmPassword: String = "",
-    val nameError: SignUpNameError? = null,
     val emailError: SignUpEmailError? = null,
     val passwordError: SignUpPasswordError? = null,
     val confirmPasswordError: SignUpConfirmPasswordError? = null,
