@@ -81,7 +81,7 @@ fun SettingsScreen(
         onThemeDismiss = viewModel::hideThemeDialog,
         onLanguageSelected = viewModel::onLanguageSelected,
         onCrashClick = viewModel::triggerTestCrash,
-        onLogout = viewModel::logout,
+        onSignOut = viewModel::signOut,
         onWebClick = viewModel::openWeb
     )
 
@@ -98,7 +98,7 @@ fun SettingsScreen(
     onThemeDismiss: () -> Unit = {},
     onLanguageSelected: (LanguageState) -> Unit = {},
     onCrashClick: () -> Unit = {},
-    onLogout: () -> Unit = {},
+    onSignOut: () -> Unit = {},
     onWebClick: () -> Unit = {}
 ) {
     LazyColumn(
@@ -205,8 +205,8 @@ fun SettingsScreen(
 
         item {
             AppTextButtonError(
-                text = stringResource(R.string.settings_logout),
-                onClick = onLogout,
+                text = stringResource(R.string.settings_sign_out),
+                onClick = onSignOut,
                 modifier = Modifier.fillMaxWidth()
             )
         }
@@ -353,8 +353,8 @@ private fun SettingsNavEvents(
     CollectNavEvents(navEventFlow = navEvent) { event ->
         when (event) {
             is SettingNavEvents.SetLocaleTag -> router.setLocale(event.tag)
-            is SettingNavEvents.Logout -> router.navigateTo(
-                Route.Login,
+            is SettingNavEvents.SignOut -> router.navigateTo(
+                Route.SignIn,
                 popUpTo = Route.HomeSection.Home::class,
                 inclusive = true
             )

@@ -29,11 +29,11 @@ fun BiometricView(
         ) {
             AppIconPrimary(
                 imageVector = Icons.Filled.Fingerprint,
-                contentDescription = stringResource(R.string.login_biometric_hint_fingerprint),
+                contentDescription = stringResource(R.string.sign_in_biometric_hint_fingerprint),
                 size = 48.dp,
             )
         }
-        TextBodySmallNeutral80(stringResource(R.string.login_biometric_hint_fingerprint))
+        TextBodySmallNeutral80(stringResource(R.string.sign_in_biometric_hint_fingerprint))
     }
 }
 

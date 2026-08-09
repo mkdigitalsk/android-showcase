@@ -38,7 +38,8 @@ for file in $(ls "$SNAPSHOTS_DIR"/*.png 2>/dev/null | sort); do
 
     # Screen = the segment after '.screen.' and before the next '_'
     # (e.g. 'calendar' from ...screen.calendar_CalendarScreenScreenshotTest_...).
-    screen_name=$(echo "$filename" | sed -E 's/.*\.screen\.([a-z0-9]+)_.*/\1/')
+    # Capitals included, or a camelCase package like 'signIn' falls through as the whole filename.
+    screen_name=$(echo "$filename" | sed -E 's/.*\.screen\.([a-zA-Z0-9]+)_.*/\1/')
     # State label = everything after 'ScreenshotTest_' (e.g. 'calendarScreen[0]_light').
     state=$(echo "$filename" | sed -E 's/.*ScreenshotTest_//; s/\.png$//')
     rel_path="$(url_encode "../$SNAPSHOTS_DIR/$filename")"

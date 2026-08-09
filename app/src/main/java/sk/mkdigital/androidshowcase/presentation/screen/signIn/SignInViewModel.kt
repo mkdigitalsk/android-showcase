@@ -1,9 +1,9 @@
-package sk.mkdigital.androidshowcase.presentation.screen.login
+package sk.mkdigital.androidshowcase.presentation.screen.signIn
 
 import dagger.hilt.android.lifecycle.HiltViewModel
 import sk.mkdigital.androidshowcase.data.biometric.BiometricResult
-import sk.mkdigital.androidshowcase.domain.useCase.auth.LoginUseCase
-import sk.mkdigital.androidshowcase.domain.useCase.auth.LoginWithTokenUseCase
+import sk.mkdigital.androidshowcase.domain.useCase.auth.SignInUseCase
+import sk.mkdigital.androidshowcase.domain.useCase.auth.SignInWithTokenUseCase
 import sk.mkdigital.androidshowcase.domain.useCase.base.invoke
 import sk.mkdigital.androidshowcase.domain.useCase.biometric.AuthenticateWithBiometricUseCase
 import sk.mkdigital.androidshowcase.domain.useCase.biometric.IsBiometricEnabledUseCase
@@ -13,24 +13,24 @@ import sk.mkdigital.androidshowcase.presentation.util.ValidationPatterns
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewModel @Inject constructor(
-    private val loginUseCase: LoginUseCase,
-    private val loginWithTokenUseCase: LoginWithTokenUseCase,
+class SignInViewModel @Inject constructor(
+    private val signInUseCase: SignInUseCase,
+    private val signInWithTokenUseCase: SignInWithTokenUseCase,
     private val isBiometricEnabledUseCase: IsBiometricEnabledUseCase,
     private val authenticateWithBiometricUseCase: AuthenticateWithBiometricUseCase,
-) : BaseViewModel<LoginUiState>(LoginUiState()) {
+) : BaseViewModel<SignInUiState>(SignInUiState()) {
 
-    fun skip() = navigate(LoginNavEvent.ToHome)
+    fun skip() = navigate(SignInNavEvent.ToHome)
 
-    fun toRegister() = navigate(LoginNavEvent.ToRegister)
+    fun toSignUp() = navigate(SignInNavEvent.ToSignUp)
 
     override fun loadInitialData() {
         execute(
-            action = { loginWithTokenUseCase() },
+            action = { signInWithTokenUseCase() },
             onLoading = { newState { it.copy(isLoading = true) } },
             onSuccess = { session ->
                 newState { it.copy(isLoading = false) }
-                if (session != null) navigate(LoginNavEvent.ToHome)
+                if (session != null) navigate(SignInNavEvent.ToHome)
             },
             onError = { newState { it.copy(isLoading = false) } }
         )
@@ -55,7 +55,7 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    fun login() {
+    fun signIn() {
         requireState { state ->
             val emailError = validateEmail(state.email)
             val passwordError = validatePassword(state.password)
@@ -71,11 +71,11 @@ class LoginViewModel @Inject constructor(
             }
 
             execute(
-                action = { loginUseCase(LoginUseCase.Params(state.email, state.password)) },
+                action = { signInUseCase(SignInUseCase.Params(state.email, state.password)) },
                 onLoading = { newState { it.copy(isLoading = true, serverError = null) } },
                 onSuccess = {
                     newState { it.copy(isLoading = false) }
-                    navigate(LoginNavEvent.ToHome)
+                    navigate(SignInNavEvent.ToHome)
                 },
                 onError = { error ->
                     newState { it.copy(isLoading = false, serverError = error.message) }
@@ -91,7 +91,7 @@ class LoginViewModel @Inject constructor(
             onSuccess = { result ->
                 newState { it.copy(biometricsLoading = false) }
                 if (result is BiometricResult.Success) {
-                    navigate(LoginNavEvent.ToHome)
+                    navigate(SignInNavEvent.ToHome)
                 }
             },
             onError = { newState { it.copy(biometricsLoading = false) } }
@@ -132,7 +132,7 @@ enum class PasswordError {
     WEAK
 }
 
-data class LoginUiState(
+data class SignInUiState(
     val email: String = "",
     val password: String = "",
     val emailError: EmailError? = null,
@@ -143,7 +143,7 @@ data class LoginUiState(
     val biometricsLoading: Boolean = false,
 )
 
-sealed interface LoginNavEvent : NavEvent {
-    data object ToHome : LoginNavEvent
-    data object ToRegister : LoginNavEvent
+sealed interface SignInNavEvent : NavEvent {
+    data object ToHome : SignInNavEvent
+    data object ToSignUp : SignInNavEvent
 }

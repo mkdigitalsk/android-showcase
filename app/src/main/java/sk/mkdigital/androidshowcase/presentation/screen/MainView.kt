@@ -31,8 +31,8 @@ import sk.mkdigital.androidshowcase.presentation.base.AppCallbacks
 import sk.mkdigital.androidshowcase.presentation.base.NavRouter
 import sk.mkdigital.androidshowcase.presentation.base.Route
 import sk.mkdigital.androidshowcase.presentation.base.Route.HomeSection
-import sk.mkdigital.androidshowcase.presentation.base.Route.Login
-import sk.mkdigital.androidshowcase.presentation.base.Route.Register
+import sk.mkdigital.androidshowcase.presentation.base.Route.SignIn
+import sk.mkdigital.androidshowcase.presentation.base.Route.SignUp
 import sk.mkdigital.androidshowcase.presentation.base.Route.Settings
 import sk.mkdigital.androidshowcase.presentation.base.rememberNavEntryDecorators
 import sk.mkdigital.androidshowcase.presentation.base.rememberNavRouter
@@ -49,10 +49,10 @@ import sk.mkdigital.androidshowcase.presentation.screen.calendar.CalendarScreen
 import sk.mkdigital.androidshowcase.presentation.screen.database.DatabaseScreen
 import sk.mkdigital.androidshowcase.presentation.screen.feature.UiComponentsScreen
 import sk.mkdigital.androidshowcase.presentation.screen.home.HomeScreen
-import sk.mkdigital.androidshowcase.presentation.screen.login.LoginScreen
+import sk.mkdigital.androidshowcase.presentation.screen.signIn.SignInScreen
 import sk.mkdigital.androidshowcase.presentation.screen.networking.NetworkingScreen
 import sk.mkdigital.androidshowcase.presentation.screen.notifications.NotificationsScreen
-import sk.mkdigital.androidshowcase.presentation.screen.register.RegisterScreen
+import sk.mkdigital.androidshowcase.presentation.screen.signUp.SignUpScreen
 import sk.mkdigital.androidshowcase.presentation.screen.scanner.ScannerScreen
 import sk.mkdigital.androidshowcase.presentation.screen.settings.SettingsScreen
 import sk.mkdigital.androidshowcase.presentation.screen.storage.StorageScreen
@@ -105,8 +105,8 @@ fun MainView(
                         onBack = router::onBack,
                         entryDecorators = rememberNavEntryDecorators(),
                         entryProvider = entryProvider {
-                            entry<Login> { LoginScreen(router) }
-                            entry<Register> { RegisterScreen(router) }
+                            entry<SignIn> { SignInScreen(router) }
+                            entry<SignUp> { SignUpScreen(router) }
                             entry<HomeSection.Home> { HomeScreen(router) }
                             entry<HomeSection.UiComponents> { UiComponentsScreen() }
                             entry<HomeSection.Networking> { NetworkingScreen() }
@@ -183,8 +183,8 @@ private fun DeepLinkEffect(
 
                     is Settings -> router.navigateTo(route, popUpTo = HomeSection.Home::class)
 
-                    Login,
-                    Register -> router.navigateTo(route, popUpTo = HomeSection.Home::class, inclusive = true)
+                    SignIn,
+                    SignUp -> router.navigateTo(route, popUpTo = HomeSection.Home::class, inclusive = true)
                 }
             }
         }

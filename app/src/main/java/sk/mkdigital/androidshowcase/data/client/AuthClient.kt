@@ -1,15 +1,15 @@
 package sk.mkdigital.androidshowcase.data.client
 
 import sk.mkdigital.androidshowcase.data.dto.auth.AuthResponseDTO
-import sk.mkdigital.androidshowcase.data.dto.auth.LoginRequestDTO
-import sk.mkdigital.androidshowcase.data.dto.auth.RegisterRequestDTO
+import sk.mkdigital.androidshowcase.data.dto.auth.SignInRequestDTO
+import sk.mkdigital.androidshowcase.data.dto.auth.SignUpRequestDTO
 import sk.mkdigital.androidshowcase.data.network.AuthApi
 import sk.mkdigital.androidshowcase.data.network.handleApiCall
 import javax.inject.Inject
 
 interface AuthClient {
-    suspend fun login(email: String, password: String): AuthResponseDTO
-    suspend fun register(email: String, password: String, name: String): AuthResponseDTO
+    suspend fun signIn(email: String, password: String): AuthResponseDTO
+    suspend fun signUp(email: String, password: String, name: String): AuthResponseDTO
     suspend fun me(token: String): AuthResponseDTO
 }
 
@@ -17,12 +17,12 @@ class AuthClientImpl @Inject constructor(
     private val authApi: AuthApi
 ) : AuthClient {
 
-    override suspend fun login(email: String, password: String): AuthResponseDTO = handleApiCall {
-        authApi.login(LoginRequestDTO(email, password))
+    override suspend fun signIn(email: String, password: String): AuthResponseDTO = handleApiCall {
+        authApi.signIn(SignInRequestDTO(email, password))
     }
 
-    override suspend fun register(email: String, password: String, name: String): AuthResponseDTO = handleApiCall {
-        authApi.register(RegisterRequestDTO(email, password, name))
+    override suspend fun signUp(email: String, password: String, name: String): AuthResponseDTO = handleApiCall {
+        authApi.signUp(SignUpRequestDTO(email, password, name))
     }
 
     override suspend fun me(token: String): AuthResponseDTO = handleApiCall {

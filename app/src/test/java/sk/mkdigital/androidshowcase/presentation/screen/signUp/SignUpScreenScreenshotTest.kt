@@ -1,4 +1,4 @@
-package sk.mkdigital.androidshowcase.presentation.screen.login
+package sk.mkdigital.androidshowcase.presentation.screen.signUp
 
 import com.android.resources.NightMode
 import sk.mkdigital.androidshowcase.presentation.base.BaseScreenshotTest
@@ -7,21 +7,21 @@ import sk.mkdigital.androidshowcase.presentation.base.generateParameterizedData
 import org.junit.Test
 import org.junit.runners.Parameterized
 
-class LoginScreenScreenshotTest(
-    stateHolder: StateHolder<LoginUiState>,
+class SignUpScreenScreenshotTest(
+    stateHolder: StateHolder<SignUpUiState>,
     mode: NightMode,
-) : BaseScreenshotTest<LoginUiState>(stateHolder, mode) {
+) : BaseScreenshotTest<SignUpUiState>(stateHolder, mode) {
 
     companion object {
         @JvmStatic
         @Parameterized.Parameters
-        fun data(): Collection<*> = generateParameterizedData(LoginScreenPreviewParams())
+        fun data(): Collection<*> = generateParameterizedData(SignUpScreenPreviewParams())
     }
 
     @Test
-    fun loginScreen() {
+    fun signUpScreen() {
         screenshot {
-            LoginScreen(state = state)
+            SignUpScreen(state = state)
         }
     }
 }

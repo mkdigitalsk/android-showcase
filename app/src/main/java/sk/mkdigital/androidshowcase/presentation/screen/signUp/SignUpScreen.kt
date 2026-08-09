@@ -1,4 +1,4 @@
-package sk.mkdigital.androidshowcase.presentation.screen.register
+package sk.mkdigital.androidshowcase.presentation.screen.signUp
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -55,33 +55,33 @@ import sk.mkdigital.androidshowcase.presentation.foundation.space4
 import sk.mkdigital.androidshowcase.presentation.foundation.space6
 
 @Composable
-fun RegisterScreen(
+fun SignUpScreen(
     router: NavRouter<Route>,
-    viewModel: RegisterViewModel = hiltViewModel(),
+    viewModel: SignUpViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    RegisterNavEvents(router, viewModel.navEvent)
-    RegisterScreen(
+    SignUpNavEvents(router, viewModel.navEvent)
+    SignUpScreen(
         state = state,
         onNameChange = viewModel::onNameChange,
         onEmailChange = viewModel::onEmailChange,
         onPasswordChange = viewModel::onPasswordChange,
         onConfirmPasswordChange = viewModel::onConfirmPasswordChange,
-        onRegister = viewModel::register,
-        onLogin = viewModel::toLogin
+        onSignUp = viewModel::signUp,
+        onSignIn = viewModel::toSignIn
     )
 }
 
 @Composable
-fun RegisterScreen(
-    state: RegisterUiState = RegisterUiState(),
+fun SignUpScreen(
+    state: SignUpUiState = SignUpUiState(),
     onNameChange: (String) -> Unit = {},
     onEmailChange: (String) -> Unit = {},
     onPasswordChange: (String) -> Unit = {},
     onConfirmPasswordChange: (String) -> Unit = {},
-    onRegister: () -> Unit = {},
-    onLogin: () -> Unit = {}
+    onSignUp: () -> Unit = {},
+    onSignIn: () -> Unit = {}
 ) {
     val focusManager = LocalFocusManager.current
 
@@ -94,7 +94,7 @@ fun RegisterScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer8()
-        TextTitleLargePrimary(stringResource(R.string.register_title))
+        TextTitleLargePrimary(stringResource(R.string.sign_up_title))
         Spacer8()
 
         // Name field
@@ -102,13 +102,13 @@ fun RegisterScreen(
             value = state.name,
             onValueChange = onNameChange,
             modifier = Modifier.fillMaxWidth(),
-            label = stringResource(R.string.register_name_label),
-            placeholder = stringResource(R.string.register_name_placeholder),
+            label = stringResource(R.string.sign_up_name_label),
+            placeholder = stringResource(R.string.sign_up_name_placeholder),
             isError = state.nameError != null,
             supportingText = state.nameError?.let { error ->
                 when (error) {
-                    RegisterNameError.EMPTY -> stringResource(R.string.register_name_empty)
-                    RegisterNameError.TOO_SHORT -> stringResource(R.string.register_name_short)
+                    SignUpNameError.EMPTY -> stringResource(R.string.sign_up_name_empty)
+                    SignUpNameError.TOO_SHORT -> stringResource(R.string.sign_up_name_short)
                 }
             },
             leadingIcon = {
@@ -131,14 +131,14 @@ fun RegisterScreen(
             value = state.email,
             onValueChange = onEmailChange,
             modifier = Modifier.fillMaxWidth(),
-            label = stringResource(R.string.register_email_label),
-            placeholder = stringResource(R.string.register_email_placeholder),
+            label = stringResource(R.string.sign_up_email_label),
+            placeholder = stringResource(R.string.sign_up_email_placeholder),
             isError = state.emailError != null,
             supportingText = state.emailError?.let { error ->
                 when (error) {
-                    RegisterEmailError.EMPTY -> stringResource(R.string.register_email_empty)
-                    RegisterEmailError.INVALID_FORMAT -> stringResource(R.string.register_email_invalid)
-                    RegisterEmailError.ALREADY_EXISTS -> stringResource(R.string.register_email_already_exists)
+                    SignUpEmailError.EMPTY -> stringResource(R.string.sign_up_email_empty)
+                    SignUpEmailError.INVALID_FORMAT -> stringResource(R.string.sign_up_email_invalid)
+                    SignUpEmailError.ALREADY_EXISTS -> stringResource(R.string.sign_up_email_already_exists)
                 }
             },
             leadingIcon = {
@@ -161,14 +161,14 @@ fun RegisterScreen(
             value = state.password,
             onValueChange = onPasswordChange,
             modifier = Modifier.fillMaxWidth(),
-            label = stringResource(R.string.register_password_label),
-            placeholder = stringResource(R.string.register_password_placeholder),
+            label = stringResource(R.string.sign_up_password_label),
+            placeholder = stringResource(R.string.sign_up_password_placeholder),
             isError = state.passwordError != null,
             supportingText = state.passwordError?.let { error ->
                 when (error) {
-                    RegisterPasswordError.EMPTY -> stringResource(R.string.register_password_empty)
-                    RegisterPasswordError.TOO_SHORT -> stringResource(R.string.register_password_short)
-                    RegisterPasswordError.WEAK -> stringResource(R.string.register_password_weak)
+                    SignUpPasswordError.EMPTY -> stringResource(R.string.sign_up_password_empty)
+                    SignUpPasswordError.TOO_SHORT -> stringResource(R.string.sign_up_password_short)
+                    SignUpPasswordError.WEAK -> stringResource(R.string.sign_up_password_weak)
                 }
             },
             keyboardActions = KeyboardActions(
@@ -183,26 +183,26 @@ fun RegisterScreen(
             value = state.confirmPassword,
             onValueChange = onConfirmPasswordChange,
             modifier = Modifier.fillMaxWidth(),
-            label = stringResource(R.string.register_confirm_password_label),
-            placeholder = stringResource(R.string.register_confirm_password_placeholder),
+            label = stringResource(R.string.sign_up_confirm_password_label),
+            placeholder = stringResource(R.string.sign_up_confirm_password_placeholder),
             isError = state.confirmPasswordError != null,
             supportingText = state.confirmPasswordError?.let { error ->
                 when (error) {
-                    RegisterConfirmPasswordError.EMPTY -> stringResource(R.string.register_confirm_password_empty)
-                    RegisterConfirmPasswordError.MISMATCH -> stringResource(R.string.register_confirm_password_mismatch)
+                    SignUpConfirmPasswordError.EMPTY -> stringResource(R.string.sign_up_confirm_password_empty)
+                    SignUpConfirmPasswordError.MISMATCH -> stringResource(R.string.sign_up_confirm_password_mismatch)
                 }
             },
             keyboardActions = KeyboardActions(
                 onDone = {
                     focusManager.clearFocus()
-                    onRegister()
+                    onSignUp()
                 }
             )
         )
 
         Spacer(modifier = Modifier.height(space6))
 
-        // Register button
+        // SignUp button
         if (state.isLoading) {
             CircularProgressIndicator(
                 modifier = Modifier.size(space12),
@@ -210,10 +210,10 @@ fun RegisterScreen(
             )
         } else {
             ContainedButton(
-                text = stringResource(R.string.register_button),
+                text = stringResource(R.string.sign_up_button),
                 onClick = {
                     focusManager.clearFocus()
-                    onRegister()
+                    onSignUp()
                 },
                 modifier = Modifier.fillMaxWidth()
             )
@@ -221,13 +221,13 @@ fun RegisterScreen(
 
         Spacer4()
 
-        // Login link
+        // SignIn link
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
-            TextBodyMediumNeutral80(stringResource(R.string.register_has_account))
-            TextButton(onClick = onLogin) {
-                TextButtonPrimary(stringResource(R.string.register_login))
+            TextBodyMediumNeutral80(stringResource(R.string.sign_up_has_account))
+            TextButton(onClick = onSignIn) {
+                TextButtonPrimary(stringResource(R.string.sign_up_sign_in))
             }
         }
 
@@ -236,19 +236,19 @@ fun RegisterScreen(
 }
 
 @Composable
-private fun RegisterNavEvents(
+private fun SignUpNavEvents(
     router: NavRouter<Route>,
     navEvent: SharedFlow<NavEvent>
 ) {
     CollectNavEvents(navEventFlow = navEvent) { event ->
         when (event) {
-            is RegisterNavEvent.ToHome -> router.navigateTo(
+            is SignUpNavEvent.ToHome -> router.navigateTo(
                 Route.HomeSection.Home,
-                popUpTo = Route.Register::class,
+                popUpTo = Route.SignUp::class,
                 inclusive = true
             )
 
-            is RegisterNavEvent.ToLogin -> router.onBack()
+            is SignUpNavEvent.ToSignIn -> router.onBack()
         }
     }
 }
@@ -256,27 +256,27 @@ private fun RegisterNavEvents(
 @Preview
 @Preview(uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
 @Composable
-private fun RegisterScreenPreview(
-    @PreviewParameter(RegisterScreenPreviewParams::class) state: RegisterUiState
+private fun SignUpScreenPreview(
+    @PreviewParameter(SignUpScreenPreviewParams::class) state: SignUpUiState
 ) {
     AppTheme {
-        RegisterScreen(state = state)
+        SignUpScreen(state = state)
     }
 }
 
-internal class RegisterScreenPreviewParams : PreviewParameterProvider<RegisterUiState> {
+internal class SignUpScreenPreviewParams : PreviewParameterProvider<SignUpUiState> {
     override val values = sequenceOf(
-        RegisterUiState(),
-        RegisterUiState(
+        SignUpUiState(),
+        SignUpUiState(
             name = "John Doe",
             email = "john@example.com",
             password = "Test123!",
             confirmPassword = "Test123!"
         ),
-        RegisterUiState(isLoading = true),
-        RegisterUiState(
-            nameError = RegisterNameError.TOO_SHORT,
-            emailError = RegisterEmailError.INVALID_FORMAT
+        SignUpUiState(isLoading = true),
+        SignUpUiState(
+            nameError = SignUpNameError.TOO_SHORT,
+            emailError = SignUpEmailError.INVALID_FORMAT
         )
     )
 }
