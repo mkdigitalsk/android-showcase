@@ -13,8 +13,8 @@ import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 import kotlinx.serialization.modules.subclass
 import sk.mkdigital.androidshowcase.presentation.base.Route.HomeSection
-import sk.mkdigital.androidshowcase.presentation.base.Route.Login
-import sk.mkdigital.androidshowcase.presentation.base.Route.Register
+import sk.mkdigital.androidshowcase.presentation.base.Route.SignIn
+import sk.mkdigital.androidshowcase.presentation.base.Route.SignUp
 import sk.mkdigital.androidshowcase.presentation.base.Route.Settings
 import sk.mkdigital.androidshowcase.presentation.foundation.ThemeMode
 import kotlin.reflect.KClass
@@ -80,7 +80,7 @@ class NavRouterImpl<T : NavKey>(
 fun <T : NavKey> rememberNavRouter(
     appCallbacks: AppCallbacks = AppCallbacks(),
 ): NavRouter<T> {
-    val backStack = rememberNavBackStack(saveStateConfiguration, Login)
+    val backStack = rememberNavBackStack(saveStateConfiguration, SignIn)
     return remember(backStack, appCallbacks) {
         NavRouterImpl(backStack as NavBackStack<T>, appCallbacks)
     }
@@ -95,8 +95,8 @@ fun <T : NavKey> rememberNavEntryDecorators(): List<NavEntryDecorator<T>> = list
 private val saveStateConfiguration = SavedStateConfiguration {
     serializersModule = SerializersModule {
         polymorphic(NavKey::class) {
-            subclass(Login.serializer())
-            subclass(Register.serializer())
+            subclass(SignIn.serializer())
+            subclass(SignUp.serializer())
             subclass(HomeSection.Home.serializer())
             subclass(HomeSection.UiComponents.serializer())
             subclass(HomeSection.Networking.serializer())

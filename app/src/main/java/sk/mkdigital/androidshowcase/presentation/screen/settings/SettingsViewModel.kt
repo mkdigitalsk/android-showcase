@@ -96,8 +96,8 @@ class SettingsViewModel @Inject constructor(
         navigate(SettingNavEvents.OpenWeb(STUDIO_URL))
     }
 
-    fun logout() {
-        navigate(SettingNavEvents.Logout)
+    fun signOut() {
+        navigate(SettingNavEvents.SignOut)
     }
 
     fun triggerTestCrash() {
@@ -132,7 +132,7 @@ sealed interface SettingNavEvents : NavEvent {
     // Android
     data class SetLocaleTag(val tag: String) : SettingNavEvents
 
-    data object Logout : SettingNavEvents
+    data object SignOut : SettingNavEvents
 
     data class ThemeChanged(val mode: ThemeMode) : SettingNavEvents
 

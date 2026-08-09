@@ -3,7 +3,7 @@
   <ManuallySuppressedIssues/>
   <CurrentIssues>
     <ID>CognitiveComplexMethod:DatabaseScreen.kt:@Composable private fun SearchBar</ID>
-    <ID>ComplexCondition:RegisterViewModel.kt:RegisterViewModel$nameError != null || emailError != null || passwordError != null || confirmPasswordError != null</ID>
+    <ID>ComplexCondition:SignUpViewModel.kt:SignUpViewModel$nameError != null || emailError != null || passwordError != null || confirmPasswordError != null</ID>
     <ID>ComposableParamOrder:AppAlertDialog.kt:@Composable fun AppAlertDialog</ID>
     <ID>ComposableParamOrder:AppSnackbar.kt:@Composable fun AppSnackbar</ID>
     <ID>ComposableParamOrder:ImageSourceOptionDialog.kt:@Composable fun ImageSourceOptionDialog</ID>

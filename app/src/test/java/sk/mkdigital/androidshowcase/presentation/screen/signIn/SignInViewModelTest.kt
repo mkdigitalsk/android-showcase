@@ -1,11 +1,11 @@
-package sk.mkdigital.androidshowcase.presentation.screen.login
+package sk.mkdigital.androidshowcase.presentation.screen.signIn
 
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import sk.mkdigital.androidshowcase.domain.model.AuthSession
-import sk.mkdigital.androidshowcase.domain.useCase.auth.LoginUseCase
-import sk.mkdigital.androidshowcase.domain.useCase.auth.LoginWithTokenUseCase
+import sk.mkdigital.androidshowcase.domain.useCase.auth.SignInUseCase
+import sk.mkdigital.androidshowcase.domain.useCase.auth.SignInWithTokenUseCase
 import sk.mkdigital.androidshowcase.domain.useCase.biometric.AuthenticateWithBiometricUseCase
 import sk.mkdigital.androidshowcase.domain.useCase.biometric.IsBiometricEnabledUseCase
 import sk.mkdigital.androidshowcase.fake.NoOpLogger
@@ -17,21 +17,21 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class LoginViewModelTest : BaseViewModelTest<LoginViewModel>() {
+class SignInViewModelTest : BaseViewModelTest<SignInViewModel>() {
 
-    override lateinit var classUnderTest: LoginViewModel
+    override lateinit var classUnderTest: SignInViewModel
 
-    private val loginUseCase = mockk<LoginUseCase>()
-    private val loginWithTokenUseCase = mockk<LoginWithTokenUseCase>()
+    private val signInUseCase = mockk<SignInUseCase>()
+    private val signInWithTokenUseCase = mockk<SignInWithTokenUseCase>()
     private val isBiometricEnabledUseCase = mockk<IsBiometricEnabledUseCase>()
     private val authenticateWithBiometricUseCase = mockk<AuthenticateWithBiometricUseCase>()
 
     override fun beforeEach() {
-        coEvery { loginUseCase(any()) } returns
+        coEvery { signInUseCase(any()) } returns
             AuthSession(token = "token", userId = 1L, email = "test@example.com", name = "Test")
-        classUnderTest = LoginViewModel(
-            loginUseCase = loginUseCase,
-            loginWithTokenUseCase = loginWithTokenUseCase,
+        classUnderTest = SignInViewModel(
+            signInUseCase = signInUseCase,
+            signInWithTokenUseCase = signInWithTokenUseCase,
             isBiometricEnabledUseCase = isBiometricEnabledUseCase,
             authenticateWithBiometricUseCase = authenticateWithBiometricUseCase,
         ).apply { logger = NoOpLogger }
@@ -72,7 +72,7 @@ class LoginViewModelTest : BaseViewModelTest<LoginViewModel>() {
 
     @Test
     fun `onEmailChange clears email error`() {
-        classUnderTest.login() // Triggers validation error for empty email
+        classUnderTest.signIn() // Triggers validation error for empty email
 
         classUnderTest.onEmailChange("test@example.com")
 
@@ -88,7 +88,7 @@ class LoginViewModelTest : BaseViewModelTest<LoginViewModel>() {
 
     @Test
     fun `onPasswordChange clears password error`() {
-        classUnderTest.login() // Triggers validation error for empty password
+        classUnderTest.signIn() // Triggers validation error for empty password
 
         classUnderTest.onPasswordChange("Test123!")
 
@@ -99,19 +99,19 @@ class LoginViewModelTest : BaseViewModelTest<LoginViewModel>() {
     fun `fillTestAccount sets test email`() {
         classUnderTest.fillTestAccount()
 
-        assertEquals(LoginViewModel.TEST_EMAIL, classUnderTest.state.value.email)
+        assertEquals(SignInViewModel.TEST_EMAIL, classUnderTest.state.value.email)
     }
 
     @Test
     fun `fillTestAccount sets test password`() {
         classUnderTest.fillTestAccount()
 
-        assertEquals(LoginViewModel.TEST_PASSWORD, classUnderTest.state.value.password)
+        assertEquals(SignInViewModel.TEST_PASSWORD, classUnderTest.state.value.password)
     }
 
     @Test
     fun `fillTestAccount clears errors`() {
-        classUnderTest.login() // Triggers validation errors
+        classUnderTest.signIn() // Triggers validation errors
 
         classUnderTest.fillTestAccount()
 
@@ -120,69 +120,69 @@ class LoginViewModelTest : BaseViewModelTest<LoginViewModel>() {
     }
 
     @Test
-    fun `login with empty email shows EMPTY error`() {
+    fun `sign in with empty email shows EMPTY error`() {
         classUnderTest.onPasswordChange("Test123!")
 
-        classUnderTest.login()
+        classUnderTest.signIn()
 
         assertEquals(EmailError.EMPTY, classUnderTest.state.value.emailError)
     }
 
     @Test
-    fun `login with invalid email format shows INVALID_FORMAT error`() {
+    fun `sign in with invalid email format shows INVALID_FORMAT error`() {
         classUnderTest.onEmailChange("invalid-email")
         classUnderTest.onPasswordChange("Test123!")
 
-        classUnderTest.login()
+        classUnderTest.signIn()
 
         assertEquals(EmailError.INVALID_FORMAT, classUnderTest.state.value.emailError)
     }
 
     @Test
-    fun `login with valid email clears email error`() {
+    fun `sign in with valid email clears email error`() {
         classUnderTest.onEmailChange("test@example.com")
         classUnderTest.onPasswordChange("Test123!")
 
-        classUnderTest.login()
+        classUnderTest.signIn()
 
         assertNull(classUnderTest.state.value.emailError)
     }
 
     @Test
-    fun `login with empty password shows EMPTY error`() {
+    fun `sign in with empty password shows EMPTY error`() {
         classUnderTest.onEmailChange("test@example.com")
 
-        classUnderTest.login()
+        classUnderTest.signIn()
 
         assertEquals(PasswordError.EMPTY, classUnderTest.state.value.passwordError)
     }
 
     @Test
-    fun `login with short password shows TOO_SHORT error`() {
+    fun `sign in with short password shows TOO_SHORT error`() {
         classUnderTest.onEmailChange("test@example.com")
         classUnderTest.onPasswordChange("Test1!")
 
-        classUnderTest.login()
+        classUnderTest.signIn()
 
         assertEquals(PasswordError.TOO_SHORT, classUnderTest.state.value.passwordError)
     }
 
     @Test
-    fun `login with weak password shows WEAK error`() {
+    fun `sign in with weak password shows WEAK error`() {
         classUnderTest.onEmailChange("test@example.com")
         classUnderTest.onPasswordChange("testtest") // No uppercase, digit, or special char
 
-        classUnderTest.login()
+        classUnderTest.signIn()
 
         assertEquals(PasswordError.WEAK, classUnderTest.state.value.passwordError)
     }
 
     @Test
-    fun `login with valid credentials clears all errors`() {
+    fun `sign in with valid credentials clears all errors`() {
         classUnderTest.onEmailChange("test@example.com")
         classUnderTest.onPasswordChange("Test123!")
 
-        classUnderTest.login()
+        classUnderTest.signIn()
 
         assertNull(classUnderTest.state.value.emailError)
         assertNull(classUnderTest.state.value.passwordError)
@@ -193,7 +193,7 @@ class LoginViewModelTest : BaseViewModelTest<LoginViewModel>() {
         classUnderTest.onEmailChange("testexample.com")
         classUnderTest.onPasswordChange("Test123!")
 
-        classUnderTest.login()
+        classUnderTest.signIn()
 
         assertEquals(EmailError.INVALID_FORMAT, classUnderTest.state.value.emailError)
     }
@@ -203,7 +203,7 @@ class LoginViewModelTest : BaseViewModelTest<LoginViewModel>() {
         classUnderTest.onEmailChange("test@")
         classUnderTest.onPasswordChange("Test123!")
 
-        classUnderTest.login()
+        classUnderTest.signIn()
 
         assertEquals(EmailError.INVALID_FORMAT, classUnderTest.state.value.emailError)
     }
@@ -213,7 +213,7 @@ class LoginViewModelTest : BaseViewModelTest<LoginViewModel>() {
         classUnderTest.onEmailChange("user.name+tag@example.co.uk")
         classUnderTest.onPasswordChange("Test123!")
 
-        classUnderTest.login()
+        classUnderTest.signIn()
 
         assertNull(classUnderTest.state.value.emailError)
     }
@@ -223,7 +223,7 @@ class LoginViewModelTest : BaseViewModelTest<LoginViewModel>() {
         classUnderTest.onEmailChange("test@example.com")
         classUnderTest.onPasswordChange("test123!")
 
-        classUnderTest.login()
+        classUnderTest.signIn()
 
         assertEquals(PasswordError.WEAK, classUnderTest.state.value.passwordError)
     }
@@ -233,7 +233,7 @@ class LoginViewModelTest : BaseViewModelTest<LoginViewModel>() {
         classUnderTest.onEmailChange("test@example.com")
         classUnderTest.onPasswordChange("TEST123!")
 
-        classUnderTest.login()
+        classUnderTest.signIn()
 
         assertEquals(PasswordError.WEAK, classUnderTest.state.value.passwordError)
     }
@@ -243,7 +243,7 @@ class LoginViewModelTest : BaseViewModelTest<LoginViewModel>() {
         classUnderTest.onEmailChange("test@example.com")
         classUnderTest.onPasswordChange("TestTest!")
 
-        classUnderTest.login()
+        classUnderTest.signIn()
 
         assertEquals(PasswordError.WEAK, classUnderTest.state.value.passwordError)
     }
@@ -253,7 +253,7 @@ class LoginViewModelTest : BaseViewModelTest<LoginViewModel>() {
         classUnderTest.onEmailChange("test@example.com")
         classUnderTest.onPasswordChange("Test1234")
 
-        classUnderTest.login()
+        classUnderTest.signIn()
 
         assertEquals(PasswordError.WEAK, classUnderTest.state.value.passwordError)
     }
@@ -263,14 +263,14 @@ class LoginViewModelTest : BaseViewModelTest<LoginViewModel>() {
         classUnderTest.onEmailChange("test@example.com")
         classUnderTest.onPasswordChange("StrongP@ss1")
 
-        classUnderTest.login()
+        classUnderTest.signIn()
 
         assertNull(classUnderTest.state.value.passwordError)
     }
 
     @Test
-    fun `LoginUiState default values are correct`() {
-        val state = LoginUiState()
+    fun `SignInUiState default values are correct`() {
+        val state = SignInUiState()
         assertEquals("", state.email)
         assertEquals("", state.password)
         assertNull(state.emailError)
@@ -306,13 +306,13 @@ class LoginViewModelTest : BaseViewModelTest<LoginViewModel>() {
 
     @Test
     fun `TEST_EMAIL is valid email format`() {
-        assertTrue(LoginViewModel.TEST_EMAIL.contains("@"))
-        assertTrue(LoginViewModel.TEST_EMAIL.contains("."))
+        assertTrue(SignInViewModel.TEST_EMAIL.contains("@"))
+        assertTrue(SignInViewModel.TEST_EMAIL.contains("."))
     }
 
     @Test
     fun `TEST_PASSWORD meets all requirements`() {
-        val password = LoginViewModel.TEST_PASSWORD
+        val password = SignInViewModel.TEST_PASSWORD
         assertTrue(password.length >= 8)
         assertTrue(password.any { it.isUpperCase() })
         assertTrue(password.any { it.isLowerCase() })

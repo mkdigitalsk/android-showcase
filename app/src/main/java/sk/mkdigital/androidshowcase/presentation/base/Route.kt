@@ -14,16 +14,16 @@ sealed interface Route : NavKey {
     val showBottomNav: Boolean get() = true
 
     @Serializable
-    data object Login : Route {
-        override val titleRes = R.string.screen_login
+    data object SignIn : Route {
+        override val titleRes = R.string.screen_sign_in
         override val showBackArrow = false
         override val showTopBar = false
         override val showBottomNav = false
     }
 
     @Serializable
-    data object Register : Route {
-        override val titleRes = R.string.screen_register
+    data object SignUp : Route {
+        override val titleRes = R.string.screen_sign_up
         override val showBackArrow = true
         override val showTopBar = false
         override val showBottomNav = false

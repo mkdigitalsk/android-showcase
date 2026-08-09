@@ -73,13 +73,13 @@ A production-ready Android demo app showcasing modern mobile development with Je
 
 <table>
 <tr>
-<td><img src="app/src/test/snapshots/images/sk.mkdigital.androidshowcase.presentation.screen.login_LoginScreenScreenshotTest_loginScreen%5B0%5D_light.png" width="180" alt="Login"/></td>
+<td><img src="app/src/test/snapshots/images/sk.mkdigital.androidshowcase.presentation.screen.signIn_SignInScreenScreenshotTest_signInScreen%5B0%5D_light.png" width="180" alt="SignIn"/></td>
 <td><img src="app/src/test/snapshots/images/sk.mkdigital.androidshowcase.presentation.screen.home_HomeScreenScreenshotTest_homeScreen%5B0%5D_light.png" width="180" alt="Home"/></td>
 <td><img src="app/src/test/snapshots/images/sk.mkdigital.androidshowcase.presentation.screen.database_DatabaseScreenScreenshotTest_databaseScreen%5B4%5D_light.png" width="180" alt="Database"/></td>
 <td><img src="app/src/test/snapshots/images/sk.mkdigital.androidshowcase.presentation.screen.calendar_CalendarScreenScreenshotTest_calendarScreen%5B2%5D_light.png" width="180" alt="Calendar"/></td>
 </tr>
 <tr>
-<td style="text-align:center">Login</td>
+<td style="text-align:center">SignIn</td>
 <td style="text-align:center">Home</td>
 <td style="text-align:center">Database</td>
 <td style="text-align:center">Calendar</td>

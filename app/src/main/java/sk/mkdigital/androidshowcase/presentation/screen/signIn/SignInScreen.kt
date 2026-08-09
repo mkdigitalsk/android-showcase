@@ -1,4 +1,4 @@
-package sk.mkdigital.androidshowcase.presentation.screen.login
+package sk.mkdigital.androidshowcase.presentation.screen.signIn
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -63,31 +63,31 @@ import sk.mkdigital.androidshowcase.presentation.foundation.space2
 import sk.mkdigital.androidshowcase.presentation.foundation.space4
 
 @Composable
-fun LoginScreen(
+fun SignInScreen(
     router: NavRouter<Route>,
-    viewModel: LoginViewModel = hiltViewModel(),
+    viewModel: SignInViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    LoginNavEvents(router, viewModel.navEvent)
-    LoginScreen(
+    SignInNavEvents(router, viewModel.navEvent)
+    SignInScreen(
         state = state,
         onEmailChange = viewModel::onEmailChange,
         onPasswordChange = viewModel::onPasswordChange,
-        onLogin = viewModel::login,
-        onRegister = viewModel::toRegister,
+        onSignIn = viewModel::signIn,
+        onSignUp = viewModel::toSignUp,
         onBiometricAuth = viewModel::authenticateWithBiometrics,
         onFillTestAccount = viewModel::fillTestAccount
     )
 }
 
 @Composable
-fun LoginScreen(
-    state: LoginUiState = LoginUiState(),
+fun SignInScreen(
+    state: SignInUiState = SignInUiState(),
     onEmailChange: (String) -> Unit = {},
     onPasswordChange: (String) -> Unit = {},
-    onLogin: () -> Unit = {},
-    onRegister: () -> Unit = {},
+    onSignIn: () -> Unit = {},
+    onSignUp: () -> Unit = {},
     onBiometricAuth: () -> Unit = {},
     onFillTestAccount: () -> Unit = {}
 ) {
@@ -101,7 +101,7 @@ fun LoginScreen(
             .padding(space4),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        TextTitleLargePrimary(stringResource(R.string.login_title))
+        TextTitleLargePrimary(stringResource(R.string.sign_in_title))
 
         Spacer8()
 
@@ -110,13 +110,13 @@ fun LoginScreen(
             value = state.email,
             onValueChange = onEmailChange,
             modifier = Modifier.fillMaxWidth(),
-            label = stringResource(R.string.login_email_label),
-            placeholder = stringResource(R.string.login_email_placeholder),
+            label = stringResource(R.string.sign_in_email_label),
+            placeholder = stringResource(R.string.sign_in_email_placeholder),
             isError = state.emailError != null,
             supportingText = state.emailError?.let { error ->
                 when (error) {
-                    EmailError.EMPTY -> stringResource(R.string.login_email_empty)
-                    EmailError.INVALID_FORMAT -> stringResource(R.string.login_email_invalid)
+                    EmailError.EMPTY -> stringResource(R.string.sign_in_email_empty)
+                    EmailError.INVALID_FORMAT -> stringResource(R.string.sign_in_email_invalid)
                 }
             },
             leadingIcon = {
@@ -139,32 +139,32 @@ fun LoginScreen(
             value = state.password,
             onValueChange = onPasswordChange,
             modifier = Modifier.fillMaxWidth(),
-            label = stringResource(R.string.login_password_label),
-            placeholder = stringResource(R.string.login_password_placeholder),
+            label = stringResource(R.string.sign_in_password_label),
+            placeholder = stringResource(R.string.sign_in_password_placeholder),
             isError = state.passwordError != null,
             supportingText = state.passwordError?.let { error ->
                 when (error) {
-                    PasswordError.EMPTY -> stringResource(R.string.login_password_empty)
-                    PasswordError.TOO_SHORT -> stringResource(R.string.login_password_short)
-                    PasswordError.WEAK -> stringResource(R.string.login_password_weak)
+                    PasswordError.EMPTY -> stringResource(R.string.sign_in_password_empty)
+                    PasswordError.TOO_SHORT -> stringResource(R.string.sign_in_password_short)
+                    PasswordError.WEAK -> stringResource(R.string.sign_in_password_weak)
                 }
             },
             keyboardActions = KeyboardActions(
                 onDone = {
                     focusManager.clearFocus()
-                    onLogin()
+                    onSignIn()
                 }
             )
         )
 
         Spacer6()
 
-        // Login button
+        // SignIn button
         ContainedButton(
-            text = stringResource(R.string.login_button),
+            text = stringResource(R.string.sign_in_button),
             onClick = {
                 focusManager.clearFocus()
-                onLogin()
+                onSignIn()
             },
             modifier = Modifier.fillMaxWidth(),
             loading = state.isLoading
@@ -172,17 +172,17 @@ fun LoginScreen(
 
         Spacer4()
 
-        // Register link
+        // SignUp link
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
-            TextBodyMediumNeutral80(stringResource(R.string.login_no_account))
-            TextButton(onClick = onRegister) {
-                TextButtonPrimary(stringResource(R.string.login_register))
+            TextBodyMediumNeutral80(stringResource(R.string.sign_in_no_account))
+            TextButton(onClick = onSignUp) {
+                TextButtonPrimary(stringResource(R.string.sign_in_sign_up))
             }
         }
 
-        // Biometric login
+        // Biometric sign-in
         if (state.biometricsAvailable) {
             Spacer6()
 
@@ -192,7 +192,7 @@ fun LoginScreen(
                 horizontalArrangement = Arrangement.spacedBy(space2)
             ) {
                 HorizontalDivider(modifier = Modifier.weight(1f))
-                TextBodyMediumNeutral80(stringResource(R.string.login_or_divider))
+                TextBodyMediumNeutral80(stringResource(R.string.sign_in_or_divider))
                 HorizontalDivider(modifier = Modifier.weight(1f))
             }
 
@@ -224,19 +224,19 @@ fun LoginScreen(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                TextBodySmallNeutral80(stringResource(R.string.login_test_account_hint))
+                TextBodySmallNeutral80(stringResource(R.string.sign_in_test_account_hint))
 
                 Spacer2()
 
-                TextBodyMediumNeutral80(LoginViewModel.TEST_EMAIL)
-                TextBodyMediumNeutral80(LoginViewModel.TEST_PASSWORD)
+                TextBodyMediumNeutral80(SignInViewModel.TEST_EMAIL)
+                TextBodyMediumNeutral80(SignInViewModel.TEST_PASSWORD)
 
                 Spacer2()
 
                 OutlinedButton(
                     onClick = onFillTestAccount
                 ) {
-                    TextButtonPrimary(stringResource(R.string.login_test_account_fill))
+                    TextButtonPrimary(stringResource(R.string.sign_in_test_account_fill))
                 }
             }
         }
@@ -246,19 +246,19 @@ fun LoginScreen(
 }
 
 @Composable
-private fun LoginNavEvents(
+private fun SignInNavEvents(
     router: NavRouter<Route>,
     navEvent: SharedFlow<NavEvent>
 ) {
     CollectNavEvents(navEventFlow = navEvent) { event ->
         when (event) {
-            is LoginNavEvent.ToHome -> router.navigateTo(
+            is SignInNavEvent.ToHome -> router.navigateTo(
                 Route.HomeSection.Home,
-                popUpTo = Route.Login::class,
+                popUpTo = Route.SignIn::class,
                 inclusive = true
             )
 
-            is LoginNavEvent.ToRegister -> router.navigateTo(Route.Register)
+            is SignInNavEvent.ToSignUp -> router.navigateTo(Route.SignUp)
         }
     }
 }
@@ -266,19 +266,19 @@ private fun LoginNavEvents(
 @Preview
 @Preview(uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
 @Composable
-private fun LoginScreenPreview(
-    @PreviewParameter(LoginScreenPreviewParams::class) state: LoginUiState
+private fun SignInScreenPreview(
+    @PreviewParameter(SignInScreenPreviewParams::class) state: SignInUiState
 ) {
     AppTheme {
-        LoginScreen(state = state)
+        SignInScreen(state = state)
     }
 }
 
-internal class LoginScreenPreviewParams : PreviewParameterProvider<LoginUiState> {
+internal class SignInScreenPreviewParams : PreviewParameterProvider<SignInUiState> {
     override val values = sequenceOf(
-        LoginUiState(email = "test@example.com", password = "Test123!"),
-        LoginUiState(biometricsAvailable = true),
-        LoginUiState(emailError = EmailError.INVALID_FORMAT, passwordError = PasswordError.TOO_SHORT)
+        SignInUiState(email = "test@example.com", password = "Test123!"),
+        SignInUiState(biometricsAvailable = true),
+        SignInUiState(emailError = EmailError.INVALID_FORMAT, passwordError = PasswordError.TOO_SHORT)
     )
 }
 

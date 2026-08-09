@@ -1,18 +1,18 @@
-package sk.mkdigital.androidshowcase.presentation.screen.register
+package sk.mkdigital.androidshowcase.presentation.screen.signUp
 
 import dagger.hilt.android.lifecycle.HiltViewModel
 import sk.mkdigital.androidshowcase.domain.exceptions.base.ApiException
 import sk.mkdigital.androidshowcase.domain.exceptions.base.BaseException
-import sk.mkdigital.androidshowcase.domain.useCase.auth.RegisterUserUseCase
+import sk.mkdigital.androidshowcase.domain.useCase.auth.SignUpUseCase
 import sk.mkdigital.androidshowcase.presentation.base.BaseViewModel
 import sk.mkdigital.androidshowcase.presentation.base.NavEvent
 import sk.mkdigital.androidshowcase.presentation.util.ValidationPatterns
 import javax.inject.Inject
 
 @HiltViewModel
-class RegisterViewModel @Inject constructor(
-    private val registerUserUseCase: RegisterUserUseCase,
-) : BaseViewModel<RegisterUiState>(RegisterUiState()) {
+class SignUpViewModel @Inject constructor(
+    private val signUpUseCase: SignUpUseCase,
+) : BaseViewModel<SignUpUiState>(SignUpUiState()) {
 
     fun onNameChange(name: String) {
         newState { it.copy(name = name, nameError = null) }
@@ -30,7 +30,7 @@ class RegisterViewModel @Inject constructor(
         newState { it.copy(confirmPassword = confirmPassword, confirmPasswordError = null) }
     }
 
-    fun register() {
+    fun signUp() {
         requireState { state ->
             val nameError = validateName(state.name)
             val emailError = validateEmail(state.email)
@@ -49,24 +49,24 @@ class RegisterViewModel @Inject constructor(
                 return@requireState
             }
 
-            performRegistration(state.name, state.email, state.password)
+            performSignUp(state.name, state.email, state.password)
         }
     }
 
-    private fun performRegistration(name: String, email: String, password: String) {
+    private fun performSignUp(name: String, email: String, password: String) {
         execute(
-            action = { registerUserUseCase(RegisterUserUseCase.Params(name, email, password)) },
+            action = { signUpUseCase(SignUpUseCase.Params(name, email, password)) },
             onLoading = { newState { it.copy(isLoading = true) } },
             onSuccess = {
                 newState { it.copy(isLoading = false) }
-                navigate(RegisterNavEvent.ToHome)
+                navigate(SignUpNavEvent.ToHome)
             },
             onError = { error: BaseException ->
                 newState {
                     it.copy(
                         isLoading = false,
                         emailError = if (error.isEmailAlreadyExists()) {
-                            RegisterEmailError.ALREADY_EXISTS
+                            SignUpEmailError.ALREADY_EXISTS
                         } else null
                     )
                 }
@@ -74,39 +74,39 @@ class RegisterViewModel @Inject constructor(
         )
     }
 
-    fun toLogin() {
-        navigate(RegisterNavEvent.ToLogin)
+    fun toSignIn() {
+        navigate(SignUpNavEvent.ToSignIn)
     }
 
-    private fun validateName(name: String): RegisterNameError? {
+    private fun validateName(name: String): SignUpNameError? {
         return when {
-            name.isBlank() -> RegisterNameError.EMPTY
-            name.length < MIN_NAME_LENGTH -> RegisterNameError.TOO_SHORT
+            name.isBlank() -> SignUpNameError.EMPTY
+            name.length < MIN_NAME_LENGTH -> SignUpNameError.TOO_SHORT
             else -> null
         }
     }
 
-    private fun validateEmail(email: String): RegisterEmailError? {
+    private fun validateEmail(email: String): SignUpEmailError? {
         return when {
-            email.isBlank() -> RegisterEmailError.EMPTY
-            !ValidationPatterns.isValidEmail(email) -> RegisterEmailError.INVALID_FORMAT
+            email.isBlank() -> SignUpEmailError.EMPTY
+            !ValidationPatterns.isValidEmail(email) -> SignUpEmailError.INVALID_FORMAT
             else -> null
         }
     }
 
-    private fun validatePassword(password: String): RegisterPasswordError? {
+    private fun validatePassword(password: String): SignUpPasswordError? {
         return when {
-            password.isBlank() -> RegisterPasswordError.EMPTY
-            !ValidationPatterns.isPasswordLongEnough(password) -> RegisterPasswordError.TOO_SHORT
-            !ValidationPatterns.isValidPassword(password) -> RegisterPasswordError.WEAK
+            password.isBlank() -> SignUpPasswordError.EMPTY
+            !ValidationPatterns.isPasswordLongEnough(password) -> SignUpPasswordError.TOO_SHORT
+            !ValidationPatterns.isValidPassword(password) -> SignUpPasswordError.WEAK
             else -> null
         }
     }
 
-    private fun validateConfirmPassword(password: String, confirmPassword: String): RegisterConfirmPasswordError? {
+    private fun validateConfirmPassword(password: String, confirmPassword: String): SignUpConfirmPasswordError? {
         return when {
-            confirmPassword.isBlank() -> RegisterConfirmPasswordError.EMPTY
-            confirmPassword != password -> RegisterConfirmPasswordError.MISMATCH
+            confirmPassword.isBlank() -> SignUpConfirmPasswordError.EMPTY
+            confirmPassword != password -> SignUpConfirmPasswordError.MISMATCH
             else -> null
         }
     }
@@ -116,43 +116,43 @@ class RegisterViewModel @Inject constructor(
     }
 }
 
-enum class RegisterNameError {
+enum class SignUpNameError {
     EMPTY,
     TOO_SHORT
 }
 
-enum class RegisterEmailError {
+enum class SignUpEmailError {
     EMPTY,
     INVALID_FORMAT,
     ALREADY_EXISTS
 }
 
-enum class RegisterPasswordError {
+enum class SignUpPasswordError {
     EMPTY,
     TOO_SHORT,
     WEAK
 }
 
-enum class RegisterConfirmPasswordError {
+enum class SignUpConfirmPasswordError {
     EMPTY,
     MISMATCH
 }
 
-data class RegisterUiState(
+data class SignUpUiState(
     val name: String = "",
     val email: String = "",
     val password: String = "",
     val confirmPassword: String = "",
-    val nameError: RegisterNameError? = null,
-    val emailError: RegisterEmailError? = null,
-    val passwordError: RegisterPasswordError? = null,
-    val confirmPasswordError: RegisterConfirmPasswordError? = null,
+    val nameError: SignUpNameError? = null,
+    val emailError: SignUpEmailError? = null,
+    val passwordError: SignUpPasswordError? = null,
+    val confirmPasswordError: SignUpConfirmPasswordError? = null,
     val isLoading: Boolean = false,
 )
 
-sealed interface RegisterNavEvent : NavEvent {
-    data object ToHome : RegisterNavEvent
-    data object ToLogin : RegisterNavEvent
+sealed interface SignUpNavEvent : NavEvent {
+    data object ToHome : SignUpNavEvent
+    data object ToSignIn : SignUpNavEvent
 }
 
 private const val HTTP_CONFLICT = 409
