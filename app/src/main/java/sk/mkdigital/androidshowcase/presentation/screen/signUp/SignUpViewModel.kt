@@ -4,7 +4,9 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import sk.mkdigital.androidshowcase.domain.exceptions.base.ApiException
 import sk.mkdigital.androidshowcase.domain.exceptions.base.BaseException
 import sk.mkdigital.androidshowcase.domain.useCase.auth.SignUpUseCase
+import sk.mkdigital.androidshowcase.presentation.base.AppError
 import sk.mkdigital.androidshowcase.presentation.base.BaseViewModel
+import sk.mkdigital.androidshowcase.presentation.base.toAppError
 import sk.mkdigital.androidshowcase.presentation.base.NavEvent
 import sk.mkdigital.androidshowcase.presentation.util.ValidationPatterns
 import javax.inject.Inject
@@ -56,12 +58,14 @@ class SignUpViewModel @Inject constructor(
                 navigate(SignUpNavEvent.ToHome)
             },
             onError = { error: BaseException ->
+                // A taken email belongs on the email field; anything else is not about one field,
+                // so it goes to the form-level error rather than being dropped.
+                val emailTaken = error.isEmailAlreadyExists()
                 newState {
                     it.copy(
                         isLoading = false,
-                        emailError = if (error.isEmailAlreadyExists()) {
-                            SignUpEmailError.ALREADY_EXISTS
-                        } else null
+                        emailError = if (emailTaken) SignUpEmailError.ALREADY_EXISTS else null,
+                        error = if (emailTaken) null else error.toAppError(),
                     )
                 }
             }
@@ -123,6 +127,7 @@ data class SignUpUiState(
     val passwordError: SignUpPasswordError? = null,
     val confirmPasswordError: SignUpConfirmPasswordError? = null,
     val isLoading: Boolean = false,
+    val error: AppError? = null,
 )
 
 sealed interface SignUpNavEvent : NavEvent {

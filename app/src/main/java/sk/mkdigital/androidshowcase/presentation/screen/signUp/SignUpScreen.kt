@@ -41,6 +41,8 @@ import sk.mkdigital.androidshowcase.presentation.base.Route
 import sk.mkdigital.androidshowcase.presentation.component.AppPasswordTextField
 import sk.mkdigital.androidshowcase.presentation.component.AppTextField
 import sk.mkdigital.androidshowcase.presentation.component.buttons.ContainedButton
+import sk.mkdigital.androidshowcase.presentation.component.text
+import sk.mkdigital.androidshowcase.presentation.component.text.labelLarge.TextButtonError
 import sk.mkdigital.androidshowcase.presentation.component.image.AppIconNeutral80
 import sk.mkdigital.androidshowcase.presentation.component.spacers.ColumnSpacer.Spacer4
 import sk.mkdigital.androidshowcase.presentation.component.spacers.ColumnSpacer.Spacer8
@@ -173,7 +175,11 @@ fun SignUpScreen(
 
         Spacer(modifier = Modifier.height(space6))
 
-        // SignUp button
+        state.error?.let { error ->
+            TextButtonError(text = error.text(), modifier = Modifier.fillMaxWidth())
+            Spacer4()
+        }
+
         ContainedButton(
                 text = stringResource(R.string.sign_up_button),
                 onClick = {

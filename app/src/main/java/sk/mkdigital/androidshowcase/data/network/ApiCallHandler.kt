@@ -18,7 +18,7 @@ suspend inline fun <T> handleApiCall(
     throw NetworkException(
         message = "Request timeout: ${e.message}",
         cause = e,
-        userMessage = "Request timed out. Please try again.",
+        logMessage = "Request timed out. Please try again.",
         errorCode = NetworkErrorCode.TIMEOUT
     )
 } catch (e: UnknownHostException) {
@@ -39,7 +39,7 @@ suspend inline fun <T> handleApiCall(
         httpCode = code,
         message = "HTTP error: ${e.message()}",
         cause = e,
-        userMessage = when (code) {
+        logMessage = when (code) {
             401 -> "Please sign in again."
             403 -> "You don't have permission to access this."
             404 -> "The requested resource was not found."

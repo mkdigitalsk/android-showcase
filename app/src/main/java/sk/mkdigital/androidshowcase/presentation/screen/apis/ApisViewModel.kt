@@ -110,7 +110,7 @@ class ApisViewModel @Inject constructor(
                 newState { it.copy(biometricsLoading = false, biometricsResult = result.toUiModel()) }
             },
             onError = { error ->
-                val result = BiometricUiModel(BiometricUiStatus.FAILED, error.message?.takeIf { it.isNotBlank() })
+                val result = BiometricUiModel(BiometricUiStatus.FAILED)
                 newState { it.copy(biometricsLoading = false, biometricsResult = result) }
             }
         )
