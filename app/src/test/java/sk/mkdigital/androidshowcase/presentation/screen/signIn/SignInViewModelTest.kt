@@ -28,7 +28,7 @@ class SignInViewModelTest : BaseViewModelTest<SignInViewModel>() {
 
     override fun beforeEach() {
         coEvery { signInUseCase(any()) } returns
-            AuthSession(token = "token", userId = 1L, email = "test@example.com", name = "Test")
+            AuthSession(token = "token", userId = 1L, email = "test@example.com")
         classUnderTest = SignInViewModel(
             signInUseCase = signInUseCase,
             signInWithTokenUseCase = signInWithTokenUseCase,

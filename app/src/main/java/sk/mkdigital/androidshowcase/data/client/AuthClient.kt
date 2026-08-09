@@ -9,7 +9,7 @@ import javax.inject.Inject
 
 interface AuthClient {
     suspend fun signIn(email: String, password: String): AuthResponseDTO
-    suspend fun signUp(email: String, password: String, name: String): AuthResponseDTO
+    suspend fun signUp(email: String, password: String): AuthResponseDTO
     suspend fun me(token: String): AuthResponseDTO
 }
 
@@ -21,8 +21,8 @@ class AuthClientImpl @Inject constructor(
         authApi.signIn(SignInRequestDTO(email, password))
     }
 
-    override suspend fun signUp(email: String, password: String, name: String): AuthResponseDTO = handleApiCall {
-        authApi.signUp(SignUpRequestDTO(email, password, name))
+    override suspend fun signUp(email: String, password: String): AuthResponseDTO = handleApiCall {
+        authApi.signUp(SignUpRequestDTO(email, password))
     }
 
     override suspend fun me(token: String): AuthResponseDTO = handleApiCall {

@@ -134,8 +134,6 @@ private fun UserCard(user: UserUiModel) {
             .fillMaxWidth()
             .padding(space4)
     ) {
-        TextTitleLargeNeutral80(user.name)
-        Spacer2()
         Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(
                 imageVector = Icons.Filled.Email,
@@ -168,8 +166,7 @@ internal class NetworkingScreenPreviewParams : PreviewParameterProvider<Networki
         NetworkingUiState(users = listOf(
             User(
                 id = 1,
-                email = "jane.doe@example.com",
-                name = "Jane Doe"
+                email = "jane.doe@example.com"
             ).toUiModel()
         ))
     )

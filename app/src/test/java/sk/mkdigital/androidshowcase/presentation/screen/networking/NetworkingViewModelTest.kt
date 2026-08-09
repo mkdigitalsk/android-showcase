@@ -24,7 +24,7 @@ class NetworkingViewModelTest : BaseViewModelTest<NetworkingViewModel>() {
 
     private val getUsersUseCase = mockk<GetUsersUseCase>()
 
-    private val alice = User(id = 1, email = "alice@mk.sk", name = "Alice")
+    private val alice = User(id = 1, email = "alice@mk.sk")
 
     override fun beforeEach() {
         classUnderTest = NetworkingViewModel(getUsersUseCase).apply { logger = NoOpLogger }
@@ -38,7 +38,7 @@ class NetworkingViewModelTest : BaseViewModelTest<NetworkingViewModel>() {
 
         val state = classUnderTest.state.value
         assertFalse(state.isLoading)
-        assertEquals(listOf(UserUiModel(id = 1, name = "Alice", email = "alice@mk.sk")), state.users)
+        assertEquals(listOf(UserUiModel(id = 1, email = "alice@mk.sk")), state.users)
     }
 
     @Test

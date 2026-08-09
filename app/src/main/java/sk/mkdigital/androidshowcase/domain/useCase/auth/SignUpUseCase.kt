@@ -10,11 +10,10 @@ class SignUpUseCase @Inject constructor(
 ) : UseCase<SignUpUseCase.Params, AuthSession>() {
 
     data class Params(
-        val name: String,
         val email: String,
         val password: String
     )
 
     override suspend fun run(params: Params): AuthSession =
-        authRepository.signUp(params.name, params.email, params.password)
+        authRepository.signUp(params.email, params.password)
 }
