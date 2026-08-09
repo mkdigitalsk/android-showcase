@@ -4,7 +4,6 @@ import sk.mkdigital.androidshowcase.data.dto.auth.AuthResponseDTO
 import sk.mkdigital.androidshowcase.data.dto.auth.LoginRequestDTO
 import sk.mkdigital.androidshowcase.data.dto.auth.RegisterRequestDTO
 import retrofit2.http.Body
-import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
 
@@ -16,6 +15,6 @@ interface AuthApi {
     @POST("auth/register")
     suspend fun register(@Body request: RegisterRequestDTO): AuthResponseDTO
 
-    @GET("auth/me")
+    @POST("auth/token")
     suspend fun me(@Header("Authorization") bearer: String): AuthResponseDTO
 }
