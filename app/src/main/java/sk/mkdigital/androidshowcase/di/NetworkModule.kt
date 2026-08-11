@@ -8,6 +8,7 @@ import sk.mkdigital.androidshowcase.data.network.AuthInterceptor
 import sk.mkdigital.androidshowcase.data.network.NetworkModule.BASE_URL
 import sk.mkdigital.androidshowcase.data.network.NetworkModule.TIMEOUT_SECONDS
 import sk.mkdigital.androidshowcase.data.network.NetworkModule.json
+import sk.mkdigital.androidshowcase.data.network.NoteApi
 import sk.mkdigital.androidshowcase.data.network.UserApi
 import dagger.Binds
 import dagger.Module
@@ -53,6 +54,10 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideUserApi(retrofit: Retrofit): UserApi = retrofit.create(UserApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideNoteApi(retrofit: Retrofit): NoteApi = retrofit.create(NoteApi::class.java)
 
     @Provides
     @Singleton

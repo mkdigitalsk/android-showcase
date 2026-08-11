@@ -23,6 +23,8 @@ import sk.mkdigital.androidshowcase.data.local.preferences.SessionPreferences
 import sk.mkdigital.androidshowcase.data.local.preferences.SessionPreferencesImpl
 import sk.mkdigital.androidshowcase.data.location.LocationClient
 import sk.mkdigital.androidshowcase.data.location.LocationClientImpl
+import sk.mkdigital.androidshowcase.data.repository.note.RemoteNoteClient
+import sk.mkdigital.androidshowcase.data.repository.note.RemoteNoteClientImpl
 import sk.mkdigital.androidshowcase.data.repository.user.UserClient
 import sk.mkdigital.androidshowcase.data.repository.user.UserClientImpl
 import sk.mkdigital.androidshowcase.data.service.LocalNotificationServiceImpl
@@ -111,6 +113,10 @@ abstract class DataBindsModule {
     @Binds
     @Singleton
     abstract fun bindUserClient(impl: UserClientImpl): UserClient
+
+    @Binds
+    @Singleton
+    abstract fun bindRemoteNoteClient(impl: RemoteNoteClientImpl): RemoteNoteClient
 
     @Binds
     @Singleton
