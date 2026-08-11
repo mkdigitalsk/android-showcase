@@ -47,8 +47,6 @@ class NetworkingViewModel @Inject constructor(
         )
     }
 
-    // The tag comes from the row as it was read, never re-read at save — re-reading would adopt whatever
-    // landed meanwhile and overwrite an edit this person never saw.
     fun updateNote(id: Long, title: String, content: String, etag: String) {
         execute(
             action = { updateRemoteNoteUseCase(UpdateRemoteNoteUseCase.Params(id, title, content, etag)) },

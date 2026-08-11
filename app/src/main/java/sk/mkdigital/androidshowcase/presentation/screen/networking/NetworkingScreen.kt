@@ -28,10 +28,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import sk.mkdigital.androidshowcase.R
 import sk.mkdigital.androidshowcase.domain.model.RemoteNote
 import sk.mkdigital.androidshowcase.presentation.base.AppError
 import sk.mkdigital.androidshowcase.presentation.foundation.AppTheme
-import sk.mkdigital.androidshowcase.R
 import androidx.hilt.navigation.compose.hiltViewModel
 import sk.mkdigital.androidshowcase.presentation.component.AppAlertDialog
 import sk.mkdigital.androidshowcase.presentation.component.AppTextField
@@ -108,54 +108,49 @@ private fun NotesList(
     onSave: (Long, String, String, String) -> Unit,
     onDelete: (Long) -> Unit,
 ) {
-    Column(modifier = Modifier.fillMaxSize().padding(space4)) {
-        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
-            Column(modifier = Modifier.weight(1f)) {
-                TextHeadlineMediumPrimary(text = stringResource(R.string.networking_title))
-                TextBodyMediumNeutral80(text = stringResource(R.string.networking_subtitle))
-            }
-            IconButton(onClick = onRefresh, enabled = !state.isLoading) {
-                Icon(Icons.Default.Refresh, contentDescription = stringResource(R.string.networking_refresh))
+    LazyColumn(
+        modifier = Modifier.fillMaxSize(),
+        contentPadding = PaddingValues(space4, space4, space4, floatingNavBarSpace),
+        verticalArrangement = Arrangement.spacedBy(space4),
+    ) {
+        item {
+            Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
+                Column(modifier = Modifier.weight(1f)) {
+                    TextHeadlineMediumPrimary(text = stringResource(R.string.networking_title))
+                    TextBodyMediumNeutral80(text = stringResource(R.string.networking_subtitle))
+                }
+                IconButton(onClick = onRefresh, enabled = !state.isLoading) {
+                    Icon(Icons.Default.Refresh, contentDescription = stringResource(R.string.networking_refresh))
+                }
             }
         }
-        Spacer2()
-        CreateNoteCard(isSaving = state.isSaving, isLoading = state.isLoading, onCreate = onCreate)
-        Spacer4()
 
-        Box(
-            modifier = Modifier.fillMaxWidth().weight(1f),
-            contentAlignment = Alignment.Center,
-        ) {
-            when {
-                state.isLoading && state.notes.isEmpty() -> LoadingView()
-                state.error != null && state.notes.isEmpty() ->
-                    ErrorView(message = state.error.text(), onRetry = onRefresh)
+        item { CreateNoteCard(isSaving = state.isSaving, isLoading = state.isLoading, onCreate = onCreate) }
 
-                state.notes.isEmpty() ->
-                    TextBodyMediumNeutral80(text = stringResource(R.string.networking_empty))
-
-                else -> LazyColumn(
-                    modifier = Modifier.fillMaxSize(),
-                    contentPadding = PaddingValues(bottom = floatingNavBarSpace),
-                    verticalArrangement = Arrangement.spacedBy(space4),
-                ) {
-                    items(state.notes, key = { it.id }) { note ->
-                        if (state.editing?.id == note.id) {
-                            EditNoteCard(
-                                note = state.editing,
-                                isSaving = state.isSaving,
-                                onCancel = onCancelEditing,
-                                onSave = onSave,
-                            )
-                        } else {
-                            NoteCard(
-                                note = note,
-                                onEdit = { onStartEditing(note) },
-                                onDelete = { onDelete(note.id) },
-                            )
-                        }
-                    }
+        if (state.notes.isEmpty()) {
+            item {
+                when {
+                    state.isLoading -> LoadingView()
+                    state.error != null -> ErrorView(message = state.error.text(), onRetry = onRefresh)
+                    else -> TextBodyMediumNeutral80(text = stringResource(R.string.networking_empty))
                 }
+            }
+        }
+
+        items(state.notes, key = { it.id }) { note ->
+            if (state.editing?.id == note.id) {
+                EditNoteCard(
+                    note = state.editing,
+                    isSaving = state.isSaving,
+                    onCancel = onCancelEditing,
+                    onSave = onSave,
+                )
+            } else {
+                NoteCard(
+                    note = note,
+                    onEdit = { onStartEditing(note) },
+                    onDelete = { onDelete(note.id) },
+                )
             }
         }
     }
