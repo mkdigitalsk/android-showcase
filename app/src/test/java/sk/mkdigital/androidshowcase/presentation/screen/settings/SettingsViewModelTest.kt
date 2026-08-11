@@ -17,11 +17,11 @@ import org.junit.jupiter.api.Test
 import sk.mkdigital.androidshowcase.domain.exceptions.base.ApiException
 import sk.mkdigital.androidshowcase.domain.exceptions.base.DataException
 import sk.mkdigital.androidshowcase.domain.model.User
-import sk.mkdigital.androidshowcase.domain.useCase.analytics.RecordExceptionUseCase
 import sk.mkdigital.androidshowcase.domain.useCase.auth.ClearLocalUserDataUseCase
 import sk.mkdigital.androidshowcase.domain.useCase.auth.DeleteAccountUseCase
 import sk.mkdigital.androidshowcase.domain.useCase.auth.GetCurrentUserUseCase
 import sk.mkdigital.androidshowcase.domain.useCase.base.None
+import sk.mkdigital.androidshowcase.domain.useCase.crash.RecordExceptionUseCase
 import sk.mkdigital.androidshowcase.domain.useCase.settings.GetThemeModeUseCase
 import sk.mkdigital.androidshowcase.domain.useCase.settings.SetThemeModeUseCase
 import sk.mkdigital.androidshowcase.fake.NoOpLogger
@@ -57,7 +57,6 @@ class SettingsViewModelTest : BaseViewModelTest<SettingsViewModel>() {
             getCurrentUserUseCase = getCurrentUserUseCase,
         ).apply {
             logger = NoOpLogger
-            trackScreenUseCase = mockk(relaxed = true)
         }
     }
 

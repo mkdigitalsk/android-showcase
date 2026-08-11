@@ -4,11 +4,11 @@ import androidx.annotation.StringRes
 import androidx.compose.ui.graphics.vector.ImageVector
 import sk.mkdigital.androidshowcase.BuildConfig
 import sk.mkdigital.androidshowcase.R
-import sk.mkdigital.androidshowcase.domain.useCase.analytics.RecordExceptionUseCase
 import sk.mkdigital.androidshowcase.domain.useCase.auth.ClearLocalUserDataUseCase
 import sk.mkdigital.androidshowcase.domain.useCase.auth.DeleteAccountUseCase
 import sk.mkdigital.androidshowcase.domain.useCase.auth.GetCurrentUserUseCase
 import sk.mkdigital.androidshowcase.domain.useCase.base.invoke
+import sk.mkdigital.androidshowcase.domain.useCase.crash.RecordExceptionUseCase
 import sk.mkdigital.androidshowcase.domain.useCase.settings.GetThemeModeUseCase
 import sk.mkdigital.androidshowcase.domain.useCase.settings.SetThemeModeUseCase
 import sk.mkdigital.androidshowcase.presentation.base.BaseViewModel

@@ -1,7 +1,6 @@
 package sk.mkdigital.androidshowcase.di
 
 import android.content.Context
-import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dagger.Binds
 import dagger.Module
@@ -9,10 +8,10 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import sk.mkdigital.androidshowcase.data.analytics.AnalyticsClient
-import sk.mkdigital.androidshowcase.data.analytics.FirebaseAnalyticsClient
 import sk.mkdigital.androidshowcase.data.biometric.BiometricClient
 import sk.mkdigital.androidshowcase.data.biometric.BiometricClientImpl
+import sk.mkdigital.androidshowcase.data.crash.CrashReporter
+import sk.mkdigital.androidshowcase.data.crash.FirebaseCrashReporter
 import sk.mkdigital.androidshowcase.data.local.StorageLocalStore
 import sk.mkdigital.androidshowcase.data.local.StorageLocalStoreImpl
 import sk.mkdigital.androidshowcase.data.local.preferences.PersistentPreferences
@@ -40,12 +39,6 @@ object DataModule {
 
     const val SESSION_PREFERENCES = "session"
     const val APP_PREFERENCES = "app"
-
-    @Provides
-    @Singleton
-    fun provideFirebaseAnalytics(@ApplicationContext context: Context): FirebaseAnalytics {
-        return FirebaseAnalytics.getInstance(context)
-    }
 
     @Provides
     @Singleton
@@ -104,7 +97,7 @@ abstract class DataBindsModule {
 
     @Binds
     @Singleton
-    abstract fun bindAnalyticsClient(impl: FirebaseAnalyticsClient): AnalyticsClient
+    abstract fun bindCrashReporter(impl: FirebaseCrashReporter): CrashReporter
 
     @Binds
     @Singleton
