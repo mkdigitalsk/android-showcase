@@ -22,6 +22,7 @@ class StateHolder<T>(val state: T, private val name: String) {
 abstract class BaseScreenshotTest<T>(
     private val stateHolder: StateHolder<T>,
     private val mode: NightMode,
+    deviceConfig: DeviceConfig = DeviceConfig.PIXEL_5,
     renderingMode: SessionParams.RenderingMode = SessionParams.RenderingMode.NORMAL,
     maxPercentDifference: Double = 0.01,
 ) {
@@ -30,7 +31,7 @@ abstract class BaseScreenshotTest<T>(
 
     @get:Rule
     val paparazzi: Paparazzi = Paparazzi(
-        deviceConfig = DeviceConfig.PIXEL_5.copy(
+        deviceConfig = deviceConfig.copy(
             nightMode = mode
         ),
         renderingMode = renderingMode,

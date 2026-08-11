@@ -13,5 +13,7 @@ class UserRepositoryImpl @Inject constructor(
         return client.fetchUsers().transformAll()
     }
 
+    override suspend fun getCurrentUser(): User = client.fetchMe().transform()
+
     override suspend fun deleteAccount() = client.deleteMe()
 }

@@ -11,6 +11,7 @@ data class UserResponseDTO(
     val createdAt: Long,
     val themeMode: ThemeModeDTO,
     val locale: String,
+    val demo: Boolean = false,
 ) : TransformToDomainModel<User> {
-    override fun transform(): User = User(id = id, email = email)
+    override fun transform(): User = User(id = id, email = email, isDemo = demo)
 }

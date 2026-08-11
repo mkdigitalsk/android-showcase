@@ -6,6 +6,8 @@ interface UserRepository {
 
     suspend fun getUsers(): List<User>
 
+    suspend fun getCurrentUser(): User
+
     suspend fun deleteAccount()
 
 }

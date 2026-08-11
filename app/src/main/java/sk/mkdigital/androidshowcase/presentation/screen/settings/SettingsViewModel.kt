@@ -7,6 +7,7 @@ import sk.mkdigital.androidshowcase.R
 import sk.mkdigital.androidshowcase.domain.useCase.analytics.RecordExceptionUseCase
 import sk.mkdigital.androidshowcase.domain.useCase.auth.ClearLocalUserDataUseCase
 import sk.mkdigital.androidshowcase.domain.useCase.auth.DeleteAccountUseCase
+import sk.mkdigital.androidshowcase.domain.useCase.auth.GetCurrentUserUseCase
 import sk.mkdigital.androidshowcase.domain.useCase.base.invoke
 import sk.mkdigital.androidshowcase.domain.useCase.settings.GetThemeModeUseCase
 import sk.mkdigital.androidshowcase.domain.useCase.settings.SetThemeModeUseCase
@@ -26,6 +27,7 @@ data class SettingsState(
     val showDeleteAccountDialog: Boolean = false,
     val isDeletingAccount: Boolean = false,
     val deleteAccountFailed: Boolean = false,
+    val isDemoAccount: Boolean? = null,
 ) {
     val showCrashButton: Boolean
         get() = BuildConfig.DEBUG
@@ -51,11 +53,13 @@ class SettingsViewModel @Inject constructor(
     private val recordExceptionUseCase: RecordExceptionUseCase,
     private val clearLocalUserDataUseCase: ClearLocalUserDataUseCase,
     private val deleteAccountUseCase: DeleteAccountUseCase,
+    private val getCurrentUserUseCase: GetCurrentUserUseCase,
 ) : BaseViewModel<SettingsState>(SettingsState()) {
 
     override fun loadInitialData() {
         loadThemeMode()
         loadCurrentLanguage()
+        loadCurrentUser()
     }
 
     override fun onResume() {
@@ -73,6 +77,13 @@ class SettingsViewModel @Inject constructor(
         execute(
             action = { getThemeModeUseCase() },
             onSuccess = { themeMode -> newState { it.copy(themeModeState = ThemeModeState.fromMode(themeMode)) } }
+        )
+    }
+
+    private fun loadCurrentUser() {
+        execute(
+            action = { getCurrentUserUseCase() },
+            onSuccess = { user -> newState { it.copy(isDemoAccount = user.isDemo) } }
         )
     }
 
