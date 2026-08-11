@@ -1,51 +1,67 @@
 package sk.mkdigital.androidshowcase.presentation.screen.networking
 
-import app.cash.turbine.test
 import io.mockk.coEvery
 import io.mockk.mockk
-import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
-import sk.mkdigital.androidshowcase.domain.model.User
-import sk.mkdigital.androidshowcase.domain.useCase.GetUsersUseCase
-import sk.mkdigital.androidshowcase.domain.useCase.base.None
-import sk.mkdigital.androidshowcase.fake.NoOpLogger
-import sk.mkdigital.androidshowcase.presentation.base.BaseViewModelTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNotNull
-import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
+import sk.mkdigital.androidshowcase.domain.exceptions.NoteConflictException
+import sk.mkdigital.androidshowcase.domain.model.RemoteNote
+import sk.mkdigital.androidshowcase.domain.useCase.base.None
+import sk.mkdigital.androidshowcase.domain.useCase.note.CreateRemoteNoteUseCase
+import sk.mkdigital.androidshowcase.domain.useCase.note.DeleteRemoteNoteUseCase
+import sk.mkdigital.androidshowcase.domain.useCase.note.GetRemoteNotesUseCase
+import sk.mkdigital.androidshowcase.domain.useCase.note.UpdateRemoteNoteUseCase
+import sk.mkdigital.androidshowcase.fake.NoOpLogger
+import sk.mkdigital.androidshowcase.presentation.base.BaseViewModelTest
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class NetworkingViewModelTest : BaseViewModelTest<NetworkingViewModel>() {
 
     override lateinit var classUnderTest: NetworkingViewModel
 
-    private val getUsersUseCase = mockk<GetUsersUseCase>()
+    private val getNotes = mockk<GetRemoteNotesUseCase>()
+    private val createNote = mockk<CreateRemoteNoteUseCase>()
+    private val updateNote = mockk<UpdateRemoteNoteUseCase>()
+    private val deleteNote = mockk<DeleteRemoteNoteUseCase>()
 
-    private val alice = User(id = 1, email = "alice@mk.sk")
+    private val milk = RemoteNote(
+        id = 1,
+        title = "Buy milk",
+        content = "two litres",
+        createdAt = 0,
+        updatedAt = 0,
+        etag = "\"0\"",
+    )
 
     override fun beforeEach() {
-        classUnderTest = NetworkingViewModel(getUsersUseCase).apply { logger = NoOpLogger }
+        classUnderTest = NetworkingViewModel(getNotes, createNote, updateNote, deleteNote)
+            .apply { logger = NoOpLogger }
     }
 
     @Test
-    fun `fetchUsers maps domain users into UI models`() = runTest {
-        coEvery { getUsersUseCase(None) } returns listOf(alice)
+    fun `fetching maps domain notes into UI models`() = runTest {
+        coEvery { getNotes(None) } returns listOf(milk)
 
-        classUnderTest.fetchUsers()
+        classUnderTest.fetchNotes()
 
         val state = classUnderTest.state.value
         assertFalse(state.isLoading)
-        assertEquals(listOf(UserUiModel(id = 1, email = "alice@mk.sk")), state.users)
+        assertEquals(
+            listOf(RemoteNoteUiModel(id = 1, title = "Buy milk", content = "two litres", etag = "\"0\"")),
+            state.notes,
+        )
     }
 
     @Test
-    fun `fetchUsers failure sets error and stops loading`() = runTest {
-        coEvery { getUsersUseCase(None) } throws RuntimeException("boom")
+    fun `a failed fetch sets the error and stops loading`() = runTest {
+        coEvery { getNotes(None) } throws RuntimeException("boom")
 
-        classUnderTest.fetchUsers()
+        classUnderTest.fetchNotes()
 
         val state = classUnderTest.state.value
         assertFalse(state.isLoading)
@@ -53,16 +69,32 @@ class NetworkingViewModelTest : BaseViewModelTest<NetworkingViewModel>() {
     }
 
     @Test
-    fun `fetchUsers emits loading then success`() = runTest {
-        val gate = CompletableDeferred<Unit>()
-        coEvery { getUsersUseCase(None) } coAnswers { gate.await(); listOf(alice) }
+    fun `a refused write surfaces the server's row rather than an error`() = runTest {
+        val theirs = milk.copy(title = "Someone else won", etag = "\"7\"")
+        coEvery { updateNote(any()) } throws NoteConflictException(theirs)
+        coEvery { getNotes(None) } returns listOf(milk)
 
-        classUnderTest.state.test {
-            assertEquals(NetworkingUiState(), awaitItem())
-            classUnderTest.fetchUsers()
-            assertTrue(awaitItem().isLoading)
-            gate.complete(Unit)
-            assertFalse(awaitItem().isLoading)
-        }
+        classUnderTest.updateNote(id = 1, title = "Mine", content = "mine", etag = "\"0\"")
+
+        val state = classUnderTest.state.value
+        assertEquals("Someone else won", state.conflict?.title)
+        assertNull(state.error, "a conflict is someone else saving first, not a failure to report")
+    }
+
+    @Test
+    fun `keeping mine retries against the tag the server returned`() = runTest {
+        val theirs = milk.copy(title = "Someone else won", etag = "\"7\"")
+        coEvery {
+            updateNote(UpdateRemoteNoteUseCase.Params(1, "Mine", "mine", "\"0\""))
+        } throws NoteConflictException(theirs)
+        coEvery {
+            updateNote(UpdateRemoteNoteUseCase.Params(1, "Mine", "mine", "\"7\""))
+        } returns milk.copy(title = "Mine", etag = "\"8\"")
+        coEvery { getNotes(None) } returns listOf(milk.copy(title = "Mine", etag = "\"8\""))
+
+        classUnderTest.updateNote(id = 1, title = "Mine", content = "mine", etag = "\"0\"")
+        classUnderTest.overwriteConflict(title = "Mine", content = "mine")
+
+        assertNull(classUnderTest.state.value.conflict)
     }
 }

@@ -23,6 +23,8 @@ import sk.mkdigital.androidshowcase.domain.repository.NotificationRepository
 import sk.mkdigital.androidshowcase.domain.repository.PushNotificationService
 import sk.mkdigital.androidshowcase.domain.repository.SettingsRepository
 import sk.mkdigital.androidshowcase.domain.repository.StorageRepository
+import sk.mkdigital.androidshowcase.data.repository.note.RemoteNoteRepositoryImpl
+import sk.mkdigital.androidshowcase.domain.repository.RemoteNoteRepository
 import sk.mkdigital.androidshowcase.domain.repository.UserRepository
 import javax.inject.Singleton
 
@@ -33,6 +35,10 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindUserRepository(impl: UserRepositoryImpl): UserRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindRemoteNoteRepository(impl: RemoteNoteRepositoryImpl): RemoteNoteRepository
 
     @Binds
     @Singleton
