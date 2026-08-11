@@ -47,7 +47,7 @@ import sk.mkdigital.androidshowcase.presentation.component.CircularProgress
 import sk.mkdigital.androidshowcase.presentation.component.SnackbarType
 import sk.mkdigital.androidshowcase.presentation.component.buttons.AppFloatingActionButton
 import sk.mkdigital.androidshowcase.presentation.component.buttons.AppSegmentedButton
-import sk.mkdigital.androidshowcase.presentation.component.buttons.AppTextButton
+import sk.mkdigital.androidshowcase.presentation.component.buttons.AppTextButtonPrimary
 import sk.mkdigital.androidshowcase.presentation.component.buttons.ContainedButton
 import sk.mkdigital.androidshowcase.presentation.component.buttons.OutlinedButton
 import sk.mkdigital.androidshowcase.presentation.component.cards.AppCard
@@ -112,7 +112,7 @@ fun UiComponentsScreen() {
                 horizontalArrangement = Arrangement.spacedBy(space4),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                AppTextButton(
+                AppTextButtonPrimary(
                     text = stringResource(R.string.button_text),
                     onClick = {}
                 )

@@ -7,7 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import sk.mkdigital.androidshowcase.R
-import sk.mkdigital.androidshowcase.presentation.component.buttons.AppTextButton
+import sk.mkdigital.androidshowcase.presentation.component.buttons.AppTextButtonPrimary
 import sk.mkdigital.androidshowcase.presentation.component.text.bodyMedium.TextBodyMediumNeutral80
 import sk.mkdigital.androidshowcase.presentation.component.text.titleLarge.TextTitleLargePrimary
 import sk.mkdigital.androidshowcase.presentation.foundation.appColorScheme
@@ -42,7 +42,7 @@ fun AppConfirmDialog(
         title = title,
         text = text,
         confirmButton = {
-            AppTextButton(text = stringResource(R.string.button_ok), onClick = onDismissRequest)
+            AppTextButtonPrimary(text = stringResource(R.string.button_ok), onClick = onDismissRequest)
         },
     )
 }
@@ -61,10 +61,10 @@ fun AppAlertDialog(
         title = title,
         text = text,
         confirmButton = {
-            AppTextButton(text = confirmButtonText, onClick = onConfirm)
+            AppTextButtonPrimary(text = confirmButtonText, onClick = onConfirm)
         },
         dismissButton = {
-            AppTextButton(text = dismissButtonText, onClick = onDismissRequest)
+            AppTextButtonPrimary(text = dismissButtonText, onClick = onDismissRequest)
         }
     )
 }
