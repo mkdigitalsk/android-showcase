@@ -9,4 +9,5 @@ interface StorageRepository : ClearableCache {
     suspend fun loadInitialData()
     suspend fun setSessionCounter(value: Int)
     suspend fun setPersistentCounter(value: Int)
+    suspend fun clearCounters()
 }

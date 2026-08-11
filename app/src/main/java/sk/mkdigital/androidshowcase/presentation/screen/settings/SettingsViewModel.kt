@@ -5,6 +5,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import sk.mkdigital.androidshowcase.BuildConfig
 import sk.mkdigital.androidshowcase.R
 import sk.mkdigital.androidshowcase.domain.useCase.analytics.RecordExceptionUseCase
+import sk.mkdigital.androidshowcase.domain.useCase.auth.ClearLocalUserDataUseCase
+import sk.mkdigital.androidshowcase.domain.useCase.auth.DeleteAccountUseCase
 import sk.mkdigital.androidshowcase.domain.useCase.base.invoke
 import sk.mkdigital.androidshowcase.domain.useCase.settings.GetThemeModeUseCase
 import sk.mkdigital.androidshowcase.domain.useCase.settings.SetThemeModeUseCase
@@ -21,6 +23,9 @@ data class SettingsState(
     val themeModeState: ThemeModeState = ThemeModeState.SYSTEM,
     val currentLanguage: LanguageState = LanguageState.EN,
     val showThemeDialog: Boolean = false,
+    val showDeleteAccountDialog: Boolean = false,
+    val isDeletingAccount: Boolean = false,
+    val deleteAccountFailed: Boolean = false,
 ) {
     val showCrashButton: Boolean
         get() = BuildConfig.DEBUG
@@ -44,6 +49,8 @@ class SettingsViewModel @Inject constructor(
     private val getThemeModeUseCase: GetThemeModeUseCase,
     private val setThemeModeUseCase: SetThemeModeUseCase,
     private val recordExceptionUseCase: RecordExceptionUseCase,
+    private val clearLocalUserDataUseCase: ClearLocalUserDataUseCase,
+    private val deleteAccountUseCase: DeleteAccountUseCase,
 ) : BaseViewModel<SettingsState>(SettingsState()) {
 
     override fun loadInitialData() {
@@ -97,7 +104,46 @@ class SettingsViewModel @Inject constructor(
     }
 
     fun signOut() {
-        navigate(SettingNavEvents.SignOut)
+        execute(
+            action = { clearLocalUserDataUseCase() },
+            onSuccess = { navigate(SettingNavEvents.SignOut) }
+        )
+    }
+
+    fun showDeleteAccountDialog() {
+        newState { it.copy(showDeleteAccountDialog = true, deleteAccountFailed = false) }
+    }
+
+    fun hideDeleteAccountDialog() {
+        newState { it.copy(showDeleteAccountDialog = false) }
+    }
+
+    /**
+     * The token authorizes the call, so the account goes first and the device is torn down after.
+     * The server's answer decides the outcome — a local store that will not clear cannot turn a
+     * completed erasure into "deletion failed" and leave the person on a dead account.
+     */
+    fun deleteAccount() {
+        execute(
+            action = {
+                deleteAccountUseCase()
+                runCatching { clearLocalUserDataUseCase() }
+            },
+            onLoading = { newState { it.copy(isDeletingAccount = true, deleteAccountFailed = false) } },
+            onSuccess = {
+                newState { it.copy(isDeletingAccount = false, showDeleteAccountDialog = false) }
+                navigate(SettingNavEvents.SignOut)
+            },
+            onError = {
+                newState {
+                    it.copy(
+                        isDeletingAccount = false,
+                        showDeleteAccountDialog = false,
+                        deleteAccountFailed = true
+                    )
+                }
+            }
+        )
     }
 
     fun triggerTestCrash() {

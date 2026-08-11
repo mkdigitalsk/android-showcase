@@ -12,4 +12,6 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun getUsers(): List<User> {
         return client.fetchUsers().transformAll()
     }
+
+    override suspend fun deleteAccount() = client.deleteMe()
 }

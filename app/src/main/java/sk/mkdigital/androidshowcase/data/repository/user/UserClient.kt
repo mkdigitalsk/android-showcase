@@ -8,6 +8,7 @@ import javax.inject.Inject
 interface UserClient {
     suspend fun fetchUser(id: Long): UserResponseDTO
     suspend fun fetchUsers(): List<UserResponseDTO>
+    suspend fun deleteMe()
 }
 
 class UserClientImpl @Inject constructor(
@@ -20,5 +21,9 @@ class UserClientImpl @Inject constructor(
 
     override suspend fun fetchUsers(): List<UserResponseDTO> = handleApiCall {
         userApi.fetchUsers()
+    }
+
+    override suspend fun deleteMe() = handleApiCall {
+        userApi.deleteMe()
     }
 }

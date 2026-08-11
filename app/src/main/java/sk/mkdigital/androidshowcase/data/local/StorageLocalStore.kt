@@ -16,6 +16,7 @@ interface StorageLocalStore {
     suspend fun setSessionCounter(value: Int)
     suspend fun setPersistentCounter(value: Int)
     suspend fun clear()
+    suspend fun clearCounters()
 }
 
 class StorageLocalStoreImpl @Inject constructor(
@@ -46,5 +47,11 @@ class StorageLocalStoreImpl @Inject constructor(
     override suspend fun clear() {
         sessionPreferences.clear()
         _data.update { it.copy(sessionCounter = 0) }
+    }
+
+    override suspend fun clearCounters() {
+        sessionPreferences.clear()
+        persistentPreferences.setPersistentCounter(0)
+        _data.value = StorageData()
     }
 }
