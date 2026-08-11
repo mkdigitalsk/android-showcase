@@ -8,15 +8,20 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
+import sk.mkdigital.androidshowcase.domain.exceptions.base.NetworkException
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import sk.mkdigital.androidshowcase.domain.exceptions.base.ApiException
 import sk.mkdigital.androidshowcase.domain.exceptions.base.DataException
+import sk.mkdigital.androidshowcase.domain.model.User
 import sk.mkdigital.androidshowcase.domain.useCase.analytics.RecordExceptionUseCase
 import sk.mkdigital.androidshowcase.domain.useCase.auth.ClearLocalUserDataUseCase
 import sk.mkdigital.androidshowcase.domain.useCase.auth.DeleteAccountUseCase
+import sk.mkdigital.androidshowcase.domain.useCase.auth.GetCurrentUserUseCase
+import sk.mkdigital.androidshowcase.domain.useCase.base.None
 import sk.mkdigital.androidshowcase.domain.useCase.settings.GetThemeModeUseCase
 import sk.mkdigital.androidshowcase.domain.useCase.settings.SetThemeModeUseCase
 import sk.mkdigital.androidshowcase.fake.NoOpLogger
@@ -33,6 +38,10 @@ class SettingsViewModelTest : BaseViewModelTest<SettingsViewModel>() {
     private val recordExceptionUseCase = mockk<RecordExceptionUseCase>()
     private val clearLocalUserDataUseCase = mockk<ClearLocalUserDataUseCase>()
     private val deleteAccountUseCase = mockk<DeleteAccountUseCase>()
+    private val getCurrentUserUseCase = mockk<GetCurrentUserUseCase>()
+
+    private val demo = User(id = 1, email = "test01@mkdigital.sk", isDemo = true)
+    private val normal = User(id = 2, email = "someone@mkdigital.sk", isDemo = false)
 
     private val steps = mutableListOf<String>()
 
@@ -45,7 +54,11 @@ class SettingsViewModelTest : BaseViewModelTest<SettingsViewModel>() {
             recordExceptionUseCase = recordExceptionUseCase,
             clearLocalUserDataUseCase = clearLocalUserDataUseCase,
             deleteAccountUseCase = deleteAccountUseCase,
-        ).apply { logger = NoOpLogger }
+            getCurrentUserUseCase = getCurrentUserUseCase,
+        ).apply {
+            logger = NoOpLogger
+            trackScreenUseCase = mockk(relaxed = true)
+        }
     }
 
     @Test
@@ -53,6 +66,36 @@ class SettingsViewModelTest : BaseViewModelTest<SettingsViewModel>() {
         assertFalse(classUnderTest.state.value.showDeleteAccountDialog)
         assertFalse(classUnderTest.state.value.isDeletingAccount)
         assertFalse(classUnderTest.state.value.deleteAccountFailed)
+    }
+
+    @Test
+    fun `the demo flag the server sent reaches the state`() = runTest {
+        coEvery { getCurrentUserUseCase(None) } returns demo
+
+        classUnderTest.afterInit()
+
+        assertEquals(true, classUnderTest.state.value.isDemoAccount)
+    }
+
+    @Test
+    fun `a normal account leaves the state unflagged`() = runTest {
+        coEvery { getCurrentUserUseCase(None) } returns normal
+
+        classUnderTest.afterInit()
+
+        assertEquals(false, classUnderTest.state.value.isDemoAccount)
+    }
+
+    @Test
+    fun `an account that cannot be read is offered nothing rather than the wrong thing`() = runTest {
+        coEvery { getCurrentUserUseCase(None) } throws NetworkException(message = "offline")
+
+        classUnderTest.afterInit()
+
+        assertNull(
+            classUnderTest.state.value.isDemoAccount,
+            "false would offer a demo account a control the server refuses",
+        )
     }
 
     @Test

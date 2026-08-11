@@ -222,11 +222,21 @@ fun SettingsScreen(
         }
 
         item {
-            AppTextButtonError(
-                text = stringResource(R.string.settings_delete_account),
-                onClick = onDeleteAccountClick,
-                modifier = Modifier.fillMaxWidth()
-            )
+            // Null until the account is known. Claiming either way would be a guess, and deletion needs
+            // the network the answer comes over, so there is nothing to offer while it is unknown.
+            when (state.isDemoAccount) {
+                true -> TextBodyMediumNeutral80(
+                    text = stringResource(R.string.settings_delete_account_demo),
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Center
+                )
+                false -> AppTextButtonError(
+                    text = stringResource(R.string.settings_delete_account),
+                    onClick = onDeleteAccountClick,
+                    modifier = Modifier.fillMaxWidth()
+                )
+                null -> Unit
+            }
         }
 
         if (state.deleteAccountFailed) {
@@ -445,6 +455,7 @@ internal class SettingsScreenPreviewParams : PreviewParameterProvider<SettingsSt
         SettingsState(themeModeState = ThemeModeState.DARK, currentLanguage = LanguageState.SK),
         SettingsState(showThemeDialog = true),
         SettingsState(showDeleteAccountDialog = true),
-        SettingsState(showDeleteAccountDialog = true, isDeletingAccount = true)
+        SettingsState(showDeleteAccountDialog = true, isDeletingAccount = true),
+        SettingsState(isDemoAccount = true)
     )
 }

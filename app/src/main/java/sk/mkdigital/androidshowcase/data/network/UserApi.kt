@@ -12,6 +12,9 @@ interface UserApi {
     @GET("users")
     suspend fun fetchUsers(): List<UserResponseDTO>
 
+    @GET("users/me")
+    suspend fun fetchMe(): UserResponseDTO
+
     @DELETE("users/me")
     suspend fun deleteMe()
 }
