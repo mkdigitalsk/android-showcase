@@ -1,0 +1,50 @@
+package sk.mkdigital.androidshowcase.data.repository.user
+
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.impl.annotations.MockK
+import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertInstanceOf
+import org.junit.jupiter.api.Test
+import sk.mkdigital.androidshowcase.base.BaseTest
+import sk.mkdigital.androidshowcase.domain.exceptions.base.ApiException
+
+class UserRepositoryImplTest : BaseTest<UserRepositoryImpl>() {
+
+    override lateinit var classUnderTest: UserRepositoryImpl
+
+    @MockK
+    private lateinit var client: UserClient
+
+    override fun beforeEach() {
+        classUnderTest = UserRepositoryImpl(client)
+    }
+
+    @Test
+    fun `deleting an account rethrows a not found`() = runTest {
+        coEvery { client.deleteMe() } throws notFound()
+
+        val thrown = runCatching { classUnderTest.deleteAccount() }.exceptionOrNull()
+
+        assertInstanceOf(
+            ApiException::class.java,
+            thrown,
+            "the route answers 204 whether or not the row was there, so a 404 is a route that is not there",
+        )
+    }
+
+    @Test
+    fun `deleting an account rethrows a server failure`() = runTest {
+        coEvery { client.deleteMe() } throws serverError()
+
+        val thrown = runCatching { classUnderTest.deleteAccount() }.exceptionOrNull()
+
+        assertInstanceOf(ApiException::class.java, thrown)
+        assertEquals(500, (thrown as ApiException).httpCode)
+    }
+
+    private fun notFound() = ApiException(httpCode = 404, message = "HTTP error: Not Found")
+
+    private fun serverError() = ApiException(httpCode = 500, message = "HTTP error: Server Error")
+}

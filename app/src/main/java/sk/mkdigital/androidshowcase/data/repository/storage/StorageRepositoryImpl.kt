@@ -21,4 +21,8 @@ class StorageRepositoryImpl @Inject constructor(
     override suspend fun clear() {
         storageLocalStore.clear()
     }
+
+    override suspend fun clearCounters() {
+        storageLocalStore.clearCounters()
+    }
 }

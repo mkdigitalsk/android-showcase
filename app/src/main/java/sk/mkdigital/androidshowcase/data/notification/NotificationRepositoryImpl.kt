@@ -11,4 +11,6 @@ class NotificationRepositoryImpl @Inject constructor(
     override suspend fun getToken(): String? = persistentPreferences.getFcmToken()
 
     override suspend fun setToken(token: String): Unit = persistentPreferences.setFcmToken(token)
+
+    override suspend fun clearToken() = persistentPreferences.clearFcmToken()
 }

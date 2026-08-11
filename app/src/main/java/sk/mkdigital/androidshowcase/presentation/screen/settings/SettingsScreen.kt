@@ -34,6 +34,7 @@ import sk.mkdigital.androidshowcase.presentation.component.AppAlertDialog
 import sk.mkdigital.androidshowcase.presentation.component.AppRadioButton
 import sk.mkdigital.androidshowcase.presentation.component.AvatarState
 import sk.mkdigital.androidshowcase.presentation.component.AvatarView
+import sk.mkdigital.androidshowcase.presentation.component.buttons.AppTextButton
 import sk.mkdigital.androidshowcase.presentation.component.buttons.AppTextButtonError
 import sk.mkdigital.androidshowcase.presentation.component.cards.AppElevatedCard
 import sk.mkdigital.androidshowcase.presentation.component.image.AppIconPrimary
@@ -42,14 +43,17 @@ import sk.mkdigital.androidshowcase.presentation.component.imagepicker.ImagePick
 import sk.mkdigital.androidshowcase.presentation.component.spacers.ColumnSpacer.Spacer2
 import sk.mkdigital.androidshowcase.presentation.component.text.bodyLarge.TextBodyLargeNeutral100
 import sk.mkdigital.androidshowcase.presentation.component.text.bodyLarge.TextBodyLargePrimary
+import sk.mkdigital.androidshowcase.presentation.component.text.bodyMedium.TextBodyMedium
 import sk.mkdigital.androidshowcase.presentation.component.text.bodyMedium.TextBodyMediumNeutral80
 import sk.mkdigital.androidshowcase.presentation.component.text.bodySmall.TextBodySmallNeutral80
 import sk.mkdigital.androidshowcase.presentation.component.text.titleLarge.TextTitleLargePrimary
 import sk.mkdigital.androidshowcase.presentation.foundation.AppTheme
+import sk.mkdigital.androidshowcase.presentation.foundation.appColorScheme
 import sk.mkdigital.androidshowcase.presentation.foundation.floatingNavBarSpace
 import sk.mkdigital.androidshowcase.presentation.foundation.space2
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.material3.MaterialTheme
 import sk.mkdigital.androidshowcase.presentation.component.image.AppImage
@@ -82,6 +86,9 @@ fun SettingsScreen(
         onLanguageSelected = viewModel::onLanguageSelected,
         onCrashClick = viewModel::triggerTestCrash,
         onSignOut = viewModel::signOut,
+        onDeleteAccountClick = viewModel::showDeleteAccountDialog,
+        onDeleteAccountConfirm = viewModel::deleteAccount,
+        onDeleteAccountDismiss = viewModel::hideDeleteAccountDialog,
         onWebClick = viewModel::openWeb
     )
 
@@ -99,6 +106,9 @@ fun SettingsScreen(
     onLanguageSelected: (LanguageState) -> Unit = {},
     onCrashClick: () -> Unit = {},
     onSignOut: () -> Unit = {},
+    onDeleteAccountClick: () -> Unit = {},
+    onDeleteAccountConfirm: () -> Unit = {},
+    onDeleteAccountDismiss: () -> Unit = {},
     onWebClick: () -> Unit = {}
 ) {
     LazyColumn(
@@ -204,11 +214,30 @@ fun SettingsScreen(
         }
 
         item {
-            AppTextButtonError(
+            AppTextButton(
                 text = stringResource(R.string.settings_sign_out),
                 onClick = onSignOut,
                 modifier = Modifier.fillMaxWidth()
             )
+        }
+
+        item {
+            AppTextButtonError(
+                text = stringResource(R.string.settings_delete_account),
+                onClick = onDeleteAccountClick,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+
+        if (state.deleteAccountFailed) {
+            item {
+                TextBodyMedium(
+                    text = stringResource(R.string.settings_delete_account_error),
+                    color = MaterialTheme.appColorScheme.error,
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Center
+                )
+            }
         }
     }
 
@@ -222,6 +251,40 @@ fun SettingsScreen(
             onDismiss = onThemeDismiss
         )
     }
+
+    if (state.showDeleteAccountDialog) {
+        DeleteAccountDialog(
+            isDeleting = state.isDeletingAccount,
+            onConfirm = onDeleteAccountConfirm,
+            onDismiss = onDeleteAccountDismiss
+        )
+    }
+}
+
+@Composable
+private fun DeleteAccountDialog(
+    isDeleting: Boolean,
+    onConfirm: () -> Unit,
+    onDismiss: () -> Unit,
+) {
+    AppAlertDialog(
+        title = stringResource(R.string.settings_delete_account_title),
+        text = stringResource(R.string.settings_delete_account_text),
+        onDismissRequest = onDismiss,
+        dismissButton = {
+            AppTextButton(
+                text = stringResource(R.string.button_cancel),
+                onClick = onDismiss
+            )
+        },
+        confirmButton = {
+            AppTextButtonError(
+                text = stringResource(R.string.settings_delete_account_confirm),
+                onClick = onConfirm,
+                loading = isDeleting
+            )
+        }
+    )
 }
 
 @Composable
@@ -380,6 +443,8 @@ internal class SettingsScreenPreviewParams : PreviewParameterProvider<SettingsSt
     override val values = sequenceOf(
         SettingsState(),
         SettingsState(themeModeState = ThemeModeState.DARK, currentLanguage = LanguageState.SK),
-        SettingsState(showThemeDialog = true)
+        SettingsState(showThemeDialog = true),
+        SettingsState(showDeleteAccountDialog = true),
+        SettingsState(showDeleteAccountDialog = true, isDeletingAccount = true)
     )
 }
