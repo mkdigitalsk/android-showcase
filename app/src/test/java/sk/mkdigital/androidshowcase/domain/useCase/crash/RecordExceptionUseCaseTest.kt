@@ -1,10 +1,10 @@
-package sk.mkdigital.androidshowcase.domain.useCase.analytics
+package sk.mkdigital.androidshowcase.domain.useCase.crash
 
 import io.mockk.coJustRun
 import io.mockk.coVerify
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.test.runTest
-import sk.mkdigital.androidshowcase.data.analytics.AnalyticsClient
+import sk.mkdigital.androidshowcase.data.crash.CrashReporter
 import sk.mkdigital.androidshowcase.base.BaseTest
 import sk.mkdigital.androidshowcase.base.test
 import org.junit.jupiter.api.Test
@@ -14,25 +14,25 @@ class RecordExceptionUseCaseTest : BaseTest<RecordExceptionUseCase>() {
     override lateinit var classUnderTest: RecordExceptionUseCase
 
     @MockK
-    private lateinit var analyticsClient: AnalyticsClient
+    private lateinit var crashReporter: CrashReporter
 
     override fun beforeEach() {
-        classUnderTest = RecordExceptionUseCase(analyticsClient)
+        classUnderTest = RecordExceptionUseCase(crashReporter)
     }
 
     @Test
-    fun `invoke calls recordException on analytics client`() = runTest {
+    fun `invoke calls recordException on the crash reporter`() = runTest {
         val exception = RuntimeException("Test exception")
 
         test(
             given = {
-                coJustRun { analyticsClient.recordException(exception) }
+                coJustRun { crashReporter.recordException(exception) }
             },
             whenAction = {
                 classUnderTest(exception)
             },
             then = {
-                coVerify(exactly = 1) { analyticsClient.recordException(exception) }
+                coVerify(exactly = 1) { crashReporter.recordException(exception) }
             }
         )
     }

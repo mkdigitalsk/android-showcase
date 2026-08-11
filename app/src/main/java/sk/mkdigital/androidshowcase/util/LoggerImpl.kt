@@ -1,13 +1,13 @@
 package sk.mkdigital.androidshowcase.util
 
 import android.util.Log
-import sk.mkdigital.androidshowcase.data.analytics.AnalyticsClient
+import sk.mkdigital.androidshowcase.data.crash.CrashReporter
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class LoggerImpl @Inject constructor(
-    private val analyticsClient: AnalyticsClient
+    private val crashReporter: CrashReporter
 ) : Logger {
 
     override fun e(log: String) {
@@ -16,12 +16,12 @@ class LoggerImpl @Inject constructor(
 
     override fun e(e: Throwable) {
         Log.e(TAG, e.stackTraceToString())
-        analyticsClient.recordException(e)
+        crashReporter.recordException(e)
     }
 
     override fun e(log: String, e: Throwable) {
         Log.e(TAG, log, e)
-        analyticsClient.recordException(e)
+        crashReporter.recordException(e)
     }
 
     override fun d(log: String) {

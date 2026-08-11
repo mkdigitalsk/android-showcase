@@ -15,7 +15,7 @@ data class ImagePickerState(
 @HiltViewModel
 class ImagePickerViewModel @Inject constructor() : BaseViewModel<ImagePickerState>(
     defaultState = ImagePickerState(),
-    excludedFromTracking = true
+    logsScreenName = false,
 ) {
 
     fun showDialog() {

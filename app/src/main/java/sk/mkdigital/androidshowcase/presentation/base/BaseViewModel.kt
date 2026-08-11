@@ -14,18 +14,13 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import sk.mkdigital.androidshowcase.domain.exceptions.base.BaseException
 import sk.mkdigital.androidshowcase.domain.exceptions.base.UnknownException
-import sk.mkdigital.androidshowcase.domain.useCase.analytics.TrackScreenUseCase
 import sk.mkdigital.androidshowcase.util.Logger
 import javax.inject.Inject
 
 abstract class BaseViewModel<STATE : Any>(
     defaultState: STATE,
-    val excludedFromTracking: Boolean = false
+    private val logsScreenName: Boolean = true,
 ) : ViewModel() {
-
-
-    @Inject
-    lateinit var trackScreenUseCase: TrackScreenUseCase
 
     @Inject
     lateinit var logger: Logger
@@ -47,6 +42,12 @@ abstract class BaseViewModel<STATE : Any>(
         loadInitialData()
     }
 
+    private fun logScreenName() {
+        if (!logsScreenName) return
+        val screenName = tag?.removeSuffix("ViewModel") ?: return
+        logger.d("Screen: $screenName")
+    }
+
     protected open fun loadInitialData() {}
 
     open fun onResume() {
@@ -66,13 +67,6 @@ abstract class BaseViewModel<STATE : Any>(
     protected fun requireState(block: (STATE) -> Unit): Unit = block(_state.value)
 
     protected fun requireState(): STATE = _state.value
-
-    private fun logScreenName() {
-        if (excludedFromTracking) return
-        val screenName = tag?.removeSuffix("ViewModel") ?: return
-        logger.d("Screen: $screenName")
-        trackScreenUseCase(screenName)
-    }
 
     @Suppress("TooGenericExceptionCaught")
     protected fun <T> execute(

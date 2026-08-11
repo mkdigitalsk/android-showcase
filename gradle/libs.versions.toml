@@ -150,7 +150,6 @@ zxing-core = { module = "com.google.zxing:core", version.ref = "zxing" }
 # Google & Firebase
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanistPermissions" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
-firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 firebase-app-check-debug = { module = "com.google.firebase:firebase-appcheck-debug" }
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics" }
 firebase-messaging = { module = "com.google.firebase:firebase-messaging" }

@@ -56,12 +56,12 @@ android {
     buildTypes {
         debug {
             // A debuggable build never occupies the production identity: it installs beside the release
-            // instead of replacing it, its crashes and analytics stay out of the testers' stream, and no
-            // one ends up with a debugger-attachable app under the real application id.
+            // instead of replacing it, its crashes stay out of the testers' stream, and no one ends up
+            // with a debugger-attachable app under the real application id.
             applicationIdSuffix = ".debug"
 
             // Its own Firebase app, so a build sent to testers for a look never lands in the production
-            // app's crash and analytics stream.
+            // app's crash stream.
             firebaseAppDistribution {
                 appId = "1:513132666055:android:976493229a289ee55d32e2"
                 artifactType = "APK"
@@ -216,7 +216,6 @@ dependencies {
 
     // Firebase
     implementation(platform(libs.firebase.bom))
-    implementation(libs.firebase.analytics)
     implementation(libs.firebase.crashlytics)
     implementation(libs.firebase.messaging)
 

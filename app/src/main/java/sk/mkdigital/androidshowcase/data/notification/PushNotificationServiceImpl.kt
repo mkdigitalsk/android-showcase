@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.tasks.await
-import sk.mkdigital.androidshowcase.data.analytics.AnalyticsClient
+import sk.mkdigital.androidshowcase.data.crash.CrashReporter
 import sk.mkdigital.androidshowcase.domain.model.Notification
 import sk.mkdigital.androidshowcase.domain.model.NotificationChannel
 import sk.mkdigital.androidshowcase.domain.repository.NotificationRepository
@@ -29,7 +29,7 @@ import javax.inject.Singleton
 class PushNotificationServiceImpl @Inject constructor(
     @param:ApplicationContext private val context: android.content.Context,
     private val notificationRepository: NotificationRepository,
-    private val analyticsClient: AnalyticsClient
+    private val crashReporter: CrashReporter
 ) : PushNotificationService {
 
     private val _token = MutableStateFlow<String?>(null)
@@ -76,7 +76,7 @@ class PushNotificationServiceImpl @Inject constructor(
             updateToken(token)
         } catch (e: Exception) {
             Log.e(TAG, "Failed to refresh token", e)
-            analyticsClient.recordException(e)
+            crashReporter.recordException(e)
         }
     }
 
@@ -88,7 +88,7 @@ class PushNotificationServiceImpl @Inject constructor(
         _token.value = token
         notificationRepository.setToken(token)
         Log.d(TAG, "FCM Token updated: ${token.take(TOKEN_PREFIX_LENGTH)}...")
-        analyticsClient.log("FCM token updated")
+        crashReporter.log("FCM token updated")
     }
 
     override fun onNotificationReceived(
@@ -110,7 +110,7 @@ class PushNotificationServiceImpl @Inject constructor(
         _notifications.tryEmit(notification)
         deepLink?.let { _deepLinks.trySend(it) }
 
-        analyticsClient.log("Push notification received: ${notification.title}")
+        crashReporter.log("Push notification received: ${notification.title}")
     }
 
     override fun onDeepLinkReceived(deepLink: String) {
