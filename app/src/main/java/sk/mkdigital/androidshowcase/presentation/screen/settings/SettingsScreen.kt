@@ -34,7 +34,7 @@ import sk.mkdigital.androidshowcase.presentation.component.AppAlertDialog
 import sk.mkdigital.androidshowcase.presentation.component.AppRadioButton
 import sk.mkdigital.androidshowcase.presentation.component.AvatarState
 import sk.mkdigital.androidshowcase.presentation.component.AvatarView
-import sk.mkdigital.androidshowcase.presentation.component.buttons.AppTextButton
+import sk.mkdigital.androidshowcase.presentation.component.buttons.AppTextButtonPrimary
 import sk.mkdigital.androidshowcase.presentation.component.buttons.AppTextButtonError
 import sk.mkdigital.androidshowcase.presentation.component.cards.AppElevatedCard
 import sk.mkdigital.androidshowcase.presentation.component.image.AppIconPrimary
@@ -214,7 +214,7 @@ fun SettingsScreen(
         }
 
         item {
-            AppTextButton(
+            AppTextButtonPrimary(
                 text = stringResource(R.string.settings_sign_out),
                 onClick = onSignOut,
                 modifier = Modifier.fillMaxWidth()
@@ -282,7 +282,7 @@ private fun DeleteAccountDialog(
         text = stringResource(R.string.settings_delete_account_text),
         onDismissRequest = onDismiss,
         dismissButton = {
-            AppTextButton(
+            AppTextButtonPrimary(
                 text = stringResource(R.string.button_cancel),
                 onClick = onDismiss
             )

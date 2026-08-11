@@ -17,7 +17,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -47,6 +46,7 @@ import sk.mkdigital.androidshowcase.presentation.component.image.AppIconNeutral8
 import sk.mkdigital.androidshowcase.presentation.component.spacers.ColumnSpacer.Spacer4
 import sk.mkdigital.androidshowcase.presentation.component.spacers.ColumnSpacer.Spacer8
 import sk.mkdigital.androidshowcase.presentation.component.text.bodyMedium.TextBodyMediumNeutral80
+import sk.mkdigital.androidshowcase.presentation.component.buttons.AppTextButtonPrimary
 import sk.mkdigital.androidshowcase.presentation.component.text.labelLarge.TextButtonPrimary
 import sk.mkdigital.androidshowcase.presentation.component.text.titleLarge.TextTitleLargePrimary
 import sk.mkdigital.androidshowcase.presentation.foundation.AppTheme
@@ -69,7 +69,8 @@ fun SignUpScreen(
         onPasswordChange = viewModel::onPasswordChange,
         onConfirmPasswordChange = viewModel::onConfirmPasswordChange,
         onSignUp = viewModel::signUp,
-        onSignIn = viewModel::toSignIn
+        onSignIn = viewModel::toSignIn,
+        onPrivacy = viewModel::openPrivacy,
     )
 }
 
@@ -80,7 +81,8 @@ fun SignUpScreen(
     onPasswordChange: (String) -> Unit = {},
     onConfirmPasswordChange: (String) -> Unit = {},
     onSignUp: () -> Unit = {},
-    onSignIn: () -> Unit = {}
+    onSignIn: () -> Unit = {},
+    onPrivacy: () -> Unit = {}
 ) {
     val focusManager = LocalFocusManager.current
 
@@ -197,10 +199,10 @@ fun SignUpScreen(
             verticalAlignment = Alignment.CenterVertically
         ) {
             TextBodyMediumNeutral80(stringResource(R.string.sign_up_has_account))
-            TextButton(onClick = onSignIn) {
-                TextButtonPrimary(stringResource(R.string.sign_up_sign_in))
-            }
+            AppTextButtonPrimary(text = stringResource(R.string.sign_up_sign_in), onClick = onSignIn)
         }
+
+        AppTextButtonPrimary(text = stringResource(R.string.sign_up_privacy), onClick = onPrivacy)
 
         Spacer(modifier = Modifier.weight(1f))
     }
@@ -220,6 +222,8 @@ private fun SignUpNavEvents(
             )
 
             is SignUpNavEvent.ToSignIn -> router.onBack()
+
+            is SignUpNavEvent.OpenPrivacy -> router.openLink(event.url)
         }
     }
 }
