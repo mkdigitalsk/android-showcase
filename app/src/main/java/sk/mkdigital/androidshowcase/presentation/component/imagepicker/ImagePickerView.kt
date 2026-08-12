@@ -3,46 +3,44 @@ package sk.mkdigital.androidshowcase.presentation.component.imagepicker
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.compose.runtime.rememberUpdatedState
 import sk.mkdigital.androidshowcase.presentation.component.camera.rememberCameraManager
 import sk.mkdigital.androidshowcase.presentation.component.galery.rememberGalleryManager
 import sk.mkdigital.androidshowcase.presentation.component.permission.PermissionType
 import sk.mkdigital.androidshowcase.presentation.component.permission.PermissionView
 
 @Composable
-fun ImagePickerView(viewModel: ImagePickerViewModel) {
-    val state by viewModel.state.collectAsStateWithLifecycle()
-
-    val cameraManager = rememberCameraManager { result ->
-        viewModel.onImageLoading()
-        viewModel.onImageResult(result)
-    }
-
-    val galleryManager = rememberGalleryManager { result ->
-        viewModel.onImageLoading()
-        viewModel.onImageResult(result)
-    }
+fun ImagePickerView(
+    state: ImagePickerState,
+    onDialogDismiss: () -> Unit,
+    onActionSelect: (PickerAction) -> Unit,
+    onActionReset: () -> Unit,
+    onImagePick: (ImageResult?) -> Unit,
+) {
+    val cameraManager = rememberCameraManager(onImagePick)
+    val galleryManager = rememberGalleryManager(onImagePick)
+    val currentActionReset by rememberUpdatedState(onActionReset)
 
     if (state.showOptionDialog) {
         ImageSourceOptionDialog(
-            onDismissRequest = { viewModel.hideDialog() },
-            onAction = { viewModel.onActionSelected(it) },
+            onDismissRequest = onDialogDismiss,
+            onAction = onActionSelect,
         )
     }
 
     when (state.action) {
         PickerAction.Camera -> PermissionView(
             permission = PermissionType.CAMERA,
-            onDeniedDialogDismiss = { viewModel.resetAction() },
+            onDeniedDialogDismiss = onActionReset,
         ) {
             cameraManager.launch()
-            viewModel.resetAction()
+            onActionReset()
         }
 
         PickerAction.Gallery -> {
             LaunchedEffect(state.action) {
                 galleryManager.launch()
-                viewModel.resetAction()
+                currentActionReset()
             }
         }
 

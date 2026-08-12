@@ -37,6 +37,7 @@ import sk.mkdigital.androidshowcase.presentation.base.CollectNavEvents
 import sk.mkdigital.androidshowcase.presentation.base.NavEvent
 import sk.mkdigital.androidshowcase.presentation.base.NavRouter
 import sk.mkdigital.androidshowcase.presentation.base.Route
+import sk.mkdigital.androidshowcase.presentation.base.router.LinkRouter
 import sk.mkdigital.androidshowcase.presentation.component.AppPasswordTextField
 import sk.mkdigital.androidshowcase.presentation.component.AppTextField
 import sk.mkdigital.androidshowcase.presentation.component.buttons.ContainedButton
@@ -58,11 +59,12 @@ import sk.mkdigital.androidshowcase.presentation.foundation.space6
 @Composable
 fun SignUpScreen(
     router: NavRouter<Route>,
+    linkRouter: LinkRouter,
     viewModel: SignUpViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    SignUpNavEvents(router, viewModel.navEvent)
+    SignUpNavEvents(router, linkRouter, viewModel.navEvent)
     SignUpScreen(
         state = state,
         onEmailChange = viewModel::onEmailChange,
@@ -211,6 +213,7 @@ fun SignUpScreen(
 @Composable
 private fun SignUpNavEvents(
     router: NavRouter<Route>,
+    linkRouter: LinkRouter,
     navEvent: SharedFlow<NavEvent>
 ) {
     CollectNavEvents(navEventFlow = navEvent) { event ->
@@ -223,7 +226,7 @@ private fun SignUpNavEvents(
 
             is SignUpNavEvent.ToSignIn -> router.onBack()
 
-            is SignUpNavEvent.OpenPrivacy -> router.openLink(event.url)
+            is SignUpNavEvent.OpenPrivacy -> linkRouter.openLink(event.url)
         }
     }
 }

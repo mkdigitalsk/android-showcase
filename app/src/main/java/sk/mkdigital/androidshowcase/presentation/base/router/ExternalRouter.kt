@@ -13,5 +13,6 @@ class ExternalRouter @Inject constructor(
     ShareRouter by ShareRouter.Impl(context),
     CopyRouter by CopyRouter.Impl(context),
     EmailRouter by EmailRouter.Impl(context),
-    SettingsRouter by SettingsRouter.Impl(context)
+    SettingsRouter by SettingsRouter.Impl(context),
+    LocaleRouter by LocaleRouter.Impl()
 

@@ -6,15 +6,12 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.compose.runtime.getValue
-import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dagger.hilt.android.AndroidEntryPoint
 import sk.mkdigital.androidshowcase.data.service.LocalNotificationServiceImpl
 import sk.mkdigital.androidshowcase.domain.repository.PushNotificationService
-import sk.mkdigital.androidshowcase.presentation.base.AppCallbacks
 import sk.mkdigital.androidshowcase.presentation.base.router.ExternalRouter
 import sk.mkdigital.androidshowcase.presentation.screen.MainView
 import sk.mkdigital.androidshowcase.presentation.screen.MainViewState
@@ -43,19 +40,8 @@ class MainActivity : AppCompatActivity() {
             MainView(
                 state = MainViewState(themeMode = mainState.themeMode),
                 deepLinks = pushService.deepLinks,
-                appCallbacks = AppCallbacks(
-                    openLink = externalRouter::openLink,
-                    dial = externalRouter::dial,
-                    share = externalRouter::share,
-                    copyToClipboard = externalRouter::copyToClipboard,
-                    sendEmail = externalRouter::sendEmail,
-                    openSettings = externalRouter::openSettings,
-                    openNotificationSettings = externalRouter::openNotificationSettings,
-                    setLocale = { tag ->
-                        AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags(tag))
-                    },
-                    setThemeMode = mainViewModel::setThemeMode
-                )
+                externalRouter = externalRouter,
+                onThemeChange = mainViewModel::setThemeMode,
             )
         }
     }

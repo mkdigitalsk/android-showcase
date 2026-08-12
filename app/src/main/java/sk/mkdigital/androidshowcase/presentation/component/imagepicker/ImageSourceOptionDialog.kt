@@ -24,9 +24,9 @@ import sk.mkdigital.androidshowcase.presentation.foundation.space4
 
 @Composable
 fun ImageSourceOptionDialog(
-    title: String = stringResource(R.string.imagepicker_title),
     onDismissRequest: () -> Unit,
     onAction: (PickerAction) -> Unit,
+    title: String = stringResource(R.string.imagepicker_title),
 ) {
     AppAlertDialog(
         onDismissRequest = onDismissRequest,

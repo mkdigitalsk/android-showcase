@@ -30,6 +30,8 @@ import sk.mkdigital.androidshowcase.presentation.base.NavEvent
 import sk.mkdigital.androidshowcase.presentation.base.NavRouter
 import sk.mkdigital.androidshowcase.presentation.base.Route
 import sk.mkdigital.androidshowcase.presentation.base.lifecycleAwareViewModel
+import sk.mkdigital.androidshowcase.presentation.base.router.LinkRouter
+import sk.mkdigital.androidshowcase.presentation.base.router.LocaleRouter
 import sk.mkdigital.androidshowcase.presentation.component.AppAlertDialog
 import sk.mkdigital.androidshowcase.presentation.component.AppRadioButton
 import sk.mkdigital.androidshowcase.presentation.component.AvatarState
@@ -48,6 +50,7 @@ import sk.mkdigital.androidshowcase.presentation.component.text.bodyMedium.TextB
 import sk.mkdigital.androidshowcase.presentation.component.text.bodySmall.TextBodySmallNeutral80
 import sk.mkdigital.androidshowcase.presentation.component.text.titleLarge.TextTitleLargePrimary
 import sk.mkdigital.androidshowcase.presentation.foundation.AppTheme
+import sk.mkdigital.androidshowcase.presentation.foundation.ThemeMode
 import sk.mkdigital.androidshowcase.presentation.foundation.appColorScheme
 import sk.mkdigital.androidshowcase.presentation.foundation.floatingNavBarSpace
 import sk.mkdigital.androidshowcase.presentation.foundation.space2
@@ -63,6 +66,9 @@ import sk.mkdigital.androidshowcase.presentation.foundation.space4
 @Composable
 fun SettingsScreen(
     router: NavRouter<Route>,
+    linkRouter: LinkRouter,
+    localeRouter: LocaleRouter,
+    onThemeChange: (ThemeMode) -> Unit,
     viewModel: SettingsViewModel = lifecycleAwareViewModel(),
     imagePickerViewModel: ImagePickerViewModel = hiltViewModel(),
 ) {
@@ -75,15 +81,21 @@ fun SettingsScreen(
         else -> AvatarState.Empty
     }
 
-    SettingsNavEvents(router, viewModel.navEvent)
+    SettingsNavEvents(
+        router = router,
+        linkRouter = linkRouter,
+        localeRouter = localeRouter,
+        onThemeChange = onThemeChange,
+        navEvent = viewModel.navEvent,
+    )
     SettingsScreen(
         state = state,
         avatarState = avatarState,
         onProfilePhotoClick = imagePickerViewModel::showDialog,
         onThemeClick = viewModel::showThemeDialog,
-        onThemeSelected = viewModel::setThemeMode,
+        onThemeSelect = viewModel::setThemeMode,
         onThemeDismiss = viewModel::hideThemeDialog,
-        onLanguageSelected = viewModel::onLanguageSelected,
+        onLanguageSelect = viewModel::onLanguageSelected,
         onCrashClick = viewModel::triggerTestCrash,
         onSignOut = viewModel::signOut,
         onDeleteAccountClick = viewModel::showDeleteAccountDialog,
@@ -92,7 +104,16 @@ fun SettingsScreen(
         onWebClick = viewModel::openWeb
     )
 
-    ImagePickerView(viewModel = imagePickerViewModel)
+    ImagePickerView(
+        state = imagePickerState,
+        onDialogDismiss = imagePickerViewModel::hideDialog,
+        onActionSelect = imagePickerViewModel::onActionSelected,
+        onActionReset = imagePickerViewModel::resetAction,
+        onImagePick = { result ->
+            imagePickerViewModel.onImageLoading()
+            imagePickerViewModel.onImageResult(result)
+        }
+    )
 }
 
 @Composable
@@ -101,9 +122,9 @@ fun SettingsScreen(
     avatarState: AvatarState = AvatarState.Empty,
     onProfilePhotoClick: () -> Unit = {},
     onThemeClick: () -> Unit = {},
-    onThemeSelected: (ThemeModeState) -> Unit = {},
+    onThemeSelect: (ThemeModeState) -> Unit = {},
     onThemeDismiss: () -> Unit = {},
-    onLanguageSelected: (LanguageState) -> Unit = {},
+    onLanguageSelect: (LanguageState) -> Unit = {},
     onCrashClick: () -> Unit = {},
     onSignOut: () -> Unit = {},
     onDeleteAccountClick: () -> Unit = {},
@@ -166,7 +187,7 @@ fun SettingsScreen(
         item {
             LanguageSelector(
                 currentLanguage = state.currentLanguage,
-                onLanguageSelected = onLanguageSelected
+                onLanguageSelect = onLanguageSelect
             )
         }
 
@@ -254,8 +275,8 @@ fun SettingsScreen(
     if (state.showThemeDialog) {
         ThemeSelectionDialog(
             currentTheme = state.themeModeState,
-            onThemeSelected = { themeModeState ->
-                onThemeSelected(themeModeState)
+            onThemeSelect = { themeModeState ->
+                onThemeSelect(themeModeState)
                 onThemeDismiss()
             },
             onDismiss = onThemeDismiss
@@ -344,7 +365,7 @@ private fun SettingsItem(
 @Composable
 private fun ThemeSelectionDialog(
     currentTheme: ThemeModeState,
-    onThemeSelected: (ThemeModeState) -> Unit,
+    onThemeSelect: (ThemeModeState) -> Unit,
     onDismiss: () -> Unit,
 ) {
     AppAlertDialog(
@@ -356,7 +377,7 @@ private fun ThemeSelectionDialog(
                 ThemeOption(
                     title = stringResource(themeModeState.textId),
                     selected = currentTheme == themeModeState,
-                    onClick = { onThemeSelected(themeModeState) }
+                    onClick = { onThemeSelect(themeModeState) }
                 )
             }
         }
@@ -421,19 +442,22 @@ private fun VersionFooter(
 @Composable
 private fun SettingsNavEvents(
     router: NavRouter<Route>,
+    linkRouter: LinkRouter,
+    localeRouter: LocaleRouter,
+    onThemeChange: (ThemeMode) -> Unit,
     navEvent: SharedFlow<NavEvent>,
 ) {
     CollectNavEvents(navEventFlow = navEvent) { event ->
         when (event) {
-            is SettingNavEvents.SetLocaleTag -> router.setLocale(event.tag)
+            is SettingNavEvents.SetLocaleTag -> localeRouter.setLocale(event.tag)
             is SettingNavEvents.SignOut -> router.navigateTo(
                 Route.SignIn,
                 popUpTo = Route.HomeSection.Home::class,
                 inclusive = true
             )
 
-            is SettingNavEvents.ThemeChanged -> router.setThemeMode(event.mode)
-            is SettingNavEvents.OpenWeb -> router.openLink(event.url)
+            is SettingNavEvents.ThemeChanged -> onThemeChange(event.mode)
+            is SettingNavEvents.OpenWeb -> linkRouter.openLink(event.url)
         }
     }
 }

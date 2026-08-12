@@ -16,8 +16,8 @@ import sk.mkdigital.androidshowcase.presentation.component.text.bodySmall.TextBo
 
 @Composable
 fun BiometricView(
-    modifier: Modifier,
     onClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier,

@@ -15,6 +15,8 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -74,10 +76,10 @@ fun UiComponentsScreen() {
     var checkboxChecked by remember { mutableStateOf(false) }
     var textFieldValue by remember { mutableStateOf("") }
     var switchChecked by remember { mutableStateOf(false) }
-    var selectedRadioOption by remember { mutableStateOf(0) }
+    var selectedRadioOption by remember { mutableIntStateOf(0) }
     var selectedChips by remember { mutableStateOf(setOf<Int>()) }
-    var sliderValue by remember { mutableStateOf(0.5f) }
-    var selectedSegment by remember { mutableStateOf(0) }
+    var sliderValue by remember { mutableFloatStateOf(0.5f) }
+    var selectedSegment by remember { mutableIntStateOf(0) }
     val snackbarHostState = LocalSnackbarHostState.current
     val scope = rememberCoroutineScope()
     val snackbarMessageDefault = stringResource(R.string.snackbar_message_default)
@@ -131,7 +133,7 @@ fun UiComponentsScreen() {
                     stringResource(R.string.segment_month)
                 ),
                 selectedIndex = selectedSegment,
-                onSelectionChanged = { selectedSegment = it },
+                onSelectionChange = { selectedSegment = it },
                 modifier = Modifier.fillMaxWidth()
             )
 

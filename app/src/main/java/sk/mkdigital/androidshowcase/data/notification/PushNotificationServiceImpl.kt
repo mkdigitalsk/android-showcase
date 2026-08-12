@@ -22,6 +22,7 @@ import sk.mkdigital.androidshowcase.domain.model.NotificationChannel
 import sk.mkdigital.androidshowcase.domain.repository.NotificationRepository
 import sk.mkdigital.androidshowcase.domain.repository.PushNotificationService
 import sk.mkdigital.androidshowcase.domain.repository.PushPermissionStatus
+import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -74,7 +75,7 @@ class PushNotificationServiceImpl @Inject constructor(
         try {
             val token = FirebaseMessaging.getInstance().token.await()
             updateToken(token)
-        } catch (e: Exception) {
+        } catch (e: IOException) {
             Log.e(TAG, "Failed to refresh token", e)
             crashReporter.recordException(e)
         }

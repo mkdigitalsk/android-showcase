@@ -26,6 +26,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,9 +38,12 @@ import kotlinx.coroutines.flow.SharedFlow
 import sk.mkdigital.androidshowcase.R
 import sk.mkdigital.androidshowcase.presentation.base.CollectNavEvents
 import sk.mkdigital.androidshowcase.presentation.base.NavEvent
-import sk.mkdigital.androidshowcase.presentation.base.NavRouter
-import sk.mkdigital.androidshowcase.presentation.base.Route
 import sk.mkdigital.androidshowcase.presentation.base.lifecycleAwareViewModel
+import sk.mkdigital.androidshowcase.presentation.base.router.CopyRouter
+import sk.mkdigital.androidshowcase.presentation.base.router.DialRouter
+import sk.mkdigital.androidshowcase.presentation.base.router.EmailRouter
+import sk.mkdigital.androidshowcase.presentation.base.router.LinkRouter
+import sk.mkdigital.androidshowcase.presentation.base.router.ShareRouter
 import sk.mkdigital.androidshowcase.presentation.component.buttons.OutlinedButton
 import sk.mkdigital.androidshowcase.presentation.component.cards.AppElevatedCard
 import sk.mkdigital.androidshowcase.presentation.component.permission.rememberLocationPermissionState
@@ -59,12 +63,14 @@ private fun rememberLocationActionHandler(
 ): (PendingLocationAction) -> Unit {
     val locationPermission = rememberLocationPermissionState()
     var pendingAction by remember { mutableStateOf(PendingLocationAction.NONE) }
+    val currentOnGetLocation by rememberUpdatedState(onGetLocation)
+    val currentOnStartUpdates by rememberUpdatedState(onStartUpdates)
 
     LaunchedEffect(locationPermission.isGranted, pendingAction) {
         if (locationPermission.isGranted && pendingAction != PendingLocationAction.NONE) {
             when (pendingAction) {
-                PendingLocationAction.GET_LOCATION -> onGetLocation()
-                PendingLocationAction.START_UPDATES -> onStartUpdates()
+                PendingLocationAction.GET_LOCATION -> currentOnGetLocation()
+                PendingLocationAction.START_UPDATES -> currentOnStartUpdates()
                 PendingLocationAction.NONE -> Unit
             }
             pendingAction = PendingLocationAction.NONE
@@ -74,8 +80,8 @@ private fun rememberLocationActionHandler(
     return { action ->
         if (locationPermission.isGranted) {
             when (action) {
-                PendingLocationAction.GET_LOCATION -> onGetLocation()
-                PendingLocationAction.START_UPDATES -> onStartUpdates()
+                PendingLocationAction.GET_LOCATION -> currentOnGetLocation()
+                PendingLocationAction.START_UPDATES -> currentOnStartUpdates()
                 PendingLocationAction.NONE -> Unit
             }
         } else {
@@ -88,7 +94,11 @@ private fun rememberLocationActionHandler(
 @Suppress("CyclomaticComplexMethod", "CognitiveComplexMethod")
 @Composable
 fun ApisScreen(
-    router: NavRouter<Route>,
+    shareRouter: ShareRouter,
+    dialRouter: DialRouter,
+    linkRouter: LinkRouter,
+    emailRouter: EmailRouter,
+    copyRouter: CopyRouter,
     viewModel: ApisViewModel = lifecycleAwareViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -274,7 +284,14 @@ fun ApisScreen(
         }
     }
 
-    ApisNavEvents(router, viewModel.navEvent)
+    ApisNavEvents(
+        shareRouter = shareRouter,
+        dialRouter = dialRouter,
+        linkRouter = linkRouter,
+        emailRouter = emailRouter,
+        copyRouter = copyRouter,
+        navEvent = viewModel.navEvent,
+    )
 }
 
 @Composable
@@ -320,25 +337,29 @@ private fun ApiCardButton(
 
 @Composable
 private fun ApisNavEvents(
-    router: NavRouter<Route>,
+    shareRouter: ShareRouter,
+    dialRouter: DialRouter,
+    linkRouter: LinkRouter,
+    emailRouter: EmailRouter,
+    copyRouter: CopyRouter,
     navEvent: SharedFlow<NavEvent>,
 ) {
     val context = LocalContext.current
     CollectNavEvents(navEventFlow = navEvent) { event ->
         when (event) {
-            is ApisNavEvent.Share -> router.share(
+            is ApisNavEvent.Share -> shareRouter.share(
                 text = context.getString(event.textRes),
                 title = context.getString(event.titleRes),
                 url = context.getString(event.urlRes)
             )
-            is ApisNavEvent.Dial -> router.dial(context.getString(event.numberRes))
-            is ApisNavEvent.OpenLink -> router.openLink(context.getString(event.urlRes))
-            is ApisNavEvent.SendEmail -> router.sendEmail(
+            is ApisNavEvent.Dial -> dialRouter.dial(context.getString(event.numberRes))
+            is ApisNavEvent.OpenLink -> linkRouter.openLink(context.getString(event.urlRes))
+            is ApisNavEvent.SendEmail -> emailRouter.sendEmail(
                 context.getString(event.toRes),
                 context.getString(event.subjectRes),
                 context.getString(event.bodyRes)
             )
-            is ApisNavEvent.CopyToClipboard -> router.copyToClipboard(context.getString(event.textRes))
+            is ApisNavEvent.CopyToClipboard -> copyRouter.copyToClipboard(context.getString(event.textRes))
         }
     }
 }

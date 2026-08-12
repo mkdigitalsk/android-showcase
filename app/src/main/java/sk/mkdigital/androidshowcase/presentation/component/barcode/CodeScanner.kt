@@ -21,10 +21,10 @@ import com.google.mlkit.vision.common.InputImage
 
 @Suppress("CognitiveComplexMethod")
 @Composable
- fun CodeScanner(
-    onScanned: (String) -> Unit,
+fun CodeScanner(
+    onScan: (String) -> Unit,
     onError: (String) -> Unit,
-    modifier: Modifier
+    modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -57,7 +57,7 @@ import com.google.mlkit.vision.common.InputImage
                                     .addOnSuccessListener { barcodes ->
                                         for (barcode in barcodes) {
                                             barcode.rawValue?.let {
-                                                onScanned(it)
+                                                onScan(it)
                                             }
                                         }
                                     }

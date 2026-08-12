@@ -34,7 +34,9 @@ class SignUpViewModel @Inject constructor(
             val passwordError = validatePassword(state.password)
             val confirmPasswordError = validateConfirmPassword(state.password, state.confirmPassword)
 
-            if (emailError != null || passwordError != null || confirmPasswordError != null) {
+            val hasInvalidField = emailError != null || passwordError != null || confirmPasswordError != null
+
+            if (hasInvalidField) {
                 newState {
                     it.copy(
                         emailError = emailError,

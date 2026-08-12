@@ -210,7 +210,7 @@ fun SignInScreen(
                     color = MaterialTheme.colorScheme.primary
                 )
             } else {
-                BiometricView(modifier = Modifier, onClick = onBiometricAuth)
+                BiometricView(onClick = onBiometricAuth)
             }
         }
 
