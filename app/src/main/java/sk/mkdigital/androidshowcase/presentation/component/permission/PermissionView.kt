@@ -40,13 +40,13 @@ fun PermissionView(
     onDeniedDialogDismiss: () -> Unit,
     content: @Composable () -> Unit
 ) {
-
-    when (permission) {
-        PermissionType.GALLERY -> content()
-        PermissionType.CAMERA,
-        PermissionType.LOCATION,
-        PermissionType.NOTIFICATION -> PermissionContendDefault(
+    val manifestPermission = permission.toManifestPermission()
+    if (manifestPermission == null) {
+        content()
+    } else {
+        RequiredPermissionView(
             permission = permission,
+            manifestPermission = manifestPermission,
             onDeniedDialogDismiss = onDeniedDialogDismiss,
             content = content,
         )
@@ -63,17 +63,12 @@ private fun PermissionType.toManifestPermission() = when (this) {
 }
 
 @Composable
-private fun PermissionContendDefault(
+private fun RequiredPermissionView(
     permission: PermissionType,
+    manifestPermission: String,
     onDeniedDialogDismiss: () -> Unit,
     content: @Composable () -> Unit,
 ) {
-    val manifestPermission = permission.toManifestPermission()
-    if (manifestPermission == null) {
-        content()
-        return
-    }
-
     val state = rememberPermissionState(manifestPermission)
     var rationaleDismissed by remember { mutableStateOf(false) }
     var hasRequested by remember { mutableStateOf(false) }

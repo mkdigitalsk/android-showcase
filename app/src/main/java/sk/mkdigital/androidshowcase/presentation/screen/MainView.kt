@@ -27,7 +27,6 @@ import androidx.navigation3.ui.NavDisplay
 import kotlinx.coroutines.flow.Flow
 import sk.mkdigital.androidshowcase.R
 import sk.mkdigital.androidshowcase.data.push.DeepLinkHandler
-import sk.mkdigital.androidshowcase.presentation.base.AppCallbacks
 import sk.mkdigital.androidshowcase.presentation.base.NavRouter
 import sk.mkdigital.androidshowcase.presentation.base.Route
 import sk.mkdigital.androidshowcase.presentation.base.Route.HomeSection
@@ -36,6 +35,7 @@ import sk.mkdigital.androidshowcase.presentation.base.Route.SignUp
 import sk.mkdigital.androidshowcase.presentation.base.Route.Settings
 import sk.mkdigital.androidshowcase.presentation.base.rememberNavEntryDecorators
 import sk.mkdigital.androidshowcase.presentation.base.rememberNavRouter
+import sk.mkdigital.androidshowcase.presentation.base.router.ExternalRouter
 import sk.mkdigital.androidshowcase.presentation.component.AppFloatingNavBar
 import sk.mkdigital.androidshowcase.presentation.component.AppSnackbarHost
 import sk.mkdigital.androidshowcase.presentation.component.FloatingNavItem
@@ -68,11 +68,12 @@ data class MainViewState(
 @Suppress("CognitiveComplexMethod")
 @Composable
 fun MainView(
-    state: MainViewState = MainViewState(),
-    appCallbacks: AppCallbacks = AppCallbacks(),
     deepLinks: Flow<String>,
+    externalRouter: ExternalRouter,
+    onThemeChange: (ThemeMode) -> Unit,
+    state: MainViewState = MainViewState(),
 ) {
-    val router: NavRouter<Route> = rememberNavRouter(appCallbacks)
+    val router: NavRouter<Route> = rememberNavRouter()
     val currentRoute: Route = router.backStack.last()
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -106,17 +107,32 @@ fun MainView(
                         entryDecorators = rememberNavEntryDecorators(),
                         entryProvider = entryProvider {
                             entry<SignIn> { SignInScreen(router) }
-                            entry<SignUp> { SignUpScreen(router) }
+                            entry<SignUp> { SignUpScreen(router, externalRouter) }
                             entry<HomeSection.Home> { HomeScreen(router) }
                             entry<HomeSection.UiComponents> { UiComponentsScreen() }
                             entry<HomeSection.Networking> { NetworkingScreen() }
                             entry<HomeSection.Storage> { StorageScreen() }
-                            entry<HomeSection.Apis> { ApisScreen(router) }
+                            entry<HomeSection.Apis> {
+                                ApisScreen(
+                                    shareRouter = externalRouter,
+                                    dialRouter = externalRouter,
+                                    linkRouter = externalRouter,
+                                    emailRouter = externalRouter,
+                                    copyRouter = externalRouter,
+                                )
+                            }
                             entry<HomeSection.Scanner> { ScannerScreen() }
                             entry<HomeSection.Database> { DatabaseScreen() }
                             entry<HomeSection.Calendar> { CalendarScreen() }
-                            entry<HomeSection.Notifications> { NotificationsScreen(router) }
-                            entry<Settings> { SettingsScreen(router) }
+                            entry<HomeSection.Notifications> { NotificationsScreen(externalRouter) }
+                            entry<Settings> {
+                                SettingsScreen(
+                                    router = router,
+                                    linkRouter = externalRouter,
+                                    localeRouter = externalRouter,
+                                    onThemeChange = onThemeChange,
+                                )
+                            }
                         }
                     )
                 }

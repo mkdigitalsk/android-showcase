@@ -34,8 +34,7 @@ import sk.mkdigital.androidshowcase.R
 import sk.mkdigital.androidshowcase.domain.repository.PushPermissionStatus
 import sk.mkdigital.androidshowcase.presentation.base.CollectNavEvents
 import sk.mkdigital.androidshowcase.presentation.base.NavEvent
-import sk.mkdigital.androidshowcase.presentation.base.NavRouter
-import sk.mkdigital.androidshowcase.presentation.base.Route
+import sk.mkdigital.androidshowcase.presentation.base.router.SettingsRouter
 import sk.mkdigital.androidshowcase.presentation.component.buttons.OutlinedButton
 import sk.mkdigital.androidshowcase.presentation.component.cards.AppElevatedCard
 import sk.mkdigital.androidshowcase.presentation.component.permission.rememberNotificationPermissionRequester
@@ -49,7 +48,7 @@ import sk.mkdigital.androidshowcase.presentation.foundation.space4
 
 @Composable
 fun NotificationsScreen(
-    router: NavRouter<Route>,
+    settingsRouter: SettingsRouter,
     viewModel: NotificationsViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -57,7 +56,7 @@ fun NotificationsScreen(
         viewModel.updatePermissionStatus(status)
     }
 
-    NotificationsNavEvents(router, viewModel.navEvent)
+    NotificationsNavEvents(settingsRouter, viewModel.navEvent)
     NotificationsScreen(
         state = state,
         onRequestPermission = permissionRequester.request,
@@ -249,12 +248,12 @@ private fun CardButton(
 
 @Composable
 private fun NotificationsNavEvents(
-    router: NavRouter<Route>,
+    settingsRouter: SettingsRouter,
     navEvent: SharedFlow<NavEvent>,
 ) {
     CollectNavEvents(navEventFlow = navEvent) { event ->
         when (event) {
-            is NotificationsNavEvent.OpenSettings -> router.openNotificationSettings()
+            is NotificationsNavEvent.OpenSettings -> settingsRouter.openNotificationSettings()
         }
     }
 }

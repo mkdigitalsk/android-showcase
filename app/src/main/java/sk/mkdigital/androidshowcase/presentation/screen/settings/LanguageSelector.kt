@@ -30,7 +30,7 @@ import sk.mkdigital.androidshowcase.presentation.foundation.space4
 @Composable
 fun LanguageSelector(
     currentLanguage: LanguageState,
-    onLanguageSelected: (LanguageState) -> Unit,
+    onLanguageSelect: (LanguageState) -> Unit,
 ) {
     var showDialog by remember { mutableStateOf(false) }
 
@@ -70,7 +70,7 @@ fun LanguageSelector(
                             .fillMaxWidth()
                             .clickable {
                                 showDialog = false
-                                onLanguageSelected(language)
+                                onLanguageSelect(language)
                             }
                             .padding(vertical = space4),
                         verticalAlignment = Alignment.CenterVertically,
@@ -79,7 +79,7 @@ fun LanguageSelector(
                             selected = currentLanguage == language,
                             onClick = {
                                 showDialog = false
-                                onLanguageSelected(language)
+                                onLanguageSelect(language)
                             }
                         )
                         Image(

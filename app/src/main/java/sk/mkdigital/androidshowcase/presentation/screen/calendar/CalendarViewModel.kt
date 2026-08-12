@@ -13,6 +13,8 @@ import javax.inject.Inject
 
 private const val DAY_INCREMENT = 1
 
+private val SAMPLE_DISABLED_DAY_OFFSETS = setOf(3, 7, 8, 12, 15)
+
 @HiltViewModel
 class CalendarViewModel @Inject constructor(
     private val getTodayDateUseCase: GetTodayDateUseCase,
@@ -28,15 +30,8 @@ class CalendarViewModel @Inject constructor(
         )
     }
 
-    private fun generateSampleDisabledDates(today: LocalDate): Set<LocalDate> {
-        return setOf(
-            today.plus(3, DateTimeUnit.DAY),
-            today.plus(7, DateTimeUnit.DAY),
-            today.plus(8, DateTimeUnit.DAY),
-            today.plus(12, DateTimeUnit.DAY),
-            today.plus(15, DateTimeUnit.DAY),
-        )
-    }
+    private fun generateSampleDisabledDates(today: LocalDate): Set<LocalDate> =
+        SAMPLE_DISABLED_DAY_OFFSETS.mapTo(mutableSetOf()) { offset -> today.plus(offset, DateTimeUnit.DAY) }
 
     fun onDateClick(date: LocalDate) {
         val currentState = requireState()

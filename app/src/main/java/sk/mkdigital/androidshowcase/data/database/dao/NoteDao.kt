@@ -7,6 +7,8 @@ import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 import sk.mkdigital.androidshowcase.data.database.entity.NoteEntity
 
+// One method per query; the long lines are the SQL itself.
+@Suppress("TooManyFunctions", "MaxLineLength")
 @Dao
 interface NoteDao {
 

@@ -52,12 +52,12 @@ fun DatabaseScreen(viewModel: DatabaseViewModel = lifecycleAwareViewModel()) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     DatabaseScreen(
         state = state,
-        onSearchQueryChanged = viewModel::onSearchQueryChanged,
-        onSortOptionChanged = viewModel::onSortOptionChanged,
+        onSearchQueryChange = viewModel::onSearchQueryChanged,
+        onSortOptionChange = viewModel::onSortOptionChanged,
         onToggleFilterMenu = viewModel::toggleFilterMenu,
         onDismissFilterMenu = viewModel::dismissFilterMenu,
-        onTitleChanged = viewModel::onTitleChanged,
-        onContentChanged = viewModel::onContentChanged,
+        onTitleChange = viewModel::onTitleChanged,
+        onContentChange = viewModel::onContentChanged,
         onAddNote = viewModel::addNote,
         onDeleteNote = viewModel::deleteNote,
         onDeleteAllNotes = viewModel::deleteAllNotes
@@ -67,12 +67,12 @@ fun DatabaseScreen(viewModel: DatabaseViewModel = lifecycleAwareViewModel()) {
 @Composable
 internal fun DatabaseScreen(
     state: DatabaseUiState,
-    onSearchQueryChanged: (String) -> Unit = {},
-    onSortOptionChanged: (NoteSortOption) -> Unit = {},
+    onSearchQueryChange: (String) -> Unit = {},
+    onSortOptionChange: (NoteSortOption) -> Unit = {},
     onToggleFilterMenu: () -> Unit = {},
     onDismissFilterMenu: () -> Unit = {},
-    onTitleChanged: (String) -> Unit = {},
-    onContentChanged: (String) -> Unit = {},
+    onTitleChange: (String) -> Unit = {},
+    onContentChange: (String) -> Unit = {},
     onAddNote: () -> Unit = {},
     onDeleteNote: (Long) -> Unit = {},
     onDeleteAllNotes: () -> Unit = {}
@@ -90,9 +90,9 @@ internal fun DatabaseScreen(
         item {
             SearchBar(
                 query = state.searchQuery,
-                onQueryChanged = onSearchQueryChanged,
+                onQueryChange = onSearchQueryChange,
                 sortOption = state.sortOption,
-                onSortOptionChanged = onSortOptionChanged,
+                onSortOptionChange = onSortOptionChange,
                 showFilterMenu = state.showFilterMenu,
                 onToggleFilterMenu = onToggleFilterMenu,
                 onDismissFilterMenu = onDismissFilterMenu
@@ -103,8 +103,8 @@ internal fun DatabaseScreen(
             AddNoteCard(
                 title = state.newNoteTitle,
                 content = state.newNoteContent,
-                onTitleChanged = onTitleChanged,
-                onContentChanged = onContentChanged,
+                onTitleChange = onTitleChange,
+                onContentChange = onContentChange,
                 onAddClick = onAddNote
             )
         }
@@ -144,9 +144,9 @@ internal fun DatabaseScreen(
 @Composable
 private fun SearchBar(
     query: String,
-    onQueryChanged: (String) -> Unit,
+    onQueryChange: (String) -> Unit,
     sortOption: NoteSortOption,
-    onSortOptionChanged: (NoteSortOption) -> Unit,
+    onSortOptionChange: (NoteSortOption) -> Unit,
     showFilterMenu: Boolean,
     onToggleFilterMenu: () -> Unit,
     onDismissFilterMenu: () -> Unit,
@@ -158,66 +158,90 @@ private fun SearchBar(
     ) {
         AppSearchField(
             value = query,
-            onValueChange = onQueryChanged,
+            onValueChange = onQueryChange,
             modifier = Modifier.weight(1f),
             placeholder = stringResource(R.string.database_search_hint)
         )
 
-        Box {
-            IconButton(onClick = onToggleFilterMenu) {
-                AppIconNeutral80(
-                    imageVector = Icons.Filled.FilterList,
-                    contentDescription = stringResource(R.string.database_filter)
-                )
-            }
+        SortMenu(
+            sortOption = sortOption,
+            onSortOptionChange = onSortOptionChange,
+            expanded = showFilterMenu,
+            onToggleFilterMenu = onToggleFilterMenu,
+            onDismissFilterMenu = onDismissFilterMenu
+        )
+    }
+}
 
-            DropdownMenu(
-                expanded = showFilterMenu,
-                onDismissRequest = onDismissFilterMenu
-            ) {
-                TextLabelMediumNeutral80(
-                    text = stringResource(R.string.database_sort_by),
-                    modifier = Modifier.padding(horizontal = space4, vertical = space4)
-                )
-                DropdownMenuItem(
-                    text = { TextBodyMediumNeutral80(stringResource(R.string.database_sort_date_newest)) },
-                    onClick = { onSortOptionChanged(NoteSortOption.DATE_DESC) },
-                    leadingIcon = if (sortOption == NoteSortOption.DATE_DESC) {
-                        { TextBodyMediumNeutral80("✓") }
-                    } else null
-                )
-                DropdownMenuItem(
-                    text = { TextBodyMediumNeutral80(stringResource(R.string.database_sort_date_oldest)) },
-                    onClick = { onSortOptionChanged(NoteSortOption.DATE_ASC) },
-                    leadingIcon = if (sortOption == NoteSortOption.DATE_ASC) {
-                        { TextBodyMediumNeutral80("✓") }
-                    } else null
-                )
-                DropdownMenuItem(
-                    text = { TextBodyMediumNeutral80(stringResource(R.string.database_sort_title_asc)) },
-                    onClick = { onSortOptionChanged(NoteSortOption.TITLE_ASC) },
-                    leadingIcon = if (sortOption == NoteSortOption.TITLE_ASC) {
-                        { TextBodyMediumNeutral80("✓") }
-                    } else null
-                )
-                DropdownMenuItem(
-                    text = { TextBodyMediumNeutral80(stringResource(R.string.database_sort_title_desc)) },
-                    onClick = { onSortOptionChanged(NoteSortOption.TITLE_DESC) },
-                    leadingIcon = if (sortOption == NoteSortOption.TITLE_DESC) {
-                        { TextBodyMediumNeutral80("✓") }
-                    } else null
-                )
-            }
+@Composable
+private fun SortMenu(
+    sortOption: NoteSortOption,
+    onSortOptionChange: (NoteSortOption) -> Unit,
+    expanded: Boolean,
+    onToggleFilterMenu: () -> Unit,
+    onDismissFilterMenu: () -> Unit,
+) {
+    Box {
+        IconButton(onClick = onToggleFilterMenu) {
+            AppIconNeutral80(
+                imageVector = Icons.Filled.FilterList,
+                contentDescription = stringResource(R.string.database_filter)
+            )
+        }
+
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = onDismissFilterMenu
+        ) {
+            TextLabelMediumNeutral80(
+                text = stringResource(R.string.database_sort_by),
+                modifier = Modifier.padding(horizontal = space4, vertical = space4)
+            )
+            SortMenuItem(
+                label = stringResource(R.string.database_sort_date_newest),
+                selected = sortOption == NoteSortOption.DATE_DESC,
+                onClick = { onSortOptionChange(NoteSortOption.DATE_DESC) }
+            )
+            SortMenuItem(
+                label = stringResource(R.string.database_sort_date_oldest),
+                selected = sortOption == NoteSortOption.DATE_ASC,
+                onClick = { onSortOptionChange(NoteSortOption.DATE_ASC) }
+            )
+            SortMenuItem(
+                label = stringResource(R.string.database_sort_title_asc),
+                selected = sortOption == NoteSortOption.TITLE_ASC,
+                onClick = { onSortOptionChange(NoteSortOption.TITLE_ASC) }
+            )
+            SortMenuItem(
+                label = stringResource(R.string.database_sort_title_desc),
+                selected = sortOption == NoteSortOption.TITLE_DESC,
+                onClick = { onSortOptionChange(NoteSortOption.TITLE_DESC) }
+            )
         }
     }
+}
+
+@Composable
+private fun SortMenuItem(
+    label: String,
+    selected: Boolean,
+    onClick: () -> Unit,
+) {
+    DropdownMenuItem(
+        text = { TextBodyMediumNeutral80(label) },
+        onClick = onClick,
+        leadingIcon = if (selected) {
+            { TextBodyMediumNeutral80("✓") }
+        } else null
+    )
 }
 
 @Composable
 private fun AddNoteCard(
     title: String,
     content: String,
-    onTitleChanged: (String) -> Unit,
-    onContentChanged: (String) -> Unit,
+    onTitleChange: (String) -> Unit,
+    onContentChange: (String) -> Unit,
     onAddClick: () -> Unit,
 ) {
     AppElevatedCard(
@@ -227,7 +251,7 @@ private fun AddNoteCard(
     ) {
         AppTextField(
             value = title,
-            onValueChange = onTitleChanged,
+            onValueChange = onTitleChange,
             label = stringResource(R.string.database_title_label),
             placeholder = stringResource(R.string.database_title_hint),
             modifier = Modifier.fillMaxWidth()
@@ -235,7 +259,7 @@ private fun AddNoteCard(
         Spacer2()
         AppTextField(
             value = content,
-            onValueChange = onContentChanged,
+            onValueChange = onContentChange,
             label = stringResource(R.string.database_content_label),
             placeholder = stringResource(R.string.database_content_hint),
             modifier = Modifier.fillMaxWidth()

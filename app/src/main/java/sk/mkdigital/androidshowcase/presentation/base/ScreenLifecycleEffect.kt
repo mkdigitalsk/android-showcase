@@ -52,8 +52,8 @@ inline fun <reified VM : BaseViewModel<*>> lifecycleAwareViewModel(
             "No ViewModelStoreOwner was provided via LocalViewModelStoreOwner"
         },
     key: String? = null,
+    viewModel: VM = hiltViewModel<VM>(viewModelStoreOwner = viewModelStoreOwner, key = key),
 ): VM {
-    val viewModel = hiltViewModel<VM>(viewModelStoreOwner = viewModelStoreOwner, key = key)
     LifecycleEffect(
         onResume = viewModel::onResume,
         onPause = viewModel::onPause

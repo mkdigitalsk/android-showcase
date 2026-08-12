@@ -16,33 +16,18 @@ import sk.mkdigital.androidshowcase.presentation.base.Route.HomeSection
 import sk.mkdigital.androidshowcase.presentation.base.Route.SignIn
 import sk.mkdigital.androidshowcase.presentation.base.Route.SignUp
 import sk.mkdigital.androidshowcase.presentation.base.Route.Settings
-import sk.mkdigital.androidshowcase.presentation.foundation.ThemeMode
 import kotlin.reflect.KClass
 
 interface NavRouter<T : NavKey> {
     val backStack: NavBackStack<T>
 
-    // Navigation
     fun navigateTo(page: T)
     fun <R : Any> navigateTo(page: T, popUpTo: KClass<R>? = null, inclusive: Boolean = false)
     fun onBack()
-
-    // External actions
-    fun openLink(url: String)
-    fun dial(number: String)
-    fun share(text: String, title: String, url: String)
-    fun copyToClipboard(text: String)
-    fun sendEmail(to: String, subject: String, body: String)
-    fun openNotificationSettings()
-
-    // App settings
-    fun setLocale(tag: String)
-    fun setThemeMode(mode: ThemeMode)
 }
 
 class NavRouterImpl<T : NavKey>(
     override val backStack: NavBackStack<T>,
-    private val callbacks: AppCallbacks,
 ) : NavRouter<T> {
 
     override fun navigateTo(page: T) {
@@ -64,25 +49,14 @@ class NavRouterImpl<T : NavKey>(
     override fun onBack() {
         backStack.removeLastOrNull()
     }
-
-    override fun openLink(url: String) = callbacks.openLink(url)
-    override fun dial(number: String) = callbacks.dial(number)
-    override fun share(text: String, title: String, url: String) = callbacks.share(text, title, url)
-    override fun copyToClipboard(text: String) = callbacks.copyToClipboard(text)
-    override fun sendEmail(to: String, subject: String, body: String) = callbacks.sendEmail(to, subject, body)
-    override fun openNotificationSettings() = callbacks.openNotificationSettings()
-    override fun setLocale(tag: String) = callbacks.setLocale(tag)
-    override fun setThemeMode(mode: ThemeMode) = callbacks.setThemeMode(mode)
 }
 
 @Suppress("UNCHECKED_CAST")
 @Composable
-fun <T : NavKey> rememberNavRouter(
-    appCallbacks: AppCallbacks = AppCallbacks(),
-): NavRouter<T> {
+fun <T : NavKey> rememberNavRouter(): NavRouter<T> {
     val backStack = rememberNavBackStack(saveStateConfiguration, SignIn)
-    return remember(backStack, appCallbacks) {
-        NavRouterImpl(backStack as NavBackStack<T>, appCallbacks)
+    return remember(backStack) {
+        NavRouterImpl(backStack as NavBackStack<T>)
     }
 }
 

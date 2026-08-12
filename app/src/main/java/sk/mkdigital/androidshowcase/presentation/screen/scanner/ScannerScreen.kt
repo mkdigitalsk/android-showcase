@@ -80,7 +80,7 @@ fun ScannerScreen(viewModel: ScannerViewModel = hiltViewModel()) {
             AppSegmentedButton(
                 options = modeOptions,
                 selectedIndex = state.selectedModeIndex,
-                onSelectionChanged = viewModel::onModeChanged,
+                onSelectionChange = viewModel::onModeChanged,
                 modifier = Modifier.fillMaxWidth()
             )
         }
@@ -93,7 +93,7 @@ fun ScannerScreen(viewModel: ScannerViewModel = hiltViewModel()) {
                     AppSegmentedButton(
                         options = formatOptions,
                         selectedIndex = state.selectedFormatIndex,
-                        onSelectionChanged = viewModel::onFormatChanged,
+                        onSelectionChange = viewModel::onFormatChanged,
                         modifier = Modifier.fillMaxWidth()
                     )
                     Spacer4()
@@ -158,7 +158,7 @@ fun ScannerScreen(viewModel: ScannerViewModel = hiltViewModel()) {
                                 onDeniedDialogDismiss = {},
                             ) {
                                 CodeScanner(
-                                    onScanned = viewModel::onCodeScanned,
+                                    onScan = viewModel::onCodeScanned,
                                     onError = { },
                                     modifier = Modifier.fillMaxSize()
                                 )

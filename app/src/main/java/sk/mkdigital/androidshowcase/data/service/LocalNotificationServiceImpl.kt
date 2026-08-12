@@ -46,7 +46,9 @@ class LocalNotificationServiceImpl(
 
             val notificationId = notification.id.hashCode()
             manager.notify(notificationId, builder.build())
-        } catch (e: Exception) {
+        } catch (e: SecurityException) {
+            Log.e(TAG, "Failed to show notification", e)
+        } catch (e: IllegalArgumentException) {
             Log.e(TAG, "Failed to show notification", e)
         }
     }
