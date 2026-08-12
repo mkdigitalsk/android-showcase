@@ -40,7 +40,6 @@ import sk.mkdigital.androidshowcase.presentation.component.LoadingView
 import sk.mkdigital.androidshowcase.presentation.component.buttons.ContainedButton
 import sk.mkdigital.androidshowcase.presentation.component.cards.AppElevatedCard
 import sk.mkdigital.androidshowcase.presentation.component.spacers.ColumnSpacer.Spacer2
-import sk.mkdigital.androidshowcase.presentation.component.spacers.ColumnSpacer.Spacer4
 import sk.mkdigital.androidshowcase.presentation.component.text
 import sk.mkdigital.androidshowcase.presentation.component.text.bodyLarge.TextBodyLargeNeutral80
 import sk.mkdigital.androidshowcase.presentation.component.text.bodyMedium.TextBodyMediumNeutral80
