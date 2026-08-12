@@ -14,7 +14,7 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStoreFile
 import kotlinx.coroutines.flow.first
 
-// One accessor pair per primitive type — the count tracks the type system, not the responsibilities.
+// One accessor pair per primitive type, so the count follows the type system.
 @Suppress("TooManyFunctions")
 interface Preferences {
     val storageName: String

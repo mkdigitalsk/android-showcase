@@ -2,7 +2,7 @@
 # the rest, so an upgrade brings detekt's new rules instead of freezing this file's copy of the old ones.
 
 config:
-  # The anchor below is ours, not a ruleset — validation has to be told to skip it.
+  # `_test-sources` below is a YAML anchor we define; config validation is told to skip that key.
   excludes: ['_test-sources']
 
 _test-sources: &test-sources
