@@ -66,9 +66,9 @@ object NetworkModule {
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class NetworkBindsModule {
+interface NetworkBindsModule {
 
     @Binds
     @Singleton
-    abstract fun bindAuthClient(impl: AuthClientImpl): AuthClient
+    fun bindAuthClient(impl: AuthClientImpl): AuthClient
 }

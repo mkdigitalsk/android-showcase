@@ -18,6 +18,7 @@ import sk.mkdigital.androidshowcase.util.Logger
 import javax.inject.Inject
 import sk.mkdigital.androidshowcase.util.suspendRunCatching
 
+@Suppress("AbstractClassCanBeConcreteClass")
 abstract class BaseViewModel<STATE : Any>(
     defaultState: STATE,
     private val logsScreenName: Boolean = true,

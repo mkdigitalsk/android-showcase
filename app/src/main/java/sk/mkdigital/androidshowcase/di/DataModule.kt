@@ -93,25 +93,25 @@ object DataModule {
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class DataBindsModule {
+interface DataBindsModule {
 
     @Binds
     @Singleton
-    abstract fun bindCrashReporter(impl: FirebaseCrashReporter): CrashReporter
+    fun bindCrashReporter(impl: FirebaseCrashReporter): CrashReporter
 
     @Binds
     @Singleton
-    abstract fun bindLogger(impl: LoggerImpl): Logger
+    fun bindLogger(impl: LoggerImpl): Logger
 
     @Binds
     @Singleton
-    abstract fun bindUserClient(impl: UserClientImpl): UserClient
+    fun bindUserClient(impl: UserClientImpl): UserClient
 
     @Binds
     @Singleton
-    abstract fun bindRemoteNoteClient(impl: RemoteNoteClientImpl): RemoteNoteClient
+    fun bindRemoteNoteClient(impl: RemoteNoteClientImpl): RemoteNoteClient
 
     @Binds
     @Singleton
-    abstract fun bindStorageLocalStore(impl: StorageLocalStoreImpl): StorageLocalStore
+    fun bindStorageLocalStore(impl: StorageLocalStoreImpl): StorageLocalStore
 }
