@@ -16,6 +16,7 @@ import sk.mkdigital.androidshowcase.domain.repository.PushNotificationService
 import javax.inject.Inject
 
 @AndroidEntryPoint
+@Suppress("InjectDispatcher")
 class AppFirebaseMessagingService : FirebaseMessagingService() {
 
     private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
