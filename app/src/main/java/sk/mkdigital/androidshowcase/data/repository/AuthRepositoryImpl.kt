@@ -6,6 +6,7 @@ import sk.mkdigital.androidshowcase.data.local.preferences.PersistentPreferences
 import sk.mkdigital.androidshowcase.domain.model.AuthSession
 import sk.mkdigital.androidshowcase.domain.repository.AuthRepository
 import javax.inject.Inject
+import sk.mkdigital.androidshowcase.util.suspendRunCatching
 
 class AuthRepositoryImpl @Inject constructor(
     private val client: AuthClient,
@@ -28,7 +29,7 @@ class AuthRepositoryImpl @Inject constructor(
 
     override suspend fun signInWithToken(): AuthSession? {
         val token = preferences.getToken() ?: return null
-        return runCatching { client.me(token).toAuthSession() }
+        return suspendRunCatching { client.me(token).toAuthSession() }
             .onSuccess { preferences.setToken(it.token) }
             .getOrNull()
     }
