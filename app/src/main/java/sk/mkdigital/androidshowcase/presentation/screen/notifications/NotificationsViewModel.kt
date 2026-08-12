@@ -56,8 +56,8 @@ class NotificationsViewModel @Inject constructor(
         execute(
             action = { refreshPushTokenUseCase() },
             onLoading = { newState { it.copy(tokenRefreshing = true) } },
-            onSuccess = { newState { it.copy(tokenRefreshing = false) } },
-            onError = { newState { it.copy(tokenRefreshing = false) } }
+            onSuccess = { _ -> newState { it.copy(tokenRefreshing = false) } },
+            onError = { _ -> newState { it.copy(tokenRefreshing = false) } }
         )
     }
 
@@ -75,7 +75,7 @@ class NotificationsViewModel @Inject constructor(
         )
         execute(
             action = { showLocalNotificationUseCase(notification) },
-            onSuccess = { newState { it.copy(lastSentNotification = notification.title) } }
+            onSuccess = { _ -> newState { it.copy(lastSentNotification = notification.title) } }
         )
     }
 
@@ -89,14 +89,14 @@ class NotificationsViewModel @Inject constructor(
         )
         execute(
             action = { showLocalNotificationUseCase(notification) },
-            onSuccess = { newState { it.copy(lastSentNotification = notification.title) } }
+            onSuccess = { _ -> newState { it.copy(lastSentNotification = notification.title) } }
         )
     }
 
     fun cancelAllNotifications() {
         execute(
             action = { cancelAllNotificationsUseCase() },
-            onSuccess = { newState { it.copy(lastSentNotification = null) } }
+            onSuccess = { _ -> newState { it.copy(lastSentNotification = null) } }
         )
     }
 
