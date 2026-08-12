@@ -24,8 +24,8 @@ import sk.mkdigital.androidshowcase.presentation.component.buttons.OutlinedButto
 import sk.mkdigital.androidshowcase.presentation.component.calendar.CalendarView
 import sk.mkdigital.androidshowcase.presentation.component.cards.AppElevatedCard
 import sk.mkdigital.androidshowcase.presentation.component.spacers.ColumnSpacer.Spacer2
+import sk.mkdigital.androidshowcase.presentation.component.text.bodyLarge.TextBodyLargeNeutral80
 import sk.mkdigital.androidshowcase.presentation.component.text.bodyMedium.TextBodyMediumNeutral80
-import sk.mkdigital.androidshowcase.presentation.component.text.headlineMedium.TextHeadlineMediumPrimary
 import sk.mkdigital.androidshowcase.presentation.component.text.titleLarge.TextTitleLargeNeutral80
 import sk.mkdigital.androidshowcase.presentation.foundation.AppTheme
 import sk.mkdigital.androidshowcase.presentation.foundation.floatingNavBarSpace
@@ -60,8 +60,7 @@ internal fun CalendarScreen(
     ) {
         item {
             Column {
-                TextHeadlineMediumPrimary(stringResource(R.string.calendar_title))
-                TextBodyMediumNeutral80(stringResource(R.string.calendar_subtitle))
+                TextBodyLargeNeutral80(stringResource(R.string.calendar_subtitle))
             }
         }
 

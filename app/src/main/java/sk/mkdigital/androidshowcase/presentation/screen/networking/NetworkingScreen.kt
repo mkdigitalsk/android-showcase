@@ -43,7 +43,6 @@ import sk.mkdigital.androidshowcase.presentation.component.spacers.ColumnSpacer.
 import sk.mkdigital.androidshowcase.presentation.component.spacers.ColumnSpacer.Spacer4
 import sk.mkdigital.androidshowcase.presentation.component.text
 import sk.mkdigital.androidshowcase.presentation.component.text.bodyMedium.TextBodyMediumNeutral80
-import sk.mkdigital.androidshowcase.presentation.component.text.headlineMedium.TextHeadlineMediumPrimary
 import sk.mkdigital.androidshowcase.presentation.component.text.titleLarge.TextTitleLargeNeutral80
 import sk.mkdigital.androidshowcase.presentation.foundation.floatingNavBarSpace
 import sk.mkdigital.androidshowcase.presentation.foundation.space4
@@ -116,7 +115,6 @@ private fun NotesList(
         item {
             Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
                 Column(modifier = Modifier.weight(1f)) {
-                    TextHeadlineMediumPrimary(text = stringResource(R.string.networking_title))
                     TextBodyMediumNeutral80(text = stringResource(R.string.networking_subtitle))
                 }
                 IconButton(onClick = onRefresh, enabled = !state.isLoading) {

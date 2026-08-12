@@ -170,6 +170,7 @@
 
     <!-- Storage Screen -->
     <string name="storage_title">Lokálne úložisko</string>
+    <string name="database_subtitle">Databáza Room s operáciami CRUD, vyhľadávaním a triedením</string>
     <string name="storage_subtitle">Demo session vs trvalé úložisko</string>
     <string name="storage_session_label">Počítadlo relácie</string>
     <string name="storage_session_hint">Vymazané po kliknutí na "Vymazať reláciu"</string>

@@ -38,7 +38,6 @@ import sk.mkdigital.androidshowcase.presentation.component.spacers.ColumnSpacer.
 import sk.mkdigital.androidshowcase.presentation.component.spacers.ColumnSpacer.Spacer8
 import sk.mkdigital.androidshowcase.presentation.component.text.bodyLarge.TextBodyLargeNeutral80
 import sk.mkdigital.androidshowcase.presentation.component.text.bodyMedium.TextBodyMediumNeutral80
-import sk.mkdigital.androidshowcase.presentation.component.text.headlineMedium.TextHeadlineMediumPrimary
 import sk.mkdigital.androidshowcase.presentation.foundation.floatingNavBarSpace
 import sk.mkdigital.androidshowcase.presentation.foundation.space4
 
@@ -71,8 +70,7 @@ fun ScannerScreen(viewModel: ScannerViewModel = hiltViewModel()) {
     ) {
         item {
             Column {
-                TextHeadlineMediumPrimary(stringResource(R.string.scanner_title))
-                TextBodyMediumNeutral80(stringResource(R.string.scanner_subtitle))
+                TextBodyLargeNeutral80(stringResource(R.string.scanner_subtitle))
             }
         }
 
