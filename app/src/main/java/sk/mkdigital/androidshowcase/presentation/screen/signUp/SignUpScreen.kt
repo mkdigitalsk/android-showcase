@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
@@ -15,8 +14,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -48,10 +45,8 @@ import sk.mkdigital.androidshowcase.presentation.component.spacers.ColumnSpacer.
 import sk.mkdigital.androidshowcase.presentation.component.spacers.ColumnSpacer.Spacer8
 import sk.mkdigital.androidshowcase.presentation.component.text.bodyMedium.TextBodyMediumNeutral80
 import sk.mkdigital.androidshowcase.presentation.component.buttons.AppTextButtonPrimary
-import sk.mkdigital.androidshowcase.presentation.component.text.labelLarge.TextButtonPrimary
 import sk.mkdigital.androidshowcase.presentation.component.text.titleLarge.TextTitleLargePrimary
 import sk.mkdigital.androidshowcase.presentation.foundation.AppTheme
-import sk.mkdigital.androidshowcase.presentation.foundation.space12
 import sk.mkdigital.androidshowcase.presentation.foundation.space2
 import sk.mkdigital.androidshowcase.presentation.foundation.space4
 import sk.mkdigital.androidshowcase.presentation.foundation.space6
