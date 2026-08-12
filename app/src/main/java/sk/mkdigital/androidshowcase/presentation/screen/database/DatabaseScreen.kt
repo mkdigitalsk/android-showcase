@@ -39,6 +39,7 @@ import sk.mkdigital.androidshowcase.presentation.component.buttons.OutlinedButto
 import sk.mkdigital.androidshowcase.presentation.component.cards.AppElevatedCard
 import sk.mkdigital.androidshowcase.presentation.component.image.AppIconNeutral80
 import sk.mkdigital.androidshowcase.presentation.component.spacers.ColumnSpacer.Spacer2
+import sk.mkdigital.androidshowcase.presentation.component.text.bodyLarge.TextBodyLargeNeutral80
 import sk.mkdigital.androidshowcase.presentation.component.text.bodyMedium.TextBodyMediumNeutral80
 import sk.mkdigital.androidshowcase.presentation.component.text.bodySmall.TextBodySmallNeutral80
 import sk.mkdigital.androidshowcase.presentation.component.text.labelMedium.TextLabelMediumNeutral80
@@ -87,6 +88,10 @@ internal fun DatabaseScreen(
         ),
         verticalArrangement = Arrangement.spacedBy(space4)
     ) {
+        item {
+            TextBodyLargeNeutral80(stringResource(R.string.database_subtitle))
+        }
+
         item {
             SearchBar(
                 query = state.searchQuery,

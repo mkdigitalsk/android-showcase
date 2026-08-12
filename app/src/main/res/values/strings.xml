@@ -171,6 +171,7 @@
 
     <!-- Storage Screen -->
     <string name="storage_title">Local Storage</string>
+    <string name="database_subtitle">Room database with CRUD operations, search, and sorting</string>
     <string name="storage_subtitle">Session vs Persistent storage demo</string>
     <string name="storage_session_label">Session Counter</string>
     <string name="storage_session_hint">Cleared when you tap "Clear Session"</string>

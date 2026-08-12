@@ -41,7 +41,6 @@ import sk.mkdigital.androidshowcase.presentation.component.permission.rememberNo
 import sk.mkdigital.androidshowcase.presentation.component.spacers.ColumnSpacer.Spacer2
 import sk.mkdigital.androidshowcase.presentation.component.text.bodyLarge.TextBodyLargeNeutral80
 import sk.mkdigital.androidshowcase.presentation.component.text.bodyMedium.TextBodyMediumNeutral80
-import sk.mkdigital.androidshowcase.presentation.component.text.headlineMedium.TextHeadlineMediumPrimary
 import sk.mkdigital.androidshowcase.presentation.foundation.AppTheme
 import sk.mkdigital.androidshowcase.presentation.foundation.floatingNavBarSpace
 import sk.mkdigital.androidshowcase.presentation.foundation.space4
@@ -92,8 +91,7 @@ internal fun NotificationsScreen(
     ) {
         item {
             Column {
-                TextHeadlineMediumPrimary(stringResource(R.string.notifications_title))
-                TextBodyMediumNeutral80(stringResource(R.string.notifications_subtitle))
+                TextBodyLargeNeutral80(stringResource(R.string.notifications_subtitle))
             }
         }
 

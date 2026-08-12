@@ -50,7 +50,6 @@ import sk.mkdigital.androidshowcase.presentation.component.permission.rememberLo
 import sk.mkdigital.androidshowcase.presentation.component.spacers.ColumnSpacer.Spacer2
 import sk.mkdigital.androidshowcase.presentation.component.text.bodyLarge.TextBodyLargeNeutral80
 import sk.mkdigital.androidshowcase.presentation.component.text.bodyMedium.TextBodyMediumNeutral80
-import sk.mkdigital.androidshowcase.presentation.component.text.headlineMedium.TextHeadlineMediumPrimary
 import sk.mkdigital.androidshowcase.presentation.foundation.floatingNavBarSpace
 import sk.mkdigital.androidshowcase.presentation.foundation.space4
 
@@ -119,8 +118,7 @@ fun ApisScreen(
     ) {
         item {
             Column {
-                TextHeadlineMediumPrimary(stringResource(R.string.platform_apis_title))
-                TextBodyMediumNeutral80(stringResource(R.string.platform_apis_subtitle))
+                TextBodyLargeNeutral80(stringResource(R.string.platform_apis_subtitle))
             }
         }
 
