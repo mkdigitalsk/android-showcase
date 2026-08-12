@@ -1,7 +1,6 @@
 package sk.mkdigital.androidshowcase.data.repository.user
 
 import io.mockk.coEvery
-import io.mockk.coVerify
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -13,6 +12,7 @@ import sk.mkdigital.androidshowcase.base.BaseTest
 import sk.mkdigital.androidshowcase.data.dto.user.ThemeModeDTO
 import sk.mkdigital.androidshowcase.data.dto.user.UserResponseDTO
 import sk.mkdigital.androidshowcase.domain.exceptions.base.ApiException
+import sk.mkdigital.androidshowcase.util.suspendRunCatching
 
 class UserRepositoryImplTest : BaseTest<UserRepositoryImpl>() {
 
@@ -38,7 +38,7 @@ class UserRepositoryImplTest : BaseTest<UserRepositoryImpl>() {
     fun `deleting an account rethrows a not found`() = runTest {
         coEvery { client.deleteMe() } throws notFound()
 
-        val thrown = runCatching { classUnderTest.deleteAccount() }.exceptionOrNull()
+        val thrown = suspendRunCatching { classUnderTest.deleteAccount() }.exceptionOrNull()
 
         assertInstanceOf(
             ApiException::class.java,
@@ -51,7 +51,7 @@ class UserRepositoryImplTest : BaseTest<UserRepositoryImpl>() {
     fun `deleting an account rethrows a server failure`() = runTest {
         coEvery { client.deleteMe() } throws serverError()
 
-        val thrown = runCatching { classUnderTest.deleteAccount() }.exceptionOrNull()
+        val thrown = suspendRunCatching { classUnderTest.deleteAccount() }.exceptionOrNull()
 
         assertInstanceOf(ApiException::class.java, thrown)
         assertEquals(500, (thrown as ApiException).httpCode)

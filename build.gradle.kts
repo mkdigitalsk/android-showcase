@@ -18,6 +18,19 @@ subprojects {
     // Per subproject: detekt derives type-resolution tasks from Kotlin compilations, and the root has none.
     apply(plugin = "dev.detekt")
 
+    // detekt skips type-resolution rules silently, so the per-compilation tasks matter; the source-set
+    // ones are what reaches Kotlin/Native.
+    tasks.named("detekt") {
+        dependsOn(
+            tasks.matching { task ->
+                task.name.startsWith("detekt") &&
+                    task.name != "detekt" &&
+                    !task.name.startsWith("detektBaseline") &&
+                    !task.name.startsWith("detektGenerateConfig")
+            }
+        )
+    }
+
     extensions.configure<DetektExtension> {
         buildUponDefaultConfig = true
         allRules = false
