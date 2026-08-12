@@ -34,7 +34,7 @@ class SignInViewModel @Inject constructor(
                 newState { it.copy(isLoading = false) }
                 if (session != null) navigate(SignInNavEvent.ToHome)
             },
-            onError = { newState { it.copy(isLoading = false) } }
+            onError = { _ -> newState { it.copy(isLoading = false) } }
         )
         execute(
             action = { isBiometricEnabledUseCase() },
@@ -75,7 +75,7 @@ class SignInViewModel @Inject constructor(
             execute(
                 action = { signInUseCase(SignInUseCase.Params(state.email, state.password)) },
                 onLoading = { newState { it.copy(isLoading = true, serverError = null) } },
-                onSuccess = {
+                onSuccess = { _ ->
                     newState { it.copy(isLoading = false) }
                     navigate(SignInNavEvent.ToHome)
                 },
@@ -96,7 +96,7 @@ class SignInViewModel @Inject constructor(
                     navigate(SignInNavEvent.ToHome)
                 }
             },
-            onError = { newState { it.copy(biometricsLoading = false) } }
+            onError = { _ -> newState { it.copy(biometricsLoading = false) } }
         )
     }
 

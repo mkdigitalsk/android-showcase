@@ -71,7 +71,7 @@ class ApisViewModel @Inject constructor(
             onSuccess = { location ->
                 newState { it.copy(location = location.toUiModel(), locationLoading = false) }
             },
-            onError = {
+            onError = { _ ->
                 newState { it.copy(locationLoading = false, locationError = true) }
             }
         )
@@ -92,7 +92,7 @@ class ApisViewModel @Inject constructor(
         locationUpdatesJob = observe(
             flow = observeLocationUpdatesUseCase(ObserveLocationUpdatesUseCase.Params(highAccuracy = true)),
             onEach = { location -> newState { it.copy(trackedLocation = location.toUiModel()) } },
-            onError = { newState { it.copy(isTrackingLocation = false, locationUpdatesError = true) } }
+            onError = { _ -> newState { it.copy(isTrackingLocation = false, locationUpdatesError = true) } }
         )
     }
 

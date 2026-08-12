@@ -58,7 +58,7 @@ class DatabaseViewModel @Inject constructor(
             onEach = { notes ->
                 newState { it.copy(notes = notes.map { note -> note.toUiModel() }, isLoading = false) }
             },
-            onError = { newState { it.copy(isLoading = false, error = true) } }
+            onError = { _ -> newState { it.copy(isLoading = false, error = true) } }
         )
     }
 
@@ -105,7 +105,7 @@ class DatabaseViewModel @Inject constructor(
 
         execute(
             action = { insertNoteUseCase(note) },
-            onSuccess = { newState { it.copy(newNoteTitle = "", newNoteContent = "") } }
+            onSuccess = { _ -> newState { it.copy(newNoteTitle = "", newNoteContent = "") } }
         )
     }
 
