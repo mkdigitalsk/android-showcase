@@ -102,7 +102,7 @@ class PushNotificationServiceImpl @Inject constructor(
         val notification = Notification(
             id = data[KEY_NOTIFICATION_ID] ?: System.currentTimeMillis().toString(),
             title = title ?: data[KEY_TITLE] ?: DEFAULT_TITLE,
-            message = body ?: data[KEY_BODY] ?: data[KEY_MESSAGE] ?: "",
+            message = body ?: data[KEY_BODY] ?: data[KEY_MESSAGE].orEmpty(),
             channel = NotificationChannel.GENERAL,
             data = data,
             deepLink = deepLink

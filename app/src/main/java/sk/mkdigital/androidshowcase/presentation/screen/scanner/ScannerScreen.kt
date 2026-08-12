@@ -170,7 +170,7 @@ fun ScannerScreen(viewModel: ScannerViewModel = hiltViewModel()) {
                         ) {
                             TextBodyMediumNeutral80(stringResource(R.string.scanner_scanned_result))
                             Spacer2()
-                            TextBodyLargeNeutral80(state.scannedResult ?: "")
+                            TextBodyLargeNeutral80(state.scannedResult.orEmpty())
                             Spacer4()
                             ContainedButton(
                                 text = stringResource(R.string.scanner_scan_again),

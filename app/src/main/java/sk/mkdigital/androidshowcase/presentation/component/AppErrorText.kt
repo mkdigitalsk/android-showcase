@@ -1,11 +1,13 @@
 package sk.mkdigital.androidshowcase.presentation.component
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.res.stringResource
 import sk.mkdigital.androidshowcase.R
 import sk.mkdigital.androidshowcase.presentation.base.AppError
 
 @Composable
+@ReadOnlyComposable
 fun AppError.text(): String = stringResource(
     when (this) {
         AppError.NO_CONNECTION -> R.string.error_no_connection
