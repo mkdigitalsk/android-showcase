@@ -30,49 +30,50 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class RepositoryModule {
+@Suppress("TooManyFunctions")
+interface RepositoryModule {
 
     @Binds
     @Singleton
-    abstract fun bindUserRepository(impl: UserRepositoryImpl): UserRepository
+    fun bindUserRepository(impl: UserRepositoryImpl): UserRepository
 
     @Binds
     @Singleton
-    abstract fun bindRemoteNoteRepository(impl: RemoteNoteRepositoryImpl): RemoteNoteRepository
+    fun bindRemoteNoteRepository(impl: RemoteNoteRepositoryImpl): RemoteNoteRepository
 
     @Binds
     @Singleton
-    abstract fun bindStorageRepository(impl: StorageRepositoryImpl): StorageRepository
+    fun bindStorageRepository(impl: StorageRepositoryImpl): StorageRepository
 
     @Binds
     @Singleton
-    abstract fun bindSettingsRepository(impl: SettingsRepositoryImpl): SettingsRepository
+    fun bindSettingsRepository(impl: SettingsRepositoryImpl): SettingsRepository
 
     @Binds
     @Singleton
-    abstract fun bindLocationRepository(impl: LocationRepositoryImpl): LocationRepository
+    fun bindLocationRepository(impl: LocationRepositoryImpl): LocationRepository
 
     @Binds
     @Singleton
-    abstract fun bindBiometricRepository(impl: BiometricRepositoryImpl): BiometricRepository
+    fun bindBiometricRepository(impl: BiometricRepositoryImpl): BiometricRepository
 
     @Binds
     @Singleton
-    abstract fun bindDateRepository(impl: DateRepositoryImpl): DateRepository
+    fun bindDateRepository(impl: DateRepositoryImpl): DateRepository
 
     @Binds
     @Singleton
-    abstract fun bindNoteRepository(impl: NoteRepositoryImpl): NoteRepository
+    fun bindNoteRepository(impl: NoteRepositoryImpl): NoteRepository
 
     @Binds
     @Singleton
-    abstract fun bindAuthRepository(impl: AuthRepositoryImpl): AuthRepository
+    fun bindAuthRepository(impl: AuthRepositoryImpl): AuthRepository
 
     @Binds
     @Singleton
-    abstract fun bindNotificationRepository(impl: NotificationRepositoryImpl): NotificationRepository
+    fun bindNotificationRepository(impl: NotificationRepositoryImpl): NotificationRepository
 
     @Binds
     @Singleton
-    abstract fun bindPushNotificationService(impl: PushNotificationServiceImpl): PushNotificationService
+    fun bindPushNotificationService(impl: PushNotificationServiceImpl): PushNotificationService
 }
