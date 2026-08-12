@@ -19,6 +19,7 @@ import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
 @HiltViewModel
+@Suppress("LongParameterList")
 class NotificationsViewModel @Inject constructor(
     private val getPushPermissionStatusUseCase: GetPushPermissionStatusUseCase,
     private val observePushTokenUseCase: ObservePushTokenUseCase,

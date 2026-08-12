@@ -334,6 +334,7 @@ private fun ApiCardButton(
 }
 
 @Composable
+@Suppress("LongParameterList")
 private fun ApisNavEvents(
     shareRouter: ShareRouter,
     dialRouter: DialRouter,
