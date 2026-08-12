@@ -7,6 +7,7 @@ import sk.mkdigital.androidshowcase.domain.repository.StorageRepository
 import sk.mkdigital.androidshowcase.domain.useCase.base.None
 import sk.mkdigital.androidshowcase.domain.useCase.base.UseCase
 import javax.inject.Inject
+import sk.mkdigital.androidshowcase.util.suspendRunCatching
 
 /**
  * Each store clears independently: a thrown one must not skip the token clear below it, or the person
@@ -20,9 +21,9 @@ class ClearLocalUserDataUseCase @Inject constructor(
 ) : UseCase<None, Unit>() {
 
     override suspend fun run(params: None) {
-        runCatching { noteRepository.deleteAll() }
-        runCatching { storageRepository.clearCounters() }
-        runCatching { notificationRepository.clearToken() }
+        suspendRunCatching { noteRepository.deleteAll() }
+        suspendRunCatching { storageRepository.clearCounters() }
+        suspendRunCatching { notificationRepository.clearToken() }
         authRepository.signOut()
     }
 }

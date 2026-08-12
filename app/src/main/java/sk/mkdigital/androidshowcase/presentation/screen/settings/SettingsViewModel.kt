@@ -19,6 +19,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.LocaleListCompat
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
+import sk.mkdigital.androidshowcase.util.suspendRunCatching
 
 data class SettingsState(
     val themeModeState: ThemeModeState = ThemeModeState.SYSTEM,
@@ -138,7 +139,7 @@ class SettingsViewModel @Inject constructor(
         execute(
             action = {
                 deleteAccountUseCase()
-                runCatching { clearLocalUserDataUseCase() }
+                suspendRunCatching { clearLocalUserDataUseCase() }
             },
             onLoading = { newState { it.copy(isDeletingAccount = true, deleteAccountFailed = false) } },
             onSuccess = {
