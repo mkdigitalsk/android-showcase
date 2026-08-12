@@ -1,6 +1,16 @@
 # Only what we decide differently from detekt's shipped defaults — `buildUponDefaultConfig = true` supplies
 # the rest, so an upgrade brings detekt's new rules instead of freezing this file's copy of the old ones.
 
+config:
+  # The anchor below is ours, not a ruleset — validation has to be told to skip it.
+  excludes: ['_test-sources']
+
+_test-sources: &test-sources
+  - '**/test/**'
+  - '**/androidTest/**'
+  - '**/androidUnitTest/**'
+  - '**/androidInstrumentedTest/**'
+
 complexity:
   CognitiveComplexMethod:
     active: true
@@ -50,6 +60,8 @@ performance:
     active: false
 
 potential-bugs:
+  IgnoredReturnValue:
+    excludes: *test-sources
   DontDowncastCollectionTypes:
     active: true
   MissingPackageDeclaration:
@@ -58,6 +70,12 @@ potential-bugs:
     active: true
 
 style:
+  # `lateinit val` is not Kotlin, so the rule's suggestion cannot be followed for a mock the
+  # framework assigns by reflection.
+  VarCouldBeVal:
+    ignoreLateinitVar: true
+  AbstractClassCanBeConcreteClass:
+    excludes: *test-sources
   CollapsibleIfStatements:
     active: true
   ExplicitItLambdaParameter:
