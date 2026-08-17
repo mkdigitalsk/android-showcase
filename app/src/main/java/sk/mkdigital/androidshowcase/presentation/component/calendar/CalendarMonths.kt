@@ -13,7 +13,7 @@ import sk.mkdigital.androidshowcase.domain.model.calendar.CalendarMonth
 import sk.mkdigital.androidshowcase.domain.model.calendar.DateRange
 import sk.mkdigital.androidshowcase.domain.model.calendar.DaySelectionType
 
-object CalendarUtils {
+object CalendarMonths {
 
     const val DAYS_PER_WEEK = 7
     const val WEEKS_TO_DISPLAY = 6

@@ -15,7 +15,7 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.FileProvider.getUriForFile
 import sk.mkdigital.androidshowcase.presentation.component.imagepicker.ImageResult
-import sk.mkdigital.androidshowcase.util.BitmapUtils
+import sk.mkdigital.androidshowcase.util.BitmapLoader
 import java.io.File
 
 @Composable
@@ -30,8 +30,8 @@ fun rememberCameraManager(onResult: (ImageResult?) -> Unit): CameraManager {
     ) { success ->
         val capturedUri = imageUri
         if (success && capturedUri != null) {
-            val byteArray = BitmapUtils.getByteArray(capturedUri, contentResolver)
-            val bitmap = BitmapUtils.getBitmapFromUri(capturedUri, byteArray, contentResolver)
+            val byteArray = BitmapLoader.getByteArray(capturedUri, contentResolver)
+            val bitmap = BitmapLoader.getBitmapFromUri(capturedUri, byteArray, contentResolver)
                 ?.asImageBitmap()
             onResult(bitmap?.let { ImageResult(byteArray, it) })
         } else {
