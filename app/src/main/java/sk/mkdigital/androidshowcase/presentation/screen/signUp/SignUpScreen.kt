@@ -23,6 +23,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
@@ -44,6 +45,7 @@ import sk.mkdigital.androidshowcase.presentation.component.image.AppIconNeutral8
 import sk.mkdigital.androidshowcase.presentation.component.spacers.ColumnSpacer.Spacer4
 import sk.mkdigital.androidshowcase.presentation.component.spacers.ColumnSpacer.Spacer8
 import sk.mkdigital.androidshowcase.presentation.component.text.bodyMedium.TextBodyMediumNeutral80
+import sk.mkdigital.androidshowcase.presentation.component.text.bodySmall.TextBodySmallNeutral80
 import sk.mkdigital.androidshowcase.presentation.component.buttons.AppTextButtonPrimary
 import sk.mkdigital.androidshowcase.presentation.component.text.titleLarge.TextTitleLargePrimary
 import sk.mkdigital.androidshowcase.presentation.foundation.AppTheme
@@ -199,9 +201,27 @@ fun SignUpScreen(
             AppTextButtonPrimary(text = stringResource(R.string.sign_up_sign_in), onClick = onSignIn)
         }
 
-        AppTextButtonPrimary(text = stringResource(R.string.sign_up_privacy), onClick = onPrivacy)
+        Spacer4()
+
+        PrivacyNotice(dataController = state.dataController, onPrivacy = onPrivacy)
 
         Spacer(modifier = Modifier.weight(1f))
+    }
+}
+
+/**
+ * The privacy notice's first layer, above the link to the full notice —
+ * [WP 260 rev. 01 — Usmernenia k transparentnosti podľa nariadenia 2016/679, odseky 35 a 36](https://dataprotection.gov.sk/files/metod-edpb/10_usmernenia_k_transparentnosti.pdf#page=19),
+ * [GDPR čl. 13 ods. 1](https://eur-lex.europa.eu/legal-content/SK/TXT/HTML/?uri=CELEX:32016R0679#013.001).
+ */
+@Composable
+private fun PrivacyNotice(dataController: String, onPrivacy: () -> Unit) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        TextBodySmallNeutral80(
+            text = stringResource(R.string.sign_up_privacy_summary, dataController),
+            textAlign = TextAlign.Center,
+        )
+        AppTextButtonPrimary(text = stringResource(R.string.sign_up_privacy), onClick = onPrivacy)
     }
 }
 
@@ -241,7 +261,7 @@ internal class SignUpScreenPreviewParams : PreviewParameterProvider<SignUpUiStat
     override val values = sequenceOf(
         SignUpUiState(),
         SignUpUiState(
-            email = "john@example.com",
+            email = "dana@example.com",
             password = "Test123!",
             confirmPassword = "Test123!"
         ),
