@@ -19,6 +19,7 @@ keystore.properties
 .cxx/
 .externalNativeBuild/
 .gradle/
+.kotlin/
 .idea/
 build/
 captures/

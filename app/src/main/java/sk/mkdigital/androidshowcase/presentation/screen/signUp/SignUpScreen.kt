@@ -70,6 +70,7 @@ fun SignUpScreen(
         onSignUp = viewModel::signUp,
         onSignIn = viewModel::toSignIn,
         onPrivacy = viewModel::openPrivacy,
+        onTerms = viewModel::openTerms,
     )
 }
 
@@ -81,7 +82,8 @@ fun SignUpScreen(
     onConfirmPasswordChange: (String) -> Unit = {},
     onSignUp: () -> Unit = {},
     onSignIn: () -> Unit = {},
-    onPrivacy: () -> Unit = {}
+    onPrivacy: () -> Unit = {},
+    onTerms: () -> Unit = {}
 ) {
     val focusManager = LocalFocusManager.current
 
@@ -203,9 +205,22 @@ fun SignUpScreen(
 
         Spacer4()
 
+        TermsNotice(onTerms = onTerms)
+
+        Spacer4()
+
         PrivacyNotice(dataController = state.dataController, onPrivacy = onPrivacy)
 
         Spacer(modifier = Modifier.weight(1f))
+    }
+}
+
+/** The terms of use line, with the link that opens them. */
+@Composable
+private fun TermsNotice(onTerms: () -> Unit) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        TextBodySmallNeutral80(text = stringResource(R.string.sign_up_terms), textAlign = TextAlign.Center)
+        AppTextButtonPrimary(text = stringResource(R.string.sign_up_terms_link), onClick = onTerms)
     }
 }
 
@@ -242,6 +257,8 @@ private fun SignUpNavEvents(
             is SignUpNavEvent.ToSignIn -> router.onBack()
 
             is SignUpNavEvent.OpenPrivacy -> linkRouter.openLink(event.url)
+
+            is SignUpNavEvent.OpenTerms -> linkRouter.openLink(event.url)
         }
     }
 }

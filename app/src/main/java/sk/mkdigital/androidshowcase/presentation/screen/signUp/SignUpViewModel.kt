@@ -82,6 +82,10 @@ class SignUpViewModel @Inject constructor(
         navigate(SignUpNavEvent.OpenPrivacy(PRIVACY_URL))
     }
 
+    fun openTerms() {
+        navigate(SignUpNavEvent.OpenTerms(TERMS_URL))
+    }
+
     private fun validateEmail(email: String): SignUpEmailError? {
         return when {
             email.isBlank() -> SignUpEmailError.EMPTY
@@ -141,9 +145,12 @@ sealed interface SignUpNavEvent : NavEvent {
     data object ToHome : SignUpNavEvent
     data object ToSignIn : SignUpNavEvent
     data class OpenPrivacy(val url: String) : SignUpNavEvent
+    data class OpenTerms(val url: String) : SignUpNavEvent
 }
 
 private const val PRIVACY_URL = "https://showcase.mkdigital.sk/privacy"
+
+private const val TERMS_URL = "https://showcase.mkdigital.sk/terms"
 
 private const val DATA_CONTROLLER = "MK Digital s. r. o."
 
