@@ -22,7 +22,7 @@ import androidx.compose.material.icons.outlined.Phone
 import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -65,7 +65,7 @@ private fun rememberLocationActionHandler(
     val currentOnGetLocation by rememberUpdatedState(onGetLocation)
     val currentOnStartUpdates by rememberUpdatedState(onStartUpdates)
 
-    LaunchedEffect(locationPermission.isGranted, pendingAction) {
+    SideEffect(locationPermission.isGranted, pendingAction) {
         if (locationPermission.isGranted && pendingAction != PendingLocationAction.NONE) {
             when (pendingAction) {
                 PendingLocationAction.GET_LOCATION -> currentOnGetLocation()

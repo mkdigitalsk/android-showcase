@@ -42,9 +42,6 @@ jobs:
         run: ./gradlew :app:testDebugUnitTest
 
       - name: Verify Screenshot Tests
-        # UTC or the rendered timestamps carry the runner's offset and nothing matches.
-        env:
-          TZ: UTC
         run: ./gradlew :app:verifyPaparazziDebug -PscreenshotOnly
 
       - name: Upload test results

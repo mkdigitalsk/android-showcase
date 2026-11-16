@@ -7,7 +7,6 @@ import app.cash.paparazzi.Paparazzi
 import com.android.ide.common.rendering.api.SessionParams
 import com.android.resources.NightMode
 import sk.mkdigital.androidshowcase.presentation.base.rule.LocaleRule
-import sk.mkdigital.androidshowcase.presentation.base.rule.TimezoneRule
 import sk.mkdigital.androidshowcase.presentation.foundation.AppTheme
 import org.junit.Rule
 import org.junit.runner.RunWith
@@ -41,9 +40,6 @@ abstract class BaseScreenshotTest<T>(
 
     @get:Rule
     val localeRule: LocaleRule = LocaleRule()
-
-    @get:Rule
-    val timezoneRule: TimezoneRule = TimezoneRule()
 
     fun screenshot(content: @Composable () -> Unit) {
         paparazzi.snapshot(name = getName()) {

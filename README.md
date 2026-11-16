@@ -1,9 +1,9 @@
 # Android Showcase
 
 [![CI](https://github.com/mkdigitalsk/android-showcase/actions/workflows/ci.yml/badge.svg)](https://github.com/mkdigitalsk/android-showcase/actions/workflows/ci.yml)
-[![Kotlin](https://img.shields.io/badge/Kotlin-2.3.0-7F52FF.svg?logo=kotlin&logoColor=white)](https://kotlinlang.org)
+[![Kotlin](https://img.shields.io/badge/Kotlin-7F52FF.svg?logo=kotlin&logoColor=white)](https://kotlinlang.org)
 [![Compose](https://img.shields.io/badge/Jetpack_Compose-4285F4.svg?logo=jetpackcompose&logoColor=white)](https://developer.android.com/jetpack/compose)
-[![Android](https://img.shields.io/badge/Android-36-3DDC84.svg?logo=android&logoColor=white)](https://developer.android.com)
+[![Android](https://img.shields.io/badge/Android-3DDC84.svg?logo=android&logoColor=white)](https://developer.android.com)
 
 A production-ready Android demo app showcasing modern mobile development with Jetpack Compose, clean architecture, and native platform integrations.
 

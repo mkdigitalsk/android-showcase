@@ -122,6 +122,10 @@ kotlin {
 tasks.withType<Test> {
     useJUnitPlatform()
 
+    // The JVM's zone from its start: preview states are built before any JUnit rule runs, and the
+    // screenshot baselines are drawn in UTC.
+    systemProperty("user.timezone", "UTC")
+
     // -PscreenshotOnly: run ONLY screenshot tests
     // no flag: run ONLY regular unit tests (exclude screenshot tests)
     val runScreenShotTests = project.hasProperty("screenshotOnly")

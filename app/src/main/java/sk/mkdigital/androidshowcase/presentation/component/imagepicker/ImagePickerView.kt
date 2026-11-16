@@ -1,7 +1,7 @@
 package sk.mkdigital.androidshowcase.presentation.component.imagepicker
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
 import sk.mkdigital.androidshowcase.presentation.component.camera.rememberCameraManager
@@ -38,7 +38,7 @@ fun ImagePickerView(
         }
 
         PickerAction.Gallery -> {
-            LaunchedEffect(state.action) {
+            SideEffect(state.action) {
                 galleryManager.launch()
                 currentActionReset()
             }

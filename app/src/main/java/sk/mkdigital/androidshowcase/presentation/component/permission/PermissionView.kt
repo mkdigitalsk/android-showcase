@@ -13,7 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -85,7 +85,7 @@ private fun RequiredPermissionView(
             }
         )
     } else {
-        LaunchedEffect(manifestPermission, hasRequested) {
+        SideEffect(manifestPermission, hasRequested) {
             if (!hasRequested && !rationaleDismissed) {
                 hasRequested = true
                 state.launchPermissionRequest()

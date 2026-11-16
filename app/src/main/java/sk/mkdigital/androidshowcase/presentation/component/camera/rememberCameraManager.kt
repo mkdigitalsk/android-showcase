@@ -6,7 +6,7 @@ import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -41,7 +41,7 @@ fun rememberCameraManager(onResult: (ImageResult?) -> Unit): CameraManager {
         imageUri = null
     }
 
-    LaunchedEffect(launchRequested, imageUri) {
+    SideEffect(launchRequested, imageUri) {
         val uri = imageUri
         if (launchRequested && uri != null) {
             cameraLauncher.launch(uri)
