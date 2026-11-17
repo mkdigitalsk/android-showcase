@@ -62,7 +62,6 @@ class UserRepositoryImplTest : BaseTest<UserRepositoryImpl>() {
         email = "test01@mkdigital.sk",
         createdAt = 0,
         themeMode = ThemeModeDTO.SYSTEM,
-        locale = "en",
         demo = demo,
     )
 

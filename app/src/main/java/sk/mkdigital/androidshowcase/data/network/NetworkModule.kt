@@ -11,6 +11,7 @@ object NetworkModule {
     val json: Json = Json {
         isLenient = true
         ignoreUnknownKeys = true
+        coerceInputValues = true
         explicitNulls = false
     }
 }
